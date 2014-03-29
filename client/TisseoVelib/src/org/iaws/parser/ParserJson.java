@@ -25,9 +25,7 @@ public class ParserJson {
 
 		for (JsonElement jsonElement : jarray) {
 			Arret arret = jsonElementToArret(jsonElement);
-			if (arret != null) {
-				liste.add(arret);
-			}
+			liste.add(arret);
 		}
 
 		return liste;
@@ -44,7 +42,9 @@ public class ParserJson {
 
 		JsonArray destinations = obj.getAsJsonArray("destinations");
 		for (JsonElement elemDest : destinations) {
-			arret.ajouter_destination(jsonElementToDestination(elemDest));
+			Destination destination = jsonElementToDestination(elemDest);
+			destination.setArret(arret);
+			arret.ajouter_destination(destination);
 		}
 
 		return arret;
@@ -61,7 +61,9 @@ public class ParserJson {
 
 		JsonArray lines = objDest.getAsJsonArray("line");
 		for (JsonElement elemLine : lines) {
-			destination.ajouter_ligne(jsonElementToLigne(elemLine));
+			Ligne ligne = jsonElementToLigne(elemLine);
+			ligne.setDestination(destination);
+			destination.ajouter_ligne(ligne);
 		}
 
 		return destination;

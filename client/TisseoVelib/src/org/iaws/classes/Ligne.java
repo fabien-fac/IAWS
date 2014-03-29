@@ -11,11 +11,12 @@ public class Ligne implements Fiabilite{
 	private int nbLike;
 	private int nbUnlike;
 	private String id;
-	
+	private Destination destination;
+
 	public Ligne(String nom, String id, String ligne){
-		this.name = nom;
-		this.id = id;
-		this.ligne = ligne;
+		this.name = nom.replaceAll("\"", "");
+		this.id = id.replaceAll("\"", "");
+		this.ligne = ligne.replaceAll("\"", "");
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class Ligne implements Fiabilite{
 	}
 
 	public void setColor(String color) {
-		this.color = color;
+		this.color = color.replaceAll("\"", "");
 	}
 
 	public String getBgXmlColor() {
@@ -57,7 +58,7 @@ public class Ligne implements Fiabilite{
 	}
 
 	public void setBgXmlColor(String bgXmlColor) {
-		this.bgXmlColor = bgXmlColor;
+		this.bgXmlColor = bgXmlColor.replaceAll("\"", "");
 	}
 
 	public String getFgXmlColor() {
@@ -65,7 +66,7 @@ public class Ligne implements Fiabilite{
 	}
 
 	public void setFgXmlColor(String fgXmlColor) {
-		this.fgXmlColor = fgXmlColor;
+		this.fgXmlColor = fgXmlColor.replaceAll("\"", "");
 	}
 
 	public int getNbLike() {
@@ -92,5 +93,40 @@ public class Ligne implements Fiabilite{
 		this.id = id;
 	}
 	
+	public Destination getDestination() {
+		return destination;
+	}
+
+	public void setDestination(Destination destination) {
+		this.destination = destination;
+	}
+	
+	@Override
+	public String toString() {
+		String str = this.ligne + " : déstination : " + this.destination.getName();
+		return str;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.id.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof Ligne) {
+
+			Ligne other = (Ligne) obj;
+
+			if (other.id.equals(this.id)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 	
 }

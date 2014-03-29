@@ -53,9 +53,7 @@ public class MainActivity extends Activity {
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
  
         navDrawerItems = new ArrayList<NavDrawerItem>();
-         
-        homeNavDrawerItem = new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1));
-        navDrawerItems.add(homeNavDrawerItem);
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
