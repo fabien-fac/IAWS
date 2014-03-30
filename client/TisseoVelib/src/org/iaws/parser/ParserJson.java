@@ -143,13 +143,13 @@ public class ParserJson {
 
 		JsonElement jelement = new JsonParser().parse(json);
 		JsonArray jArray = jelement.getAsJsonArray();
-		System.out.println("BABAAAAAR : " + jArray.get(0));
+		
 		
 		for (JsonElement jsonElement : jArray) {
 			Station station = jsonElementToStation(jsonElement);
 			liste.add(station);
 		}
-
+		System.out.println("BABAAAAAR : " + liste.get(0));
 		return liste;
 	}
 	
@@ -161,8 +161,8 @@ public class ParserJson {
 		String address = obj.get("address").toString();
 		int totalVelo = Integer.parseInt(obj.get("bike_stands").toString());
 		int nbVeloDispo = Integer.parseInt(obj.get("available_bikes").toString());
-		
-		station = new Station(name, address, totalVelo, nbVeloDispo);
+		String ouverte = obj.get("status").toString();
+		station = new Station(name, address, totalVelo, nbVeloDispo, ouverte);
 
 		return station;
 	}
