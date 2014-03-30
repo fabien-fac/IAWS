@@ -1,20 +1,43 @@
 package org.iaws.classes;
 
 public class Station {
-	
+
 	private String nom;
 	private String adresse;
+	private Boolean ouverte;
 	private int totalVelo;
 	private int nbVeloDispo;
 	private int nbLike;
 	private int nbUnlike;
-	
-	public Station(String nom, String adresse, int totalVelo, int nbVeloDispo) {
-		super();
+
+	public Station(String nom, String adresse, int totalVelo, int nbVeloDispo,
+			String ouverte) {
 		this.nom = nom;
 		this.adresse = adresse;
 		this.totalVelo = totalVelo;
 		this.nbVeloDispo = nbVeloDispo;
+		String open = ouverte.replace("\"", "");
+		this.ouverte = (open.equalsIgnoreCase("OPEN"));
+	}
+
+	public String toString() {
+		return "Nom : " + this.nom + " / adresse : " + this.adresse
+				+ " / Sation ouverte : " + this.ouverte
+				+ " / totalVelo : " + this.totalVelo + " / nbVeloDispo : "
+				+ this.nbVeloDispo;
+
+	}
+	
+	public int calculerNbStandDIsponible(){
+		return this.totalVelo-nbVeloDispo;
+	}
+
+	public Boolean getOuverte() {
+		return ouverte;
+	}
+
+	public void setOuverte(Boolean ouverte) {
+		this.ouverte = ouverte;
 	}
 
 	public String getNom() {
@@ -64,5 +87,5 @@ public class Station {
 	public void setNbUnlike(int nbUnlike) {
 		this.nbUnlike = nbUnlike;
 	}
-	
+
 }
