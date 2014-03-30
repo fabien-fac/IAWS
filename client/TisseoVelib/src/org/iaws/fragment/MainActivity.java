@@ -35,7 +35,8 @@ public class MainActivity extends Activity {
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
     
-    private NavDrawerItem homeNavDrawerItem;
+    private int current_position;
+    
      
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +141,7 @@ public class MainActivity extends Activity {
      * */
     private void displayView(int position) {
         Fragment fragment = null;
+        current_position = position;
         switch (position) {
         case 0:
             fragment = new HomeFragment();
@@ -196,6 +198,18 @@ public class MainActivity extends Activity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	switch (current_position) {
+		case 0:
+			moveTaskToBack(true);
+			break;
+		default:
+			displayView(0);
+			break;
+		}     
     }
  
 }
