@@ -1,16 +1,18 @@
 package org.iaws.classes;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 public class ProchainPassage {
 
-	public String idLigne;
-	public String idArret;
-	public String destination;
-	public Date prochainPassage;
+	private String idLigne;
+	private String idArret;
+	private String destination;
+	private Date prochainPassage;
 
 	public ProchainPassage() {
-
 	}
 
 	public ProchainPassage(String idLigne, String idArret, String destination,
@@ -19,6 +21,25 @@ public class ProchainPassage {
 		this.idArret = idArret;
 		this.destination = destination;
 		this.prochainPassage = prochainPassage;
+	}
+
+	public String toString() {
+		return "ligne : " + this.idLigne + " / arret : " + this.idArret
+				+ " / destination : " + this.destination + " / horaire : "
+				+ this.prochainPassage;
+
+	}
+
+	public String calculerProchainPassage() {
+		String resultat = "Dans ";
+		long intervalle = this.prochainPassage.getTime() - new Date().getTime();
+		resultat += TimeUnit.MINUTES.convert(intervalle, TimeUnit.MILLISECONDS)
+				+ "minutes : ";
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(this.prochainPassage);
+		resultat += calendar.get(Calendar.HOUR_OF_DAY) + "H"
+				+ calendar.get(Calendar.MINUTE);
+		return resultat;
 	}
 
 	public String getIdLigne() {
