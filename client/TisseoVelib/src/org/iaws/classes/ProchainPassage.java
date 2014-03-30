@@ -37,8 +37,7 @@ public class ProchainPassage {
 				+ "minutes : ";
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(this.prochainPassage);
-		resultat += calendar.get(Calendar.HOUR_OF_DAY) + "H"
-				+ calendar.get(Calendar.MINUTE);
+		resultat += String.format("%02dH%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 		return resultat;
 	}
 
