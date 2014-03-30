@@ -34,7 +34,7 @@
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/velibdispo_listview_liste"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>
