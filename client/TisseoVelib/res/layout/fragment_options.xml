@@ -14,7 +14,7 @@
         android:text="@string/form_your_adress" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/options_editText_adresse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView1"
@@ -26,7 +26,7 @@
     </EditText>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/options_button_validerAdresse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

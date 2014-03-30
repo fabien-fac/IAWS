@@ -43,10 +43,8 @@ public final class R {
     }
     public static final class id {
         public static final int action_settings=0x7f090012;
-        public static final int button1=0x7f090009;
         public static final int counter=0x7f090006;
         public static final int drawer_layout=0x7f090000;
-        public static final int editText1=0x7f090008;
         public static final int frame_container=0x7f090001;
         public static final int icon=0x7f090004;
         public static final int imageView1=0x7f090002;
@@ -54,6 +52,8 @@ public final class R {
         public static final int ligne_textview_nomArret=0x7f090010;
         public static final int ligne_textview_nomLigne=0x7f09000f;
         public static final int list_slidermenu=0x7f090003;
+        public static final int options_button_validerAdresse=0x7f090009;
+        public static final int options_editText_adresse=0x7f090008;
         public static final int prochain_listview_liste=0x7f09000e;
         public static final int prochain_progressbar_load=0x7f09000b;
         public static final int prochain_spinner_arret=0x7f09000d;
