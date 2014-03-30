@@ -1,11 +1,15 @@
 package org.iaws.parser;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.iaws.classes.Arret;
 import org.iaws.classes.Destination;
 import org.iaws.classes.Ligne;
+import org.iaws.classes.ProchainPassage;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -82,5 +86,46 @@ public class ParserJson {
 		ligne.setFgXmlColor(objLine.get("fgXmlColor").toString());
 
 		return ligne;
+	}
+	
+	public List<ProchainPassage> jsonToListProchainPassage(String json) {
+
+		List<ProchainPassage> liste = new ArrayList<ProchainPassage>();
+
+		JsonElement jelement = new JsonParser().parse(json);
+		JsonObject jobject = jelement.getAsJsonObject();
+		jobject = jobject.getAsJsonObject("departures");
+		String idArret = jobject.getAsJsonObject().get("stop")
+				.getAsJsonObject().get("id").toString();
+
+		JsonArray jarray = jobject.getAsJsonArray("departure");
+		for (JsonElement jsonElement : jarray) {
+			ProchainPassage prochainPassage = new ProchainPassage();
+			prochainPassage.setIdArret(idArret);
+			prochainPassage = jsonElementToProchainPassage(jsonElement, prochainPassage);
+			liste.add(prochainPassage);
+		}
+		return liste;
+	}
+
+	private ProchainPassage jsonElementToProchainPassage(JsonElement elem,
+			ProchainPassage prochainPassage) {
+		JsonObject obj = elem.getAsJsonObject();
+		prochainPassage.setIdLigne(obj.get("line").getAsJsonObject()
+				.get("shortName").toString());
+		prochainPassage.setDestination(obj.get("destination").getAsJsonArray()
+				.get(0).getAsJsonObject().get("name").toString());
+		String prochainPassageString = obj.get("dateTime").toString();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mi:ss");
+		Date prochainHoraire = new Date();
+		try {
+			prochainHoraire = sdf.parse(prochainPassageString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		prochainPassage.setProchainPassage(prochainHoraire);
+
+		return prochainPassage;
 	}
 }
