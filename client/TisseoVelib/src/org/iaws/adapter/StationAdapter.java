@@ -53,22 +53,28 @@ public class StationAdapter extends BaseAdapter{
 		TextView view_nomStation = (TextView) convertView.findViewById(R.id.station_textview_name);
         TextView view_nbVelo = (TextView) convertView.findViewById(R.id.station_textview_nbVeloDispo);
         TextView view_nbPlace = (TextView) convertView.findViewById(R.id.station_textview_nbPlaceDispo);
+        TextView view_adresse = (TextView) convertView.findViewById(R.id.station_textview_adresse);
+        
         View etat = (View) convertView.findViewById(R.id.station_etat);
         
         view_nomStation.setText(stationItems.get(position).getNom());
         
-        String str = view_nbVelo.getText().toString();
-        view_nbVelo.setText(str+(stationItems.get(position).getNbVeloDispo()));
+        String str = context.getResources().getString(R.string.station_velo_dispo) + " ";
+        str += String.valueOf(stationItems.get(position).getNbVeloDispo());
+        view_nbVelo.setText(str);
         
-        str = view_nbPlace.getText().toString();/*
-        view_nbPlace.setText(str+(stationItems.get(position).get()));
+        str = context.getResources().getString(R.string.station_place_dispo) + " ";
+        str += String.valueOf(stationItems.get(position).calculerNbStandDIsponible());
+        view_nbPlace.setText(str);
         
         GradientDrawable drawable = (GradientDrawable) etat.getBackground();
-        if(){
+        if(stationItems.get(position).getOuverte()){
         	drawable.setColor(Color.GREEN);
         }else{
         	drawable.setColor(Color.RED);
-        }*/
+        }
+        
+        view_adresse.setText(stationItems.get(position).getAdresse());
         
 		
 		return convertView;
