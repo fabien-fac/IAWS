@@ -149,7 +149,6 @@ public class ParserJson {
 			Station station = jsonElementToStation(jsonElement);
 			liste.add(station);
 		}
-		System.out.println("BABAAAAAR : " + liste.get(0));
 		return liste;
 	}
 	

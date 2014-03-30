@@ -42,7 +42,7 @@ public final class R {
         public static final int search=0x7f020009;
     }
     public static final class id {
-        public static final int action_settings=0x7f090019;
+        public static final int action_settings=0x7f09001a;
         public static final int counter=0x7f090006;
         public static final int drawer_layout=0x7f090000;
         public static final int frame_container=0x7f090001;
@@ -59,9 +59,10 @@ public final class R {
         public static final int prochain_spinner_arret=0x7f09000d;
         public static final int prochain_spinner_ligne=0x7f09000a;
         public static final int station_etat=0x7f090015;
+        public static final int station_textview_adresse=0x7f090017;
         public static final int station_textview_name=0x7f090016;
-        public static final int station_textview_nbPlaceDispo=0x7f090018;
-        public static final int station_textview_nbVeloDispo=0x7f090017;
+        public static final int station_textview_nbPlaceDispo=0x7f090019;
+        public static final int station_textview_nbVeloDispo=0x7f090018;
         public static final int textView1=0x7f090007;
         public static final int textView2=0x7f09000c;
         public static final int title=0x7f090005;
@@ -94,16 +95,17 @@ public final class R {
         public static final int adress_save=0x7f050005;
         public static final int app_name=0x7f050000;
         public static final int arret_name=0x7f050002;
-        public static final int button_valider=0x7f05000d;
+        public static final int button_valider=0x7f05000e;
         public static final int depart_indispo=0x7f050004;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f05000e;
+        public static final int desc_list_item_icon=0x7f05000f;
         public static final int directions=0x7f050003;
-        public static final int form_arret=0x7f05000b;
-        public static final int form_ligne=0x7f05000a;
-        public static final int form_nom_station=0x7f05000c;
-        public static final int form_your_adress=0x7f050009;
+        public static final int form_arret=0x7f05000c;
+        public static final int form_ligne=0x7f05000b;
+        public static final int form_nom_station=0x7f05000d;
+        public static final int form_your_adress=0x7f05000a;
+        public static final int station_adresse=0x7f050009;
         public static final int station_name=0x7f050006;
         public static final int station_place_dispo=0x7f050008;
         public static final int station_velo_dispo=0x7f050007;

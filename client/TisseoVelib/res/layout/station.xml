@@ -26,6 +26,16 @@
             android:layout_marginLeft="4dp"
             android:text="@string/station_name"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <TextView
+            android:id="@+id/station_textview_adresse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/station_etat"
+            android:layout_marginLeft="4dp"
+            android:layout_below="@+id/station_textview_name"
+            android:textColor="#b4b4b4"
+            android:text="@string/station_adresse" />
 
         <TextView
             android:id="@+id/station_textview_nbVeloDispo"
@@ -33,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/station_etat"
             android:layout_marginLeft="4dp"
-            android:layout_below="@+id/station_textview_name"
+            android:layout_below="@+id/station_textview_adresse"
             android:text="@string/station_velo_dispo" />
 
         <TextView
@@ -41,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/station_textview_name"
+            android:layout_below="@+id/station_textview_adresse"
             android:text="@string/station_place_dispo" />
 
     </RelativeLayout>

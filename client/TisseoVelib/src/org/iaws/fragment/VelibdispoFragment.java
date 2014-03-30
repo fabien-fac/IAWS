@@ -68,7 +68,7 @@ public class VelibdispoFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				station_select = editName.getText().toString();
-				update_view_stations();
+				update_view_stations(station_select);
 			}
 		});
 		btnSearch.setEnabled(false);
@@ -91,16 +91,12 @@ public class VelibdispoFragment extends Fragment {
 		protected void onPostExecute(String json) {
 			update_listes(json);
 			activate_btn_search();
+			update_view_stations();
 		}
 
 	}
 
 	private void activate_btn_search() {
-		list_string_stations.add("toulouse");
-		list_string_stations.add("24 rue de lolz");
-		list_string_stations.add("2 RUE GATIEN ARNOULT");
-		list_string_stations.add("BRUNHES-FONTAINES");
-
 		btnSearch.setEnabled(true);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_dropdown_item_1line,
@@ -113,7 +109,8 @@ public class VelibdispoFragment extends Fragment {
 		list_stations = parser.jsonToListStation(json);
 
 		for (Station station : list_stations) {
-			// list_string_stations.add(station);
+			list_string_stations.add(station.getNom());
+			list_string_stations.add(station.getAdresse());
 		}
 
 	}
@@ -122,8 +119,19 @@ public class VelibdispoFragment extends Fragment {
 		StationAdapter adapter = new StationAdapter(getActivity(), list_stations);
 		list_view.setAdapter(adapter);
 	}
-
-	private boolean is_station_affichable(Station station) {
-		return true;
+	
+	private void update_view_stations(String name){
+		List<Station> stations = new ArrayList<Station>();
+		for (Station station : list_stations) {
+			System.out.println(station.getAdresse());
+			if(station.getNom().contains(name) || station.getAdresse().contains(name)){
+				stations.add(station);
+			}
+		}
+		
+		StationAdapter adapter = new StationAdapter(getActivity(), stations);
+		list_view.setAdapter(adapter);
+		
 	}
+
 }

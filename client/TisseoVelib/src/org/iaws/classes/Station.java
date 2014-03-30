@@ -1,5 +1,7 @@
 package org.iaws.classes;
 
+import java.util.Locale;
+
 public class Station {
 
 	private String nom;
@@ -12,8 +14,8 @@ public class Station {
 
 	public Station(String nom, String adresse, int totalVelo, int nbVeloDispo,
 			String ouverte) {
-		this.nom = nom;
-		this.adresse = adresse;
+		this.nom = nom.replace("\"", "");
+		this.adresse = adresse.replace("\"", "");
 		this.totalVelo = totalVelo;
 		this.nbVeloDispo = nbVeloDispo;
 		String open = ouverte.replace("\"", "");
@@ -41,7 +43,7 @@ public class Station {
 	}
 
 	public String getNom() {
-		return nom;
+		return nom.toLowerCase();
 	}
 
 	public void setNom(String nom) {
@@ -49,7 +51,7 @@ public class Station {
 	}
 
 	public String getAdresse() {
-		return adresse;
+		return adresse.toLowerCase();
 	}
 
 	public void setAdresse(String adresse) {
