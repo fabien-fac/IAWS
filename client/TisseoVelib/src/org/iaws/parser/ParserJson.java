@@ -87,9 +87,8 @@ public class ParserJson {
 
 		return ligne;
 	}
-	
-	public List<ProchainPassage> jsonToListProchainPassage(String json) {
 
+	public List<ProchainPassage> jsonToListProchainPassage(String json) {
 		List<ProchainPassage> liste = new ArrayList<ProchainPassage>();
 
 		JsonElement jelement = new JsonParser().parse(json);
@@ -100,10 +99,17 @@ public class ParserJson {
 
 		JsonArray jarray = jobject.getAsJsonArray("departure");
 		for (JsonElement jsonElement : jarray) {
-			ProchainPassage prochainPassage = new ProchainPassage();
-			prochainPassage.setIdArret(idArret);
-			prochainPassage = jsonElementToProchainPassage(jsonElement, prochainPassage);
-			liste.add(prochainPassage);
+			try {
+				ProchainPassage prochainPassage = new ProchainPassage();
+				prochainPassage.setIdArret(idArret);
+				prochainPassage = jsonElementToProchainPassage(jsonElement,
+						prochainPassage);
+				System.out.println("BABAAAR : " + prochainPassage.toString());
+				liste.add(prochainPassage);
+			} catch (java.lang.NullPointerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return liste;
 	}
@@ -111,11 +117,16 @@ public class ParserJson {
 	private ProchainPassage jsonElementToProchainPassage(JsonElement elem,
 			ProchainPassage prochainPassage) {
 		JsonObject obj = elem.getAsJsonObject();
-		prochainPassage.setIdLigne(obj.get("line").getAsJsonObject()
-				.get("shortName").toString());
+
+		JsonObject ligne = obj.getAsJsonObject("line");
+
+		prochainPassage.setIdLigne(ligne.get("shortName").toString());
+		System.out.println("BIIIIIILBO : "+ obj.get("destination").getAsJsonArray()
+				.get(0).toString());
 		prochainPassage.setDestination(obj.get("destination").getAsJsonArray()
 				.get(0).getAsJsonObject().get("name").toString());
-		String prochainPassageString = obj.get("dateTime").toString().replaceAll("\"", "");
+		String prochainPassageString = obj.get("dateTime").toString()
+				.replaceAll("\"", "");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		Date prochainHoraire = new Date();
 		try {
