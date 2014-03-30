@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="4dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <View
+            android:id="@+id/station_etat"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@layout/circle"
+            android:layout_centerVertical="true"
+             />
+
+        <TextView
+            android:id="@+id/station_textview_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/station_etat"
+            android:layout_marginLeft="4dp"
+            android:text="@string/station_name"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/station_textview_nbVeloDispo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/station_etat"
+            android:layout_marginLeft="4dp"
+            android:layout_below="@+id/station_textview_name"
+            android:text="@string/station_velo_dispo" />
+
+        <TextView
+            android:id="@+id/station_textview_nbPlaceDispo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/station_textview_name"
+            android:text="@string/station_place_dispo" />
+
+    </RelativeLayout>
+
+</LinearLayout>
