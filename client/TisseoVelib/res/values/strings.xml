@@ -5,6 +5,7 @@
     <string name="action_settings">Options</string>
     <string name="arret_name">Nom de l\'arret :</string>
     <string name="directions">Directions :</string>
+    <string name="depart_indispo">Aucun départ disponible</string>
     
     <string name="form_your_adress">Votre adresse :</string>
     <string name="form_ligne">Ligne :</string>

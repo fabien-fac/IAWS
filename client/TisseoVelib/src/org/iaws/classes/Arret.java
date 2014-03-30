@@ -13,7 +13,7 @@ public class Arret {
 	public Arret(String nom, String id) {
 		destinations = new HashSet<Destination>();
 		this.name = nom.replaceAll("\"", "");
-		this.id = id.replaceAll("\"", "");;
+		this.id = id.replaceAll("\"", "");
 	}
 
 	public String getName() {

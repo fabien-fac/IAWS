@@ -1,9 +1,12 @@
 package org.iaws.adapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.iaws.R;
+import org.iaws.classes.ProchainPassage;
 import org.iaws.model.LigneItem;
+import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
 import android.app.Activity;
@@ -98,17 +101,27 @@ public class LigneAdapter extends BaseAdapter{
 		}
 
 		protected void onPostExecute(String result) {
-			System.out.println(result);
-			String liste_horaire = "Destination : Université Paul Sabatier\nDans 10 minutes : 13h30\nDans 25 minutes : 13h45";
-			display_horaires(liste_horaire);
+			ParserJson parser = new ParserJson();
+			List<ProchainPassage> prochainPassages = parser.jsonToListProchainPassage(result);
+			display_horaires(prochainPassages);
 		}
 	}
 	
-	private void display_horaires(String horaires){
+	private void display_horaires(List<ProchainPassage> prochainPassages){
+		
+		String message = "";
+		if(prochainPassages.size() == 0){
+			message = context.getResources().getString(R.string.depart_indispo);
+		}
+		else{
+			for (ProchainPassage prochainPassage : prochainPassages) {
+				message += prochainPassage.getProchainPassage();
+			}
+		}
 		 
 		new AlertDialog.Builder(context)
 	    .setTitle(ligneItems.get(positionClique).getNomLigne() + " " +ligneItems.get(positionClique).getNomArret())
-	    .setMessage(horaires)
+	    .setMessage(message)
 	    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	            // continue with delete

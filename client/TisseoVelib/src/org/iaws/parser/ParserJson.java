@@ -115,8 +115,8 @@ public class ParserJson {
 				.get("shortName").toString());
 		prochainPassage.setDestination(obj.get("destination").getAsJsonArray()
 				.get(0).getAsJsonObject().get("name").toString());
-		String prochainPassageString = obj.get("dateTime").toString();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mi:ss");
+		String prochainPassageString = obj.get("dateTime").toString().replaceAll("\"", "");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		Date prochainHoraire = new Date();
 		try {
 			prochainHoraire = sdf.parse(prochainPassageString);
