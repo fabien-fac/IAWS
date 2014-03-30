@@ -63,9 +63,8 @@ public class ProchainFragment extends Fragment {
 		init_variables();
 		init_composants();
 
-		webservice = new WebService();
-		GetArretsTask c = new GetArretsTask();
-		c.execute("");
+		GetArretsTask task = new GetArretsTask();
+		task.execute();
 
 		return rootView;
 	}
@@ -84,14 +83,15 @@ public class ProchainFragment extends Fragment {
 	}
 
 	private void init_variables() {
+		webservice = new WebService();
 		liste_string_arrets = new HashSet<String>();
 		liste_string_lignes = new HashSet<String>();
 		liste_lignes = new ArrayList<Ligne>();
 	}
 
-	private class GetArretsTask extends AsyncTask<String, Void, String> {
+	private class GetArretsTask extends AsyncTask<Void, Void, String> {
 
-		protected String doInBackground(String... urls) {
+		protected String doInBackground(Void... param) {
 			progress_load.setVisibility(View.VISIBLE);
 			String liste_arrets = webservice.get_arrets();
 

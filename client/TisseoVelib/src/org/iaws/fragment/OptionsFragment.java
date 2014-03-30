@@ -11,9 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 public class OptionsFragment extends Fragment {
@@ -61,6 +58,8 @@ public class OptionsFragment extends Fragment {
 		adresseSave = bdAdresse.get_adresse();
 		if (adresseSave != null) {
 			edit_adresse.setText(adresseSave);
+		}else{
+			adresseSave = "";
 		}
 	}
 

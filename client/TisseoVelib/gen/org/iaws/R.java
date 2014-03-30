@@ -42,15 +42,16 @@ public final class R {
         public static final int search=0x7f020009;
     }
     public static final class id {
-        public static final int action_settings=0x7f090012;
+        public static final int action_settings=0x7f090015;
         public static final int counter=0x7f090006;
         public static final int drawer_layout=0x7f090000;
         public static final int frame_container=0x7f090001;
         public static final int icon=0x7f090004;
         public static final int imageView1=0x7f090002;
-        public static final int ligne_textview_direction=0x7f090011;
-        public static final int ligne_textview_nomArret=0x7f090010;
-        public static final int ligne_textview_nomLigne=0x7f09000f;
+        public static final int ligne_textview_direction=0x7f090014;
+        public static final int ligne_textview_nomArret=0x7f090013;
+        public static final int ligne_textview_nomLigne=0x7f090012;
+        public static final int listView1=0x7f090011;
         public static final int list_slidermenu=0x7f090003;
         public static final int options_button_validerAdresse=0x7f090009;
         public static final int options_editText_adresse=0x7f090008;
@@ -61,6 +62,8 @@ public final class R {
         public static final int textView1=0x7f090007;
         public static final int textView2=0x7f09000c;
         public static final int title=0x7f090005;
+        public static final int velibdispo_edittext_nom=0x7f09000f;
+        public static final int velibdispo_imgbutton_search=0x7f090010;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -85,14 +88,15 @@ public final class R {
         public static final int adress_save=0x7f050005;
         public static final int app_name=0x7f050000;
         public static final int arret_name=0x7f050002;
-        public static final int button_valider=0x7f050009;
+        public static final int button_valider=0x7f05000a;
         public static final int depart_indispo=0x7f050004;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f05000a;
+        public static final int desc_list_item_icon=0x7f05000b;
         public static final int directions=0x7f050003;
         public static final int form_arret=0x7f050008;
         public static final int form_ligne=0x7f050007;
+        public static final int form_nom_station=0x7f050009;
         public static final int form_your_adress=0x7f050006;
     }
     public static final class style {
