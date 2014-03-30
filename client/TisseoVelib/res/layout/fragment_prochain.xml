@@ -16,13 +16,22 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:text="@string/form_ligne" />
+            android:text="@string/form_ligne"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/prochain_spinner_ligne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/textView1" />
+
+        <ProgressBar
+            android:id="@+id/prochain_progressbar_load"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -35,7 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:text="@string/form_arret" />
+            android:text="@string/form_arret"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/prochain_spinner_arret"

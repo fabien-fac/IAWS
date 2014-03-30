@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 public class ProchainFragment extends Fragment {
@@ -44,6 +45,7 @@ public class ProchainFragment extends Fragment {
 	private ListView layout_liste;
 	private LigneAdapter adapter;
 	private ArrayList<LigneItem> ligneItems;
+	private ProgressBar progress_load;
 
 	private List<Arret> liste_arrets;
 	private List<Ligne> liste_lignes;
@@ -76,6 +78,8 @@ public class ProchainFragment extends Fragment {
 				.findViewById(R.id.prochain_spinner_arret);
 		layout_liste = (ListView) rootView
 				.findViewById(R.id.prochain_listview_liste);
+		progress_load = (ProgressBar) rootView
+				.findViewById(R.id.prochain_progressbar_load);
 
 	}
 
@@ -88,12 +92,14 @@ public class ProchainFragment extends Fragment {
 	private class GetArretsTask extends AsyncTask<String, Void, String> {
 
 		protected String doInBackground(String... urls) {
+			progress_load.setVisibility(View.VISIBLE);
 			String liste_arrets = webservice.get_arrets();
 
 			return liste_arrets;
 		}
 
 		protected void onPostExecute(String result) {
+			progress_load.setVisibility(View.GONE);
 			update_listes(result);
 			update_spinners();
 			update_view_liste();

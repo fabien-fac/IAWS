@@ -15,7 +15,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:minWidth="40dp"
+            android:gravity="center"
             android:text="2s"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@layout/ligne_name" />
 
         <TextView
@@ -23,17 +26,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/ligne_textview_nomLigne"
+            android:layout_marginLeft="61dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/arret_name" />
 
         <TextView
             android:id="@+id/ligne_textview_direction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/ligne_textview_nomLigne"
-			android:layout_alignBottom="@+id/ligne_textview_nomLigne"
+            android:layout_marginLeft="61dp"
+			android:layout_below="@+id/ligne_textview_nomArret"
             android:text="@string/directions" 
             android:textColor="#b4b4b4"/>
 
