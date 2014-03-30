@@ -16,7 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:text="@string/form_ligne" />
+            android:text="@string/form_ligne"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/prochain_spinner_ligne"
@@ -35,7 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:text="@string/form_arret" />
+            android:text="@string/form_arret"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/prochain_spinner_arret"
