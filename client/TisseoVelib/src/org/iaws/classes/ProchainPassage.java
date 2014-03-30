@@ -33,12 +33,21 @@ public class ProchainPassage {
 	public String calculerProchainPassage() {
 		String resultat = "Dans ";
 		long intervalle = this.prochainPassage.getTime() - new Date().getTime();
-		resultat += TimeUnit.MINUTES.convert(intervalle, TimeUnit.MILLISECONDS)
-				+ "minutes : ";
+		System.out.println("BABAAAAAR : " + TimeUnit.HOURS.convert(intervalle, TimeUnit.MILLISECONDS) + " heures");
+		long nbMinutes = TimeUnit.MINUTES.convert(intervalle, TimeUnit.MILLISECONDS);
+		long nbHeures = nbMinutes/60;
+		if (nbHeures >= 1){
+			resultat += nbHeures + " heures et " + nbMinutes%60 + " minutes : ";
+		} else if (nbHeures == 1){
+			resultat += "1 heure et " + nbMinutes%60 + " minutes : ";
+		}else{
+			resultat += nbMinutes + " minutes : ";
+		}
+		
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(this.prochainPassage);
-		resultat += calendar.get(Calendar.HOUR_OF_DAY) + "H"
-				+ calendar.get(Calendar.MINUTE);
+		String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+		resultat += String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 		return resultat;
 	}
 

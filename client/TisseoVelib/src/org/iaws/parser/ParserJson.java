@@ -10,6 +10,7 @@ import org.iaws.classes.Arret;
 import org.iaws.classes.Destination;
 import org.iaws.classes.Ligne;
 import org.iaws.classes.ProchainPassage;
+import org.iaws.classes.Station;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -134,5 +135,35 @@ public class ParserJson {
 		prochainPassage.setProchainPassage(prochainHoraire);
 
 		return prochainPassage;
+	}
+	
+	public List<Station> jsonToListStation(String json) {
+
+		List<Station> liste = new ArrayList<Station>();
+
+		JsonElement jelement = new JsonParser().parse(json);
+		JsonArray jArray = jelement.getAsJsonArray();
+		System.out.println("BABAAAAAR : " + jArray.get(0));
+		
+		for (JsonElement jsonElement : jArray) {
+			Station station = jsonElementToStation(jsonElement);
+			liste.add(station);
+		}
+
+		return liste;
+	}
+	
+	private Station jsonElementToStation(JsonElement elem) {
+		Station station;
+
+		JsonObject obj = elem.getAsJsonObject();
+		String name = obj.get("name").toString();
+		String address = obj.get("address").toString();
+		int totalVelo = Integer.parseInt(obj.get("bike_stands").toString());
+		int nbVeloDispo = Integer.parseInt(obj.get("available_bikes").toString());
+		
+		station = new Station(name, address, totalVelo, nbVeloDispo);
+
+		return station;
 	}
 }
