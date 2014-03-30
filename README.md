@@ -1,4 +1,0 @@
-IAWS
-====
-
-Projet IAWS
