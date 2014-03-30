@@ -8,6 +8,9 @@ import java.net.URL;
 import android.util.Log;
 
 public class WebService {
+	
+	private final String KEY = "a03561f2fd10641d96fb8188d209414d8";
+	private final String URL_TISSEO = "http://pt.data.tisseo.fr/";
 
 	private InputStream sendRequest(URL url) throws IOException {
 
@@ -29,16 +32,17 @@ public class WebService {
 
 	public String get_arrets() {
 
-		String url_arret = "http://pt.data.tisseo.fr/stopPointsList?bbox=1.4685963%2C43.5734438%2C1.4572666%2C43.5573361&format=json&displayLines=1&key=a03561f2fd10641d96fb8188d209414d8";
-		
+		String url_arret = URL_TISSEO+"stopPointsList?bbox=1.4685963%2C43.5734438%2C1.4572666%2C43.5573361&format=json&displayLines=1&key="+KEY;
+
 		try {
 			// Envoie de la requête
 			InputStream inputStream = sendRequest(new URL(url_arret));
 
 			// Vérification de l'inputStream
-			if (inputStream != null) {				
-				java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
-			    return s.hasNext() ? s.next() : "";
+			if (inputStream != null) {
+				java.util.Scanner s = new java.util.Scanner(inputStream)
+						.useDelimiter("\\A");
+				return s.hasNext() ? s.next() : "";
 			}
 
 		} catch (Exception e) {
@@ -47,7 +51,29 @@ public class WebService {
 		}
 		return null;
 
-		
+	}
+
+	public String get_horaires(String numLigne, String numArret) {
+
+		String url_arret = URL_TISSEO+"departureBoard?stopPointId="+numArret+"&format=json&displayRealTime=1&lineId="+numLigne+"&key="+KEY;
+
+		try {
+			// Envoie de la requête
+			InputStream inputStream = sendRequest(new URL(url_arret));
+
+			// Vérification de l'inputStream
+			if (inputStream != null) {
+				java.util.Scanner s = new java.util.Scanner(inputStream)
+						.useDelimiter("\\A");
+				return s.hasNext() ? s.next() : "";
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("WebService", "Impossible de récupérer les horaires de passage");
+		}
+		return null;
+
 	}
 
 }

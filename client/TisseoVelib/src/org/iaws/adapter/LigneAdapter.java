@@ -4,26 +4,33 @@ import java.util.ArrayList;
 
 import org.iaws.R;
 import org.iaws.model.LigneItem;
+import org.iaws.webservices.WebService;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class LigneAdapter extends BaseAdapter{
 	
 	private Context context;
     private ArrayList<LigneItem> ligneItems;
+    private WebService webservice;
+    private int positionClique;
     
     public LigneAdapter(Context context, ArrayList<LigneItem> ligneItems){
         this.context = context;
         this.ligneItems = ligneItems;
+        webservice = new WebService();
     }
 
 	@Override
@@ -42,7 +49,7 @@ public class LigneAdapter extends BaseAdapter{
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -59,16 +66,56 @@ public class LigneAdapter extends BaseAdapter{
         view_nomLigne.setTextColor(Color.parseColor(ligneItems.get(position).getFgXmlColor()));
         view_nomArret.setText(ligneItems.get(position).getNomArret());
         view_direction.setText("Direction : " + ligneItems.get(position).getDestination());
-         
-        /*
-        if(navDrawerItems.get(position).getCounterVisibility()){
-            txtCount.setText(ligneItems.get(position).getCount());
-        }else{
-            txtCount.setVisibility(View.GONE);
-        }
-         */
+        
+        convertView.setId(position);
+        convertView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				positionClique = position;
+				String idArret = ligneItems.get(v.getId()).getIdArret();
+				String idLigne = ligneItems.get(v.getId()).getIdLigne();
+				
+				GetHorrairesTask task = new GetHorrairesTask();
+				task.execute(idArret, idLigne, String.valueOf(position));
+			}
+		});
         
         return convertView;
+	}
+	
+	private class GetHorrairesTask extends AsyncTask<String, Void, String> {
+
+		protected String doInBackground(String... params) {
+			
+			String numArret = params[0];
+			String numLigne = params[1];
+			
+			
+			String liste_horaires = webservice.get_horaires(numLigne, numArret);
+
+			return liste_horaires;
+		}
+
+		protected void onPostExecute(String result) {
+			System.out.println(result);
+			String liste_horaire = "Destination : Université Paul Sabatier\nDans 10 minutes : 13h30\nDans 25 minutes : 13h45";
+			display_horaires(liste_horaire);
+		}
+	}
+	
+	private void display_horaires(String horaires){
+		 
+		new AlertDialog.Builder(context)
+	    .setTitle(ligneItems.get(positionClique).getNomLigne() + " " +ligneItems.get(positionClique).getNomArret())
+	    .setMessage(horaires)
+	    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with delete
+	        }
+	     })
+	    .setIcon(R.drawable.clock)
+	     .show();
 	}
 
 }

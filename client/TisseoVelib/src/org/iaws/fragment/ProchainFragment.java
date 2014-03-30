@@ -88,9 +88,9 @@ public class ProchainFragment extends Fragment {
 	private class GetArretsTask extends AsyncTask<String, Void, String> {
 
 		protected String doInBackground(String... urls) {
-			String liste_arret = webservice.get_arrets();
+			String liste_arrets = webservice.get_arrets();
 
-			return liste_arret;
+			return liste_arrets;
 		}
 
 		protected void onPostExecute(String result) {
@@ -123,7 +123,6 @@ public class ProchainFragment extends Fragment {
 
 					public void onItemSelected(AdapterView<?> parent,
 							View view, int pos, long id) {
-						System.out.println("ligne");
 						ligne_select = (String) spinner_ligne.getSelectedItem();
 
 						update_liste_arret();
@@ -134,17 +133,15 @@ public class ProchainFragment extends Fragment {
 					public void onNothingSelected(AdapterView<?> parent) {
 					}
 				});
-		
+
 		spinner_arret
 				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 					public void onItemSelected(AdapterView<?> parent,
 							View view, int pos, long id) {
-						System.out.println("arret");
 						arret_select = (String) spinner_arret.getSelectedItem();
 
 						update_liste_ligne();
-						//update_spinner_ligne();
 						update_view_liste();
 					}
 
@@ -160,9 +157,11 @@ public class ProchainFragment extends Fragment {
 
 			if (is_ligne_affichable(ligne)) {
 				ligneItems.add(new LigneItem(ligne.getDestination().getArret()
-						.getName(), ligne.getLigne(), ligne.getColor(), ligne
-						.getBgXmlColor(), ligne.getFgXmlColor(), ligne
-						.getDestination().getName()));
+						.getName(), ligne.getLigne(), ligne.getBgXmlColor(),
+						ligne.getFgXmlColor(),
+						ligne.getDestination().getName(), ligne
+								.getDestination().getArret().getId(), ligne
+								.getId()));
 			}
 		}
 		adapter = new LigneAdapter(getActivity(), ligneItems);
@@ -180,8 +179,15 @@ public class ProchainFragment extends Fragment {
 		if (ligne.getLigne().equals(ligne_select) && arret_select.equals(TOUS)) {
 			return true;
 		}
-		
-		if(ligne.getDestination().getArret().getName().equals(arret_select) && ligne.getLigne().equals(ligne_select)){
+
+		if (ligne.getDestination().getArret().getName().equals(arret_select)
+				&& ligne.getLigne().equals(ligne_select)) {
+			return true;
+		}
+
+		if (ligne_select.equals(TOUTES)
+				&& ligne.getDestination().getArret().getName()
+						.equals(arret_select)) {
 			return true;
 		}
 
