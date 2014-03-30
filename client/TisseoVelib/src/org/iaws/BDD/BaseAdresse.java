@@ -12,7 +12,7 @@ public class BaseAdresse extends SQLiteOpenHelper{
 	private static final String COL_ADRESSE = "adresse";
 	
 	private static final String CREATE_BDD = "CREATE TABLE IF NOT EXISTS " + TABLE_ADRESSE + " ("
-			+ COL_ID + " INTEGER PRIMARY KEY, " +  COL_ADRESSE + "TEXT NOT NULL);";
+			+ COL_ID + " INTEGER PRIMARY KEY, " +  COL_ADRESSE + " TEXT NOT NULL);";
 
 	public BaseAdresse(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);

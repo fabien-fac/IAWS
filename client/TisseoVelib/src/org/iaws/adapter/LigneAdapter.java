@@ -115,7 +115,7 @@ public class LigneAdapter extends BaseAdapter{
 		}
 		else{
 			for (ProchainPassage prochainPassage : prochainPassages) {
-				message += prochainPassage.getProchainPassage();
+				message += prochainPassage.calculerProchainPassage() + "\n";
 			}
 		}
 		 
@@ -124,7 +124,7 @@ public class LigneAdapter extends BaseAdapter{
 	    .setMessage(message)
 	    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with delete
+	            
 	        }
 	     })
 	    .setIcon(R.drawable.clock)

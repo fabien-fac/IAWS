@@ -82,17 +82,18 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
+        public static final int adress_save=0x7f050005;
         public static final int app_name=0x7f050000;
         public static final int arret_name=0x7f050002;
-        public static final int button_valider=0x7f050008;
+        public static final int button_valider=0x7f050009;
         public static final int depart_indispo=0x7f050004;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f050009;
+        public static final int desc_list_item_icon=0x7f05000a;
         public static final int directions=0x7f050003;
-        public static final int form_arret=0x7f050007;
-        public static final int form_ligne=0x7f050006;
-        public static final int form_your_adress=0x7f050005;
+        public static final int form_arret=0x7f050008;
+        public static final int form_ligne=0x7f050007;
+        public static final int form_your_adress=0x7f050006;
     }
     public static final class style {
         /** 

@@ -21,7 +21,7 @@ public class Bdd_Adresse {
 	private BaseAdresse base_msg;
 	
 	private static final String CREATE_BDD = "CREATE TABLE IF NOT EXISTS " + TABLE_ADRESSE + " ("
-			+ COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +  COL_ADRESSE + "TEXT NOT NULL);";
+			+ COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +  COL_ADRESSE + " TEXT NOT NULL);";
 	
 	public Bdd_Adresse(Context context){
 		base_msg = new BaseAdresse(context, NOM_BDD, null, VERSION_BDD);
@@ -67,7 +67,7 @@ public class Bdd_Adresse {
 		this.open();
 		
 		String res = null;
-		String req = "SELECT adresse FROM table_adresse WHERE id = (SELECT MAX(id) FROM table_adresse)";
+		String req = "SELECT adresse FROM table_adresse WHERE id = ( SELECT MAX(id) FROM table_adresse )";
 		Cursor c = bdd.rawQuery(req ,null);
 		
 		if (c.moveToFirst()) {

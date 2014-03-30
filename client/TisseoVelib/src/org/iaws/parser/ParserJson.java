@@ -104,11 +104,9 @@ public class ParserJson {
 				prochainPassage.setIdArret(idArret);
 				prochainPassage = jsonElementToProchainPassage(jsonElement,
 						prochainPassage);
-				System.out.println("BABAAAR : " + prochainPassage.toString());
 				liste.add(prochainPassage);
 			} catch (java.lang.NullPointerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
 			}
 		}
 		return liste;
@@ -121,8 +119,6 @@ public class ParserJson {
 		JsonObject ligne = obj.getAsJsonObject("line");
 
 		prochainPassage.setIdLigne(ligne.get("shortName").toString());
-		System.out.println("BIIIIIILBO : "+ obj.get("destination").getAsJsonArray()
-				.get(0).toString());
 		prochainPassage.setDestination(obj.get("destination").getAsJsonArray()
 				.get(0).getAsJsonObject().get("name").toString());
 		String prochainPassageString = obj.get("dateTime").toString()
