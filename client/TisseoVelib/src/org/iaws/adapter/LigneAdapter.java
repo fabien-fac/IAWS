@@ -113,9 +113,9 @@ public class LigneAdapter extends BaseAdapter {
 
 		view_like.setVisibility(View.GONE);
 
-		if(layout.getChildCount()>1)
+		if (layout.getChildCount() > 1)
 			layout.removeViewAt(1);
-		
+
 		layout.addView(view_like);
 
 		btn_like.setOnClickListener(listener_like);
@@ -150,15 +150,12 @@ public class LigneAdapter extends BaseAdapter {
 		String message = "";
 		String str;
 		int count = 0;
-		if (prochainPassages.size() == 0) {
-			message = context.getResources().getString(R.string.depart_indispo);
-		} else {
-			for (ProchainPassage prochainPassage : prochainPassages) {
-				str = prochainPassage.calculerProchainPassage();
-				if (str != null) {
-					message += str + "\n";
-					count++;
-				}
+
+		for (ProchainPassage prochainPassage : prochainPassages) {
+			str = prochainPassage.calculerProchainPassage();
+			if (str != null) {
+				message += str + "\n";
+				count++;
 			}
 		}
 
@@ -184,7 +181,7 @@ public class LigneAdapter extends BaseAdapter {
 
 		LinearLayout li = (LinearLayout) v;
 		View view = li.getChildAt(1);
-		
+
 		System.out.println("affiche");
 
 		if (view.getVisibility() == View.VISIBLE) {
@@ -196,7 +193,7 @@ public class LigneAdapter extends BaseAdapter {
 
 	private void init_listeners() {
 		listener_horaires = new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				String idArret = ligneItems.get(v.getId()).getIdArret();
@@ -206,7 +203,7 @@ public class LigneAdapter extends BaseAdapter {
 				task.execute(idArret, idLigne);
 			}
 		};
-		
+
 		listener_like = new OnClickListener() {
 
 			@Override

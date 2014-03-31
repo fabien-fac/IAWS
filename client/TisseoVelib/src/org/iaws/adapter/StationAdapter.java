@@ -98,6 +98,9 @@ public class StationAdapter extends BaseAdapter {
 		View view_like = mInflater.inflate(R.layout.like_display, null);
 		view_like.setVisibility(View.GONE);
 		
+		if(layout.getChildCount()>1)
+			layout.removeViewAt(1);
+		
 		layout.addView(view_like);
 
 		convertView.setOnClickListener(new OnClickListener() {
