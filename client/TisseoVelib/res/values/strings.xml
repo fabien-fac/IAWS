@@ -11,6 +11,9 @@
     <string name="station_velo_dispo">Vélo disponible :</string>
     <string name="station_place_dispo">Place disponible :</string>
     <string name="station_adresse">Adresse de la station</string>
+    <string name="like">like</string>
+    <string name="unlike">unlike</string>
+    <string name="horaires">horaires</string>
     
     <string name="form_your_adress">Votre adresse :</string>
     <string name="form_ligne">Ligne :</string>
