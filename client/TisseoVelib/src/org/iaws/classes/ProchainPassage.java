@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
-public class ProchainPassage {
+import android.view.View;
+import android.view.View.OnClickListener;
+
+public class ProchainPassage implements OnClickListener {
 
 	private String idLigne;
 	private String idArret;
@@ -81,5 +84,11 @@ public class ProchainPassage {
 
 	public void setProchainPassage(Date prochainPassage) {
 		this.prochainPassage = prochainPassage;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
 	}
 }
