@@ -36,6 +36,7 @@ public class ProchainPassage {
 		String resultat = "";
 		if (this.idLigne.equals(LIGNE_METRO.A)
 				|| this.idLigne.equals(LIGNE_METRO.B)) {
+			System.out.println("METROOOOOOOOOOOOOOOOOOOOOOO");
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
 			if (now.get(Calendar.HOUR_OF_DAY) > 5
@@ -80,6 +81,7 @@ public class ProchainPassage {
 				resultat = "Temps d'attente maximum : 7 minutes";
 			}
 		} else {
+			System.out.println("PAS METROOOOOOOOOOOOOOOOOOOOOOO");
 			resultat = "Dans ";
 			long intervalle = this.prochainPassage.getTime()
 					- new Date().getTime();
