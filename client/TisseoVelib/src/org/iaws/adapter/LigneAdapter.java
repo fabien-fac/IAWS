@@ -1,9 +1,11 @@
 package org.iaws.adapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.iaws.R;
+import org.iaws.classes.LIGNE_METRO;
 import org.iaws.classes.ProchainPassage;
 import org.iaws.model.LigneItem;
 import org.iaws.parser.ParserJson;
@@ -162,7 +164,7 @@ public class LigneAdapter extends BaseAdapter {
 		}
 
 		if (count == 0) {
-			message = context.getResources().getString(R.string.depart_indispo);
+			message = traitement_no_departures();
 		}
 		
 		new AlertDialog.Builder(context)
@@ -219,6 +221,17 @@ public class LigneAdapter extends BaseAdapter {
 				System.out.println("unlike");
 			}
 		};
+	}
+	
+	private String traitement_no_departures(){
+		String nomLigne = ligneItems.get(positionClique).getNomLigne();
+		if(nomLigne.equals("A") || nomLigne.equals("B")){
+			ProchainPassage p = new ProchainPassage(nomLigne, "", "",null);
+			return p.calculerProchainPassage();
+		}
+		else{
+			return context.getResources().getString(R.string.depart_indispo);
+		}
 	}
 
 }

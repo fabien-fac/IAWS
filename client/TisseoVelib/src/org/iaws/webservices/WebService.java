@@ -56,7 +56,7 @@ public class WebService {
 	}
 
 	public String get_horaires(String numLigne, String numArret) {
-
+		
 		String url_arret = URL_TISSEO+"departureBoard?stopPointId="+numArret+"&format=json&displayRealTime=1&lineId="+numLigne+"&key="+KEY_TISSEO;
 
 		try {

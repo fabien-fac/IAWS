@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class ProchainPassage implements OnClickListener {
+public class ProchainPassage {
 
 	private String idLigne;
 	private String idArret;
@@ -37,8 +37,8 @@ public class ProchainPassage implements OnClickListener {
 
 	public String calculerProchainPassage() {
 		String resultat = "";
-		if (this.idLigne.equals(LIGNE_METRO.A)
-				|| this.idLigne.equals(LIGNE_METRO.B)) {
+		if (this.idLigne.equals("A")
+				|| this.idLigne.equals("B")) {
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
 			if (now.get(Calendar.HOUR_OF_DAY) > 5
@@ -214,9 +214,4 @@ public class ProchainPassage implements OnClickListener {
 		this.prochainPassage = prochainPassage;
 	}
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
-	}
 }
