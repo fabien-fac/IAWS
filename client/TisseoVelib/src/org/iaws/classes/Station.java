@@ -1,8 +1,8 @@
 package org.iaws.classes;
 
-import java.util.Locale;
+import org.iaws.interfaces.Fiabilite;
 
-public class Station {
+public class Station implements Fiabilite {
 
 	private String nom;
 	private String adresse;
@@ -20,18 +20,19 @@ public class Station {
 		this.nbVeloDispo = nbVeloDispo;
 		String open = ouverte.replace("\"", "");
 		this.ouverte = (open.equalsIgnoreCase("OPEN"));
+		this.nbLike = 0;
+		this.nbUnlike = 0;
 	}
 
 	public String toString() {
 		return "Nom : " + this.nom + " / adresse : " + this.adresse
-				+ " / Sation ouverte : " + this.ouverte
-				+ " / totalVelo : " + this.totalVelo + " / nbVeloDispo : "
-				+ this.nbVeloDispo;
+				+ " / Sation ouverte : " + this.ouverte + " / totalVelo : "
+				+ this.totalVelo + " / nbVeloDispo : " + this.nbVeloDispo;
 
 	}
-	
-	public int calculerNbStandDIsponible(){
-		return this.totalVelo-nbVeloDispo;
+
+	public int calculerNbStandDIsponible() {
+		return this.totalVelo - nbVeloDispo;
 	}
 
 	public Boolean getOuverte() {
@@ -88,6 +89,44 @@ public class Station {
 
 	public void setNbUnlike(int nbUnlike) {
 		this.nbUnlike = nbUnlike;
+	}
+
+	@Override
+	public int get_nb_like() {
+		return nbLike;
+	}
+
+	@Override
+	public int get_nb_unlike() {
+		return nbUnlike;
+	}
+
+	@Override
+	public void ajout_like(int nb) {
+		nbLike += nb;
+	}
+
+	@Override
+	public void ajout_unlike(int nb) {
+		nbUnlike += nb;
+	}
+
+	@Override
+	public void suppr_like(int nb) {
+		if ((nbLike - nb) < 0) {
+			nbLike = 0;
+		} else {
+			nbLike -= nb;
+		}
+	}
+
+	@Override
+	public void suppr_unlike(int nb) {
+		if ((nbUnlike - nb) < 0) {
+			nbUnlike = 0;
+		} else {
+			nbUnlike -= nb;
+		}
 	}
 
 }

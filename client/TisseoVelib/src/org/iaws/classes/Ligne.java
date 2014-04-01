@@ -17,6 +17,8 @@ public class Ligne implements Fiabilite{
 		this.name = nom.replaceAll("\"", "");
 		this.id = id.replaceAll("\"", "");
 		this.ligne = ligne.replaceAll("\"", "");
+		this.nbLike = 0;
+		this.nbUnlike = 0;
 	}
 
 	@Override
@@ -27,6 +29,36 @@ public class Ligne implements Fiabilite{
 	@Override
 	public int get_nb_unlike() {
 		return this.nbUnlike;
+	}
+	
+	@Override
+	public void ajout_like(int nb) {
+		nbLike += nb;
+	}
+
+	@Override
+	public void ajout_unlike(int nb) {
+		nbUnlike += nb;
+	}
+	
+	@Override
+	public void suppr_like(int nb) {
+		if((nbLike - nb) < 0){
+			nbLike = 0;
+		}
+		else{
+			nbLike -= nb;
+		}
+	}
+
+	@Override
+	public void suppr_unlike(int nb) {
+		if((nbUnlike - nb) < 0){
+			nbUnlike = 0;
+		}
+		else{
+			nbUnlike -= nb;
+		}
 	}
 
 	public String getName() {

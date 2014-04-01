@@ -4,11 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.iaws.classes.Arret;
 import org.iaws.classes.Destination;
 import org.iaws.classes.Ligne;
+import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.ProchainPassage;
 import org.iaws.classes.Station;
 
@@ -164,5 +167,12 @@ public class ParserJson {
 		station = new Station(name, address, totalVelo, nbVeloDispo, ouverte);
 
 		return station;
+	}
+	
+	public Map<String, LikeUnlike> jsonToMapLike(String json){
+		Map<String, LikeUnlike> map = new HashMap<String, LikeUnlike>();
+		
+		
+		return map;
 	}
 }

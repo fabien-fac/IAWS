@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.iaws.R;
 import org.iaws.adapter.LigneAdapter;
 import org.iaws.classes.Arret;
 import org.iaws.classes.Ligne;
-import org.iaws.model.LigneItem;
+import org.iaws.classes.LikeUnlike;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
@@ -44,11 +45,13 @@ public class ProchainFragment extends Fragment {
 	private Spinner spinner_arret;
 	private ListView layout_liste;
 	private LigneAdapter adapter;
-	private ArrayList<LigneItem> ligneItems;
+	private ArrayList<Ligne> ligneItems;
 	private ProgressBar progress_load;
 
 	private List<Arret> liste_arrets;
 	private List<Ligne> liste_lignes;
+
+	private Map<String, LikeUnlike> mapLike;
 
 	public ProchainFragment() {
 	}
@@ -63,6 +66,10 @@ public class ProchainFragment extends Fragment {
 		init_variables();
 		init_composants();
 
+		GetLikeUnlikeTask taskLike = new GetLikeUnlikeTask();
+		taskLike.execute();
+
+		// TODO le lancer que quand le 1er est fini ?
 		GetArretsTask task = new GetArretsTask();
 		task.execute();
 
@@ -103,6 +110,19 @@ public class ProchainFragment extends Fragment {
 			update_listes(result);
 			update_spinners();
 			update_view_liste();
+		}
+	}
+
+	private class GetLikeUnlikeTask extends AsyncTask<Void, Void, String> {
+
+		protected String doInBackground(Void... param) {
+			String liste_like = webservice.get_like_unlike();
+
+			return liste_like;
+		}
+
+		protected void onPostExecute(String result) {
+			update_like(result);
 		}
 	}
 
@@ -158,16 +178,11 @@ public class ProchainFragment extends Fragment {
 
 	private void update_view_liste() {
 
-		ligneItems = new ArrayList<LigneItem>();
+		ligneItems = new ArrayList<Ligne>();
 		for (Ligne ligne : liste_lignes) {
 
 			if (is_ligne_affichable(ligne)) {
-				ligneItems.add(new LigneItem(ligne.getDestination().getArret()
-						.getName(), ligne.getLigne(), ligne.getBgXmlColor(),
-						ligne.getFgXmlColor(),
-						ligne.getDestination().getName(), ligne
-								.getDestination().getArret().getId(), ligne
-								.getId()));
+				ligneItems.add(ligne);
 			}
 		}
 		adapter = new LigneAdapter(getActivity(), ligneItems);
@@ -253,5 +268,17 @@ public class ProchainFragment extends Fragment {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner_ligne.setAdapter(dataAdapter);
 
+	}
+
+	private void update_like(String json) {
+		ParserJson parser = new ParserJson();
+		mapLike = parser.jsonToMapLike(json);
+		for (Ligne ligne : liste_lignes) {
+			if (mapLike.containsKey(ligne.getId())) {
+				LikeUnlike like = mapLike.get(ligne.getId());
+				ligne.ajout_like(like.getLike());
+				ligne.ajout_unlike(like.getUnlike());
+			}
+		}
 	}
 }

@@ -1,13 +1,11 @@
 package org.iaws.adapter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.iaws.R;
-import org.iaws.classes.LIGNE_METRO;
+import org.iaws.classes.Ligne;
 import org.iaws.classes.ProchainPassage;
-import org.iaws.model.LigneItem;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
@@ -30,14 +28,14 @@ import android.widget.TextView;
 public class LigneAdapter extends BaseAdapter {
 
 	private Context context;
-	private ArrayList<LigneItem> ligneItems;
+	private ArrayList<Ligne> ligneItems;
 	private WebService webservice;
 	private int positionClique;
 	private OnClickListener listener_horaires;
 	private OnClickListener listener_like;
 	private OnClickListener listener_unlike;
 
-	public LigneAdapter(Context context, ArrayList<LigneItem> ligneItems) {
+	public LigneAdapter(Context context, ArrayList<Ligne> ligneItems) {
 		this.context = context;
 		this.ligneItems = ligneItems;
 		webservice = new WebService();
@@ -75,16 +73,17 @@ public class LigneAdapter extends BaseAdapter {
 		TextView view_direction = (TextView) convertView
 				.findViewById(R.id.ligne_textview_direction);
 
-		view_nomLigne.setText(ligneItems.get(position).getNomLigne());
+		view_nomLigne.setText(ligneItems.get(position).getLigne());
 		GradientDrawable drawable = (GradientDrawable) view_nomLigne
 				.getBackground();
 		drawable.setColor(Color.parseColor(ligneItems.get(position)
 				.getBgXmlColor()));
 		view_nomLigne.setTextColor(Color.parseColor(ligneItems.get(position)
 				.getFgXmlColor()));
-		view_nomArret.setText(ligneItems.get(position).getNomArret());
+		view_nomArret.setText(ligneItems.get(position).getDestination()
+				.getArret().getName());
 		view_direction.setText("Direction : "
-				+ ligneItems.get(position).getDestination());
+				+ ligneItems.get(position).getDestination().getName());
 
 		convertView.setOnClickListener(new OnClickListener() {
 
@@ -112,6 +111,14 @@ public class LigneAdapter extends BaseAdapter {
 		btn_horraire.setId(position);
 		btn_horraire.setVisibility(View.VISIBLE);
 
+		TextView text_like = (TextView) view_like
+				.findViewById(R.id.likedisplay_textview_like);
+		TextView text_unlike = (TextView) view_like
+				.findViewById(R.id.likedisplay_textview_unlike);
+
+		text_like.setText(String.valueOf(ligneItems.get(position).get_nb_like()));
+		text_unlike.setText(String.valueOf(ligneItems.get(position).get_nb_unlike()));
+		
 		view_like.setVisibility(View.GONE);
 
 		if (layout.getChildCount() > 1)
@@ -120,7 +127,9 @@ public class LigneAdapter extends BaseAdapter {
 		layout.addView(view_like);
 
 		btn_like.setOnClickListener(listener_like);
+		btn_like.setId(position);
 		btn_unlike.setOnClickListener(listener_unlike);
+		btn_unlike.setId(position);
 		btn_horraire.setOnClickListener(listener_horaires);
 
 		return convertView;
@@ -132,7 +141,7 @@ public class LigneAdapter extends BaseAdapter {
 
 			String numArret = params[0];
 			String numLigne = params[1];
-			
+
 			System.out.println("arret : " + numArret);
 			System.out.println("ligne : " + numLigne);
 
@@ -166,11 +175,13 @@ public class LigneAdapter extends BaseAdapter {
 		if (count == 0) {
 			message = traitement_no_departures();
 		}
-		
+
 		new AlertDialog.Builder(context)
 				.setTitle(
-						ligneItems.get(positionClique).getNomLigne() + " "
-								+ ligneItems.get(positionClique).getNomArret())
+						ligneItems.get(positionClique).getLigne()
+								+ " "
+								+ ligneItems.get(positionClique)
+										.getDestination().getArret().getName())
 				.setMessage(message)
 				.setPositiveButton(android.R.string.yes,
 						new DialogInterface.OnClickListener() {
@@ -198,8 +209,9 @@ public class LigneAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				String idArret = ligneItems.get(v.getId()).getIdArret();
-				String idLigne = ligneItems.get(v.getId()).getIdLigne();
+				String idArret = ligneItems.get(v.getId()).getDestination()
+						.getArret().getId();
+				String idLigne = ligneItems.get(v.getId()).getId();
 				positionClique = v.getId();
 				GetHorrairesTask task = new GetHorrairesTask();
 				task.execute(idArret, idLigne);
@@ -210,7 +222,11 @@ public class LigneAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				System.out.println("like");
+				String idLigne = ligneItems.get(v.getId()).getId();
+				System.out.println("like : " + idLigne);
+				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
+				taskLike.execute(idLigne, "like");
+
 			}
 		};
 
@@ -218,19 +234,38 @@ public class LigneAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				System.out.println("unlike");
+				String idLigne = ligneItems.get(v.getId()).getId();
+				System.out.println("unlike : " + idLigne);
+				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
+				taskLike.execute(idLigne, "unlike");
 			}
 		};
 	}
-	
-	private String traitement_no_departures(){
-		String nomLigne = ligneItems.get(positionClique).getNomLigne();
-		if(nomLigne.equals("A") || nomLigne.equals("B")){
-			ProchainPassage p = new ProchainPassage(nomLigne, "", "",null);
+
+	private String traitement_no_departures() {
+		String nomLigne = ligneItems.get(positionClique).getLigne();
+		if (nomLigne.equals("A") || nomLigne.equals("B")) {
+			ProchainPassage p = new ProchainPassage(nomLigne, "", "", null);
 			return p.calculerProchainPassage();
-		}
-		else{
+		} else {
 			return context.getResources().getString(R.string.depart_indispo);
+		}
+	}
+
+	private class SendLikeUnlikeTask extends AsyncTask<String, Void, String> {
+
+		protected String doInBackground(String... params) {
+
+			String idLigne = params[0];
+			String type = params[1];
+
+			String liste_horaires = webservice.send_like_unlike(idLigne, type);
+
+			return liste_horaires;
+		}
+
+		protected void onPostExecute(String result) {
+			System.out.println("envoyé");
 		}
 	}
 

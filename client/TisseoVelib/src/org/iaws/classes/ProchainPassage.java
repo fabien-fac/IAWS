@@ -32,108 +32,120 @@ public class ProchainPassage {
 
 	}
 
-	public String calculerProchainPassage() {
-		String resultat = "";
+	public String calculerProchainPassage() {		
 		if (this.idLigne.equals("A") || this.idLigne.equals("B")) {
-			Calendar now = Calendar.getInstance();
-			now.setTime(new Date());
-			System.out.println(now.get(Calendar.HOUR_OF_DAY));
-			System.out.println(now.get(Calendar.DAY_OF_WEEK));
-			/* 1 min 20 en heure de pointe durant la semaine */
-			if ((now.get(Calendar.HOUR_OF_DAY) >= 7
-					&& now.get(Calendar.HOUR_OF_DAY) < 9 || now
-					.get(Calendar.HOUR_OF_DAY) >= 16
-					&& now.get(Calendar.HOUR_OF_DAY) < 20)
-					&& (now.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
-							.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)) {
-				resultat = "Temps d'attente maximum : 1 minute et 20 secondes";
-			}
-
-			/* 4 min en soirée le vendredi et le samedi */
-			if ((now.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY && now
-					.get(Calendar.HOUR_OF_DAY) >= 20)
-					|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && now
-							.get(Calendar.HOUR_OF_DAY) <= 1)
-					|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && now
-							.get(Calendar.HOUR_OF_DAY) >= 20)
-					|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY && now
-							.get(Calendar.HOUR_OF_DAY) <= 1)) {
-				resultat = "Temps d'attente maximum : 4 minutes";
-			}
-
-			/* 5 min en heure creuse durant la semaine */
-			if (now.get(Calendar.HOUR_OF_DAY) >= 9
-					&& now.get(Calendar.HOUR_OF_DAY) < 16
-					&& (now.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
-							.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)) {
-				resultat = "Temps d'attente maximum : 5 minutes";
-			}
-
-			/*
-			 * 7 min en soirée durant la semaine, en heure creuse le dimanche et
-			 * les jours fériés
-			 */
-			if ((now.get(Calendar.HOUR_OF_DAY) >= 20 && (now
-					.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
-					.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY))
-					|| (now.get(Calendar.HOUR_OF_DAY) >= 7 && (now
-							.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY))
-					|| estJourFerie()) {
-				resultat = "Temps d'attente maximum : 7 minutes";
-			}
-
-			/* 9 min en début de service */
-			if (now.get(Calendar.HOUR_OF_DAY) <= 5
-					&& (now.get(Calendar.MINUTE) <= 15)) {
-				resultat = "Temps d'attente maximum : 9 minutes";
-			}
-			
-			if (resultat.equals("")){
-				resultat = "Information indisponible";
-			}
-			
+			return calculerProchainPassageMetro();
 		} else {
-			resultat = "Dans ";
-			long intervalle = this.prochainPassage.getTime()
-					- new Date().getTime();
-			if (intervalle >= 0) {
-				long nbMinutes = TimeUnit.MINUTES.convert(intervalle,
-						TimeUnit.MILLISECONDS);
-				long nbHeures = nbMinutes / 60;
-				if (nbHeures > 1) {
-					resultat += nbHeures + " heures ";
-					if (nbMinutes % 60 > 1) {
-						resultat += "et " + nbMinutes % 60 + " minutes : ";
-					} else if (nbMinutes % 60 == 1){
-						resultat += "et 1 minute : ";
-					}
-				} else if (nbHeures == 1) {
-					resultat += "1 heure ";
-					if (nbMinutes % 60 > 1) {
-						resultat += "et " + nbMinutes % 60 + " minutes : ";
-					} else if (nbMinutes % 60 == 1){
-						resultat += "et 1 minute : ";
-					}
-				} else if (nbMinutes <= 1) {
-					resultat = "Arrivée imminente";
-				} else {
-					resultat += nbMinutes + " minutes : ";
-				}
-
-				Calendar calendar = GregorianCalendar.getInstance();
-				calendar.setTime(this.prochainPassage);
-				String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY),
-						calendar.get(Calendar.MINUTE));
-				resultat += String.format("%02d:%02d",
-						calendar.get(Calendar.HOUR_OF_DAY),
-						calendar.get(Calendar.MINUTE));
-			} else {
-				return null;
-			}
+			return calculerProchainPassageBus();
 		}
+	}
+	
+	private String calculerProchainPassageMetro(){
+		
+		String resultat = "";
+		
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+		System.out.println(now.get(Calendar.HOUR_OF_DAY));
+		System.out.println(now.get(Calendar.DAY_OF_WEEK));
+		/* 1 min 20 en heure de pointe durant la semaine */
+		if ((now.get(Calendar.HOUR_OF_DAY) >= 7
+				&& now.get(Calendar.HOUR_OF_DAY) < 9 || now
+				.get(Calendar.HOUR_OF_DAY) >= 16
+				&& now.get(Calendar.HOUR_OF_DAY) < 20)
+				&& (now.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+						.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)) {
+			resultat = "Temps d'attente maximum : 1 minute et 20 secondes";
+		}
+
+		/* 4 min en soirée le vendredi et le samedi */
+		if ((now.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY && now
+				.get(Calendar.HOUR_OF_DAY) >= 20)
+				|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && now
+						.get(Calendar.HOUR_OF_DAY) <= 1)
+				|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && now
+						.get(Calendar.HOUR_OF_DAY) >= 20)
+				|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY && now
+						.get(Calendar.HOUR_OF_DAY) <= 1)) {
+			resultat = "Temps d'attente maximum : 4 minutes";
+		}
+
+		/* 5 min en heure creuse durant la semaine */
+		if (now.get(Calendar.HOUR_OF_DAY) >= 9
+				&& now.get(Calendar.HOUR_OF_DAY) < 16
+				&& (now.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+						.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)) {
+			resultat = "Temps d'attente maximum : 5 minutes";
+		}
+
+		/*
+		 * 7 min en soirée durant la semaine, en heure creuse le dimanche et
+		 * les jours fériés
+		 */
+		if ((now.get(Calendar.HOUR_OF_DAY) >= 20 && (now
+				.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+				.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY))
+				|| (now.get(Calendar.HOUR_OF_DAY) >= 7 && (now
+						.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY))
+				|| estJourFerie()) {
+			resultat = "Temps d'attente maximum : 7 minutes";
+		}
+
+		/* 9 min en début de service */
+		if (now.get(Calendar.HOUR_OF_DAY) <= 5
+				&& (now.get(Calendar.MINUTE) <= 15)) {
+			resultat = "Temps d'attente maximum : 9 minutes";
+		}
+		
+		if (resultat.equals("")){
+			resultat = "Information indisponible";
+		}
+		
 		return resultat;
 	}
 
+	private String calculerProchainPassageBus(){
+		String resultat = "Dans ";
+		long intervalle = this.prochainPassage.getTime()
+				- new Date().getTime();
+		if (intervalle >= 0) {
+			long nbMinutes = TimeUnit.MINUTES.convert(intervalle,
+					TimeUnit.MILLISECONDS);
+			long nbHeures = nbMinutes / 60;
+			if (nbHeures > 1) {
+				resultat += nbHeures + " heures ";
+				if (nbMinutes % 60 > 1) {
+					resultat += "et " + nbMinutes % 60 + " minutes : ";
+				} else if (nbMinutes % 60 == 1){
+					resultat += "et 1 minute : ";
+				}
+			} else if (nbHeures == 1) {
+				resultat += "1 heure ";
+				if (nbMinutes % 60 > 1) {
+					resultat += "et " + nbMinutes % 60 + " minutes : ";
+				} else if (nbMinutes % 60 == 1){
+					resultat += "et 1 minute : ";
+				}
+			} else if (nbMinutes <= 1) {
+				resultat = "Arrivée imminente";
+			} else {
+				resultat += nbMinutes + " minutes : ";
+			}
+
+			Calendar calendar = GregorianCalendar.getInstance();
+			calendar.setTime(this.prochainPassage);
+			String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY),
+					calendar.get(Calendar.MINUTE));
+			resultat += String.format("%02d:%02d",
+					calendar.get(Calendar.HOUR_OF_DAY),
+					calendar.get(Calendar.MINUTE));
+		} else {
+			return null;
+		}
+		
+		return resultat;
+	}
+	
 	public boolean estJourFerie() {
 		Calendar now = Calendar.getInstance();
 		now.setTime(new Date());
