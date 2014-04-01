@@ -7,9 +7,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import android.view.View;
-import android.view.View.OnClickListener;
-
 public class ProchainPassage {
 
 	private String idLigne;
@@ -37,53 +34,65 @@ public class ProchainPassage {
 
 	public String calculerProchainPassage() {
 		String resultat = "";
-		if (this.idLigne.equals("A")
-				|| this.idLigne.equals("B")) {
+		if (this.idLigne.equals("A") || this.idLigne.equals("B")) {
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
-			if (now.get(Calendar.HOUR_OF_DAY) > 5
-					&& now.get(Calendar.MINUTE) > 15
-					&& now.get(Calendar.HOUR_OF_DAY) < 7) {
-				resultat = "Temps d'attente maximum : 9 minutes";
-			}
-			if (now.get(Calendar.HOUR_OF_DAY) > 7
-					&& now.get(Calendar.HOUR_OF_DAY) < 9
-					|| now.get(Calendar.HOUR_OF_DAY) > 16
-					&& now.get(Calendar.HOUR_OF_DAY) < 20) {
+			System.out.println(now.get(Calendar.HOUR_OF_DAY));
+			System.out.println(now.get(Calendar.DAY_OF_WEEK));
+			/* 1 min 20 en heure de pointe durant la semaine */
+			if ((now.get(Calendar.HOUR_OF_DAY) >= 7
+					&& now.get(Calendar.HOUR_OF_DAY) < 9 || now
+					.get(Calendar.HOUR_OF_DAY) >= 16
+					&& now.get(Calendar.HOUR_OF_DAY) < 20)
+					&& (now.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+							.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)) {
 				resultat = "Temps d'attente maximum : 1 minute et 20 secondes";
 			}
-			if (now.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY
-					|| now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-				if (now.get(Calendar.HOUR_OF_DAY) < 5
-						&& now.get(Calendar.MINUTE) < 15
-						&& now.get(Calendar.HOUR_OF_DAY) > 1) {
-					resultat = "Le métro ouvrira à 5h15";
-				} else if (now.get(Calendar.HOUR_OF_DAY) > 20
-						|| now.get(Calendar.HOUR_OF_DAY) < 1) {
-					resultat = "Temps d'attente maximum : 4 minutes";
-				}
-			} else {
-				if (now.get(Calendar.HOUR_OF_DAY) < 5
-						&& now.get(Calendar.MINUTE) < 15) {
-					resultat = "Le métro ouvrira à 5h15";
-				}
-				if (now.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-					if (now.get(Calendar.HOUR_OF_DAY) > 9
-							&& now.get(Calendar.HOUR_OF_DAY) < 16
-							|| now.get(Calendar.HOUR_OF_DAY) > 20) {
-						resultat = "Temps d'attente maximum : 7 minutes";
-					}
-				} else if (now.get(Calendar.HOUR_OF_DAY) > 9
-						&& now.get(Calendar.HOUR_OF_DAY) < 16
-						|| now.get(Calendar.HOUR_OF_DAY) > 20) {
-					resultat = "Temps d'attente maximum : 5 minutes";
-				}
+
+			/* 4 min en soirée le vendredi et le samedi */
+			if ((now.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY && now
+					.get(Calendar.HOUR_OF_DAY) >= 20)
+					|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && now
+							.get(Calendar.HOUR_OF_DAY) <= 1)
+					|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && now
+							.get(Calendar.HOUR_OF_DAY) >= 20)
+					|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY && now
+							.get(Calendar.HOUR_OF_DAY) <= 1)) {
+				resultat = "Temps d'attente maximum : 4 minutes";
 			}
-			if (estJourFerie()) {
+
+			/* 5 min en heure creuse durant la semaine */
+			if (now.get(Calendar.HOUR_OF_DAY) >= 9
+					&& now.get(Calendar.HOUR_OF_DAY) < 16
+					&& (now.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+							.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)) {
+				resultat = "Temps d'attente maximum : 5 minutes";
+			}
+
+			/*
+			 * 7 min en soirée durant la semaine, en heure creuse le dimanche et
+			 * les jours fériés
+			 */
+			if ((now.get(Calendar.HOUR_OF_DAY) >= 20 && (now
+					.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+					.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY))
+					|| (now.get(Calendar.HOUR_OF_DAY) >= 7 && (now
+							.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY))
+					|| estJourFerie()) {
 				resultat = "Temps d'attente maximum : 7 minutes";
 			}
+
+			/* 9 min en début de service */
+			if (now.get(Calendar.HOUR_OF_DAY) <= 5
+					&& (now.get(Calendar.MINUTE) <= 15)) {
+				resultat = "Temps d'attente maximum : 9 minutes";
+			}
+			
+			if (resultat.equals("")){
+				resultat = "Information indisponible";
+			}
+			
 		} else {
-			System.out.println("PAS METROOOOOOOOOOOOOOOOOOOOOOO");
 			resultat = "Dans ";
 			long intervalle = this.prochainPassage.getTime()
 					- new Date().getTime();
@@ -91,11 +100,20 @@ public class ProchainPassage {
 				long nbMinutes = TimeUnit.MINUTES.convert(intervalle,
 						TimeUnit.MILLISECONDS);
 				long nbHeures = nbMinutes / 60;
-				if (nbHeures >= 1) {
-					resultat += nbHeures + " heures et " + nbMinutes % 60
-							+ " minutes : ";
+				if (nbHeures > 1) {
+					resultat += nbHeures + " heures ";
+					if (nbMinutes % 60 > 1) {
+						resultat += "et " + nbMinutes % 60 + " minutes : ";
+					} else if (nbMinutes % 60 == 1){
+						resultat += "et 1 minute : ";
+					}
 				} else if (nbHeures == 1) {
-					resultat += "1 heure et " + nbMinutes % 60 + " minutes : ";
+					resultat += "1 heure ";
+					if (nbMinutes % 60 > 1) {
+						resultat += "et " + nbMinutes % 60 + " minutes : ";
+					} else if (nbMinutes % 60 == 1){
+						resultat += "et 1 minute : ";
+					}
 				} else if (nbMinutes <= 1) {
 					resultat = "Arrivée imminente";
 				} else {
