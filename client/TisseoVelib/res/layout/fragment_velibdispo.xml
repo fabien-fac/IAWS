@@ -29,14 +29,23 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_menu_search" />
+            android:src="@android:drawable/ic_menu_search"
+            android:background="@layout/grey_button"
+            android:contentDescription="@string/search" />
+
+        <ProgressBar
+            android:id="@+id/velibdispo_progressBar_load"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
 
     </RelativeLayout>
 
     <ListView
         android:id="@+id/velibdispo_listview_liste"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="fill_parent" >
     </ListView>
 
 </LinearLayout>
