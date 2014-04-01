@@ -108,7 +108,6 @@ public class LigneAdapter extends BaseAdapter {
 		Button btn_unlike = (Button) view_like
 				.findViewById(R.id.likedisplay_button_unlike);
 		btn_horraire.setId(position);
-		System.out.println(position);
 		btn_horraire.setVisibility(View.VISIBLE);
 
 		view_like.setVisibility(View.GONE);
@@ -131,6 +130,9 @@ public class LigneAdapter extends BaseAdapter {
 
 			String numArret = params[0];
 			String numLigne = params[1];
+			
+			System.out.println("arret : " + numArret);
+			System.out.println("ligne : " + numLigne);
 
 			String liste_horaires = webservice.get_horaires(numLigne, numArret);
 
@@ -162,7 +164,7 @@ public class LigneAdapter extends BaseAdapter {
 		if (count == 0) {
 			message = context.getResources().getString(R.string.depart_indispo);
 		}
-
+		
 		new AlertDialog.Builder(context)
 				.setTitle(
 						ligneItems.get(positionClique).getNomLigne() + " "
@@ -181,8 +183,6 @@ public class LigneAdapter extends BaseAdapter {
 
 		LinearLayout li = (LinearLayout) v;
 		View view = li.getChildAt(1);
-
-		System.out.println("affiche");
 
 		if (view.getVisibility() == View.VISIBLE) {
 			view.setVisibility(View.GONE);

@@ -62,7 +62,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:text="@string/unlike"
-            android:textColor="#fa3e3e" />
+            android:background="@layout/red_button"
+            style="@style/button_text" />
 
         <Button
             android:id="@+id/likedisplay_button_like"
@@ -71,7 +72,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:text="@string/like"
-            android:textColor="#3efa3e" />
+            android:background="@layout/green_button"
+            style="@style/button_text" />
 
         <Button
             android:id="@+id/likedisplay_button_horaires"
@@ -80,7 +82,10 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:text="@string/horaires"
-            android:visibility="invisible" />
+            android:background="@layout/grey_button"
+            style="@style/button_text"
+            android:visibility="invisible"
+             />
 
     </RelativeLayout>
 
