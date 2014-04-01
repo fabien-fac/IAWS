@@ -37,8 +37,14 @@ public class ProchainPassage {
 
 	public String calculerProchainPassage() {
 		String resultat = "";
+<<<<<<< HEAD
+		if (this.idLigne.equals(LIGNE_METRO.A)
+				|| this.idLigne.equals(LIGNE_METRO.B)) {
+			System.out.println("METROOOOOOOOOOOOOOOOOOOOOOO");
+=======
 		if (this.idLigne.equals("A")
 				|| this.idLigne.equals("B")) {
+>>>>>>> c2c952d1040fa218f09c8c7ba9a5a70dbce9fe3e
 			Calendar now = Calendar.getInstance();
 			now.setTime(new Date());
 			if (now.get(Calendar.HOUR_OF_DAY) > 5

@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 public class VelibdispoFragment extends Fragment {
 
@@ -30,6 +31,7 @@ public class VelibdispoFragment extends Fragment {
 	private AutoCompleteTextView editName;
 	private ImageButton btnSearch;
 	private ListView list_view;
+	private ProgressBar loading_bar;
 
 	private List<Station> list_stations;
 	private List<String> list_string_stations;
@@ -72,6 +74,9 @@ public class VelibdispoFragment extends Fragment {
 			}
 		});
 		btnSearch.setEnabled(false);
+		btnSearch.setVisibility(View.GONE);
+		loading_bar = (ProgressBar) rootView
+				.findViewById(R.id.velibdispo_progressBar_load);
 
 	}
 
@@ -84,6 +89,7 @@ public class VelibdispoFragment extends Fragment {
 
 		@Override
 		protected String doInBackground(Void... arg0) {
+			loading_bar.setVisibility(View.VISIBLE);
 			String liste_station = webservice.get_stations();
 			return liste_station;
 		}
@@ -95,8 +101,11 @@ public class VelibdispoFragment extends Fragment {
 		}
 
 	}
+	
 
 	private void activate_btn_search() {
+		loading_bar.setVisibility(View.GONE);
+		btnSearch.setVisibility(View.VISIBLE);
 		btnSearch.setEnabled(true);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_dropdown_item_1line,
@@ -116,22 +125,23 @@ public class VelibdispoFragment extends Fragment {
 	}
 
 	private void update_view_stations() {
-		StationAdapter adapter = new StationAdapter(getActivity(), list_stations);
+		StationAdapter adapter = new StationAdapter(getActivity(),
+				list_stations);
 		list_view.setAdapter(adapter);
 	}
-	
-	private void update_view_stations(String name){
+
+	private void update_view_stations(String name) {
 		List<Station> stations = new ArrayList<Station>();
 		for (Station station : list_stations) {
-			System.out.println(station.getAdresse());
-			if(station.getNom().contains(name) || station.getAdresse().contains(name)){
+			if (station.getNom().contains(name)
+					|| station.getAdresse().contains(name)) {
 				stations.add(station);
 			}
 		}
-		
+
 		StationAdapter adapter = new StationAdapter(getActivity(), stations);
 		list_view.setAdapter(adapter);
-		
+
 	}
 
 }
