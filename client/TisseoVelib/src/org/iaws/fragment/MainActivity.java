@@ -92,6 +92,8 @@ public class MainActivity extends Activity {
 		if (savedInstanceState == null) {
 			displayView(0);
 		}
+		System.out.println("COORD : " + 11*10000*Math.sqrt(Math.pow(48.841221-48.791033,2)+Math.pow(2.337341-2.492523,2)));
+		
 	}
 
 	/**

@@ -180,7 +180,6 @@ public class ParserJson {
 			JsonObject obj = jsonElement.getAsJsonObject();
 			String id = obj.get("id").toString();
 			map.put(id, likeUnlike);
-			System.out.println(likeUnlike.toString());
 		}
 		return map;
 	}
