@@ -119,9 +119,7 @@ public class ParserJson {
 	private ProchainPassage jsonElementToProchainPassage(JsonElement elem,
 			ProchainPassage prochainPassage) {
 		JsonObject obj = elem.getAsJsonObject();
-
 		JsonObject ligne = obj.getAsJsonObject("line");
-
 		prochainPassage.setIdLigne(ligne.get("shortName").toString());
 		prochainPassage.setDestination(obj.get("destination").getAsJsonArray()
 				.get(0).getAsJsonObject().get("name").toString());
@@ -171,8 +169,27 @@ public class ParserJson {
 	
 	public Map<String, LikeUnlike> jsonToMapLike(String json){
 		Map<String, LikeUnlike> map = new HashMap<String, LikeUnlike>();
+
+		JsonElement jelement = new JsonParser().parse(json);
+		JsonObject jobject = jelement.getAsJsonObject();
 		
-		
+		JsonArray jarray = jobject.getAsJsonArray("rows");
+
+		for (JsonElement jsonElement : jarray) {
+			LikeUnlike likeUnlike = jsonElementToLikeUnlike(jsonElement);
+			JsonObject obj = jsonElement.getAsJsonObject();
+			String id = obj.get("id").toString();
+			map.put(id, likeUnlike);
+		}
 		return map;
+	}
+	
+	private LikeUnlike jsonElementToLikeUnlike(JsonElement elem) {
+		JsonObject obj = elem.getAsJsonObject();
+		JsonObject doc = obj.getAsJsonObject("doc");
+		int nbLike = Integer.parseInt(doc.get("like").toString());
+		int nbUnlike = Integer.parseInt(doc.get("unlike").toString());
+		LikeUnlike likeUnlike = new LikeUnlike(nbLike, nbUnlike);
+		return likeUnlike;
 	}
 }
