@@ -2,6 +2,11 @@ package org.iaws.classes;
 
 public class LikeUnlike {
 
+	@Override
+	public String toString() {
+		return "LikeUnlike [like=" + like + ", unlike=" + unlike + "]";
+	}
+
 	private int like;
 	private int unlike;
 	

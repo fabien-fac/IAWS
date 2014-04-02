@@ -15,7 +15,7 @@ public class WebService {
 	private final String KEY_JCDECAUX = "9e6c731e4916e512a85e4de995de0d90462d5cf5";
 	private final String URL_JCDECAUX = "https://api.jcdecaux.com/vls/v1/";
 
-	private final String URL_LIKE = "http://localhost:5984/";
+	private final String URL_LIKE = "http://10.0.2.2:5984/";
 
 	private InputStream sendRequest(URL url) throws IOException {
 
@@ -109,8 +109,8 @@ public class WebService {
 	}
 
 	public String get_like_unlike() {
-		String url_like = URL_LIKE + "";
-
+		String url_like = URL_LIKE + "like_unlike/_all_docs?include_docs=true";
+		System.out.println(url_like);
 		try {
 			// Envoie de la requête
 			InputStream inputStream = sendRequest(new URL(url_like));
