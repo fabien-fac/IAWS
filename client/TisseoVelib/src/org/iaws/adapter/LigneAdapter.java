@@ -12,7 +12,6 @@ import org.iaws.webservices.WebService;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
@@ -23,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class LigneAdapter extends BaseAdapter {
@@ -101,9 +101,8 @@ public class LigneAdapter extends BaseAdapter {
 
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-		
-		View view_like = mInflater.inflate(R.layout.like_display, null);
 
+		View view_like = mInflater.inflate(R.layout.like_display, null);
 
 		Button btn_horraire = (Button) view_like
 				.findViewById(R.id.likedisplay_button_horaires);
@@ -119,23 +118,24 @@ public class LigneAdapter extends BaseAdapter {
 		TextView text_unlike = (TextView) view_like
 				.findViewById(R.id.likedisplay_textview_unlike);
 
-		text_like.setText(String.valueOf(ligneItems.get(position).get_nb_like()));
-		text_unlike.setText(String.valueOf(ligneItems.get(position).get_nb_unlike()));
-		
+		text_like.setText(String
+				.valueOf(ligneItems.get(position).get_nb_like()));
+		text_unlike.setText(String.valueOf(ligneItems.get(position)
+				.get_nb_unlike()));
+
 		view_like.setVisibility(View.GONE);
-		
-		if (layout.getChildCount() > 1){
-			//view_like.setVisibility(layout.getChildAt(1).getVisibility());
-			layout.removeViewAt(1);		
+
+		if (layout.getChildCount() > 1) {
+			layout.removeViewAt(1);
 		}
-
-		layout.addView(view_like);
-
+		
 		btn_like.setOnClickListener(listener_like);
 		btn_like.setId(position);
 		btn_unlike.setOnClickListener(listener_unlike);
 		btn_unlike.setId(position);
 		btn_horraire.setOnClickListener(listener_horaires);
+		
+		layout.addView(view_like);
 
 		return convertView;
 	}
@@ -178,7 +178,8 @@ public class LigneAdapter extends BaseAdapter {
 			message = traitement_no_departures();
 		}
 
-		TextView messageDialog = (TextView)dialog.findViewById(android.R.id.message);
+		TextView messageDialog = (TextView) dialog
+				.findViewById(android.R.id.message);
 		messageDialog.setText(message);
 
 	}
@@ -200,16 +201,18 @@ public class LigneAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				
+
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setTitle(ligneItems.get(positionClique).getLigne()
 						+ " - "
-						+ ligneItems.get(positionClique)
-								.getDestination().getArret().getName());
-				builder.setMessage(context.getResources().getString(R.string.loading)+"...");
+						+ ligneItems.get(positionClique).getDestination()
+								.getArret().getName());
+				builder.setMessage(context.getResources().getString(
+						R.string.loading)
+						+ "...");
 				builder.setPositiveButton("OK", null);
 				dialog = builder.show();
-				
+
 				String idArret = ligneItems.get(v.getId()).getDestination()
 						.getArret().getId();
 				String idLigne = ligneItems.get(v.getId()).getId();
@@ -225,9 +228,19 @@ public class LigneAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				String idLigne = ligneItems.get(v.getId()).getId();
 				ligneItems.get(v.getId()).ajout_like(1);
-				System.out.println("like : " + idLigne);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
-				taskLike.execute(idLigne, "like");
+				
+				String nb_like = String.valueOf(ligneItems.get(v.getId())
+						.get_nb_like());
+				taskLike.execute(idLigne, nb_like, String.valueOf(ligneItems.get(v.getId())
+						.get_nb_unlike()));
+
+				View view_grandparent = (View) v.getParent().getParent();
+				RelativeLayout parent = (RelativeLayout) view_grandparent
+						.findViewById(R.id.likedisplay_relativelayout_pouces);
+				TextView text_like = (TextView) parent
+						.findViewById(R.id.likedisplay_textview_like);
+				text_like.setText(nb_like);
 
 			}
 		};
@@ -238,9 +251,19 @@ public class LigneAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				String idLigne = ligneItems.get(v.getId()).getId();
 				ligneItems.get(v.getId()).ajout_unlike(1);
-				System.out.println("unlike : " + idLigne);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
-				taskLike.execute(idLigne, "unlike");
+				
+				String nb_unlike = String.valueOf(ligneItems.get(v.getId())
+						.get_nb_unlike());
+				taskLike.execute(idLigne, String.valueOf(ligneItems.get(v.getId())
+						.get_nb_like()), nb_unlike);
+
+				View view_grandparent = (View) v.getParent().getParent();
+				RelativeLayout parent = (RelativeLayout) view_grandparent
+						.findViewById(R.id.likedisplay_relativelayout_pouces);
+				TextView text_unlike = (TextView) parent
+						.findViewById(R.id.likedisplay_textview_unlike);
+				text_unlike.setText(nb_unlike);
 			}
 		};
 	}
@@ -255,19 +278,21 @@ public class LigneAdapter extends BaseAdapter {
 		}
 	}
 
-	private class SendLikeUnlikeTask extends AsyncTask<String, Void, String> {
+	private class SendLikeUnlikeTask extends AsyncTask<String, Void, Void> {
 
-		protected String doInBackground(String... params) {
+		protected Void doInBackground(String... params) {
 
 			String idLigne = params[0];
-			String type = params[1];
+			String nbLike = params[1];
+			String nbUnLike = params[2];
+			
+			webservice.send_like_unlike(idLigne, nbLike, nbUnLike);
+			
+			return null;
 
-			String liste_horaires = webservice.send_like_unlike(idLigne, type);
-
-			return liste_horaires;
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Void param) {
 			System.out.println("envoyé");
 		}
 	}

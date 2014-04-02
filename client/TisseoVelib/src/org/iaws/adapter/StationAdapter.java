@@ -5,28 +5,36 @@ import java.util.List;
 
 import org.iaws.R;
 import org.iaws.classes.Station;
+import org.iaws.webservices.WebService;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.opengl.Visibility;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class StationAdapter extends BaseAdapter {
 
 	private Context context;
 	private ArrayList<Station> stationItems;
+	private OnClickListener listener_like;
+	private OnClickListener listener_unlike;
+	private WebService webservice;
 
 	public StationAdapter(Context context, List<Station> stationItems) {
 		this.context = context;
 		this.stationItems = new ArrayList<Station>(stationItems);
+		webservice = new WebService();
+		init_listeners();
 	}
 
 	@Override
@@ -98,8 +106,30 @@ public class StationAdapter extends BaseAdapter {
 		View view_like = mInflater.inflate(R.layout.like_display, null);
 		view_like.setVisibility(View.GONE);
 		
-		if(layout.getChildCount()>1)
+		
+		Button btn_like = (Button) view_like
+				.findViewById(R.id.likedisplay_button_like);
+		Button btn_unlike = (Button) view_like
+				.findViewById(R.id.likedisplay_button_unlike);
+
+		TextView text_like = (TextView) view_like
+				.findViewById(R.id.likedisplay_textview_like);
+		TextView text_unlike = (TextView) view_like
+				.findViewById(R.id.likedisplay_textview_unlike);
+
+		text_like.setText(String
+				.valueOf(stationItems.get(position).get_nb_like()));
+		text_unlike.setText(String.valueOf(stationItems.get(position)
+				.get_nb_unlike()));
+		
+		if(layout.getChildCount()>1){
 			layout.removeViewAt(1);
+		}
+		
+		btn_like.setOnClickListener(listener_like);
+		btn_like.setId(position);
+		btn_unlike.setOnClickListener(listener_unlike);
+		btn_unlike.setId(position);
 		
 		layout.addView(view_like);
 
@@ -124,6 +154,73 @@ public class StationAdapter extends BaseAdapter {
 		}
 		else{
 			view.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	private void init_listeners() {
+		
+		listener_like = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String idLigne = stationItems.get(v.getId()).getId();
+				stationItems.get(v.getId()).ajout_like(1);
+				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
+				
+				String nb_like = String.valueOf(stationItems.get(v.getId())
+						.get_nb_like());
+				taskLike.execute(idLigne, nb_like, String.valueOf(stationItems.get(v.getId())
+						.get_nb_unlike()));
+
+				View view_grandparent = (View) v.getParent().getParent();
+				RelativeLayout parent = (RelativeLayout) view_grandparent
+						.findViewById(R.id.likedisplay_relativelayout_pouces);
+				TextView text_like = (TextView) parent
+						.findViewById(R.id.likedisplay_textview_like);
+				text_like.setText(nb_like);
+
+			}
+		};
+
+		listener_unlike = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String idLigne = stationItems.get(v.getId()).getId();
+				stationItems.get(v.getId()).ajout_unlike(1);
+				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
+				
+				String nb_unlike = String.valueOf(stationItems.get(v.getId())
+						.get_nb_unlike());
+				taskLike.execute(idLigne, String.valueOf(stationItems.get(v.getId())
+						.get_nb_like()), nb_unlike);
+
+				View view_grandparent = (View) v.getParent().getParent();
+				RelativeLayout parent = (RelativeLayout) view_grandparent
+						.findViewById(R.id.likedisplay_relativelayout_pouces);
+				TextView text_unlike = (TextView) parent
+						.findViewById(R.id.likedisplay_textview_unlike);
+				text_unlike.setText(nb_unlike);
+			}
+		};
+	}
+	
+	private class SendLikeUnlikeTask extends AsyncTask<String, Void, Void> {
+
+		protected Void doInBackground(String... params) {
+
+			String idLigne = params[0];
+			String nbLike = params[1];
+			String nbUnLike = params[2];
+			
+			webservice.send_like_unlike(idLigne, nbLike, nbUnLike);
+			
+			return null;
+
+		}
+
+		protected void onPostExecute(Void param) {
+			System.out.println("envoyé");
 		}
 	}
 

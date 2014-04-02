@@ -4,6 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.google.gson.GsonBuilder;
 
 import android.util.Log;
 
@@ -129,25 +137,31 @@ public class WebService {
 		return null;
 	}
 
-	public String send_like_unlike(String id, String type) {
-		String url_like = URL_LIKE + "http://localhost:5984/like_unlike/_all_docs?include_docs=true";
-
+	public void send_like_unlike(String id, String nbLike, String nbUnlike) {
+		String url_like = URL_LIKE + "like_unlike/" + id;
+		String json = paramLikeToStringJson(id, nbLike, nbUnlike);
+		
+		System.out.println(json);
 		try {
-			// Envoie de la requête
-			InputStream inputStream = sendRequest(new URL(url_like));
-
-			// Vérification de l'inputStream
-			if (inputStream != null) {
-				java.util.Scanner s = new java.util.Scanner(inputStream)
-						.useDelimiter("\\A");
-				return s.hasNext() ? s.next() : "";
-			}
-
+	        HttpPost httpPost = new HttpPost(url_like);
+	        httpPost.setEntity(new StringEntity(json));
+	        httpPost.setHeader("Accept", "application/json");
+	        httpPost.setHeader("Content-type", "application/json");
+	        new DefaultHttpClient().execute(httpPost);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e("WebService", "Impossible d'envoyer les like et unlike");
 		}
-		return null;
+	}
+	
+	private String paramLikeToStringJson(String id, String nbLike, String nbUnlike){
+		Map<String, String> comment = new HashMap<String, String>();
+	    comment.put("id", id);
+	    comment.put("like", nbLike);
+	    comment.put("unlike", nbUnlike);
+	    String json = new GsonBuilder().create().toJson(comment, Map.class);
+	    
+	    return json;
 	}
 
 }
