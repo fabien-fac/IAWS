@@ -130,7 +130,7 @@ public class WebService {
 	}
 
 	public String send_like_unlike(String id, String type) {
-		String url_like = URL_LIKE + "";
+		String url_like = URL_LIKE + "http://localhost:5984/like_unlike/_all_docs?include_docs=true";
 
 		try {
 			// Envoie de la requête

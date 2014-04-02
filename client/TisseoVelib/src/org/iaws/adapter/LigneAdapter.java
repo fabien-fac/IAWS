@@ -124,7 +124,7 @@ public class LigneAdapter extends BaseAdapter {
 		view_like.setVisibility(View.GONE);
 		
 		if (layout.getChildCount() > 1){
-			view_like.setVisibility(layout.getChildAt(1).getVisibility());
+			//view_like.setVisibility(layout.getChildAt(1).getVisibility());
 			layout.removeViewAt(1);		
 		}
 
@@ -224,6 +224,7 @@ public class LigneAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				String idLigne = ligneItems.get(v.getId()).getId();
+				ligneItems.get(v.getId()).ajout_like(1);
 				System.out.println("like : " + idLigne);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
 				taskLike.execute(idLigne, "like");
@@ -236,6 +237,7 @@ public class LigneAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				String idLigne = ligneItems.get(v.getId()).getId();
+				ligneItems.get(v.getId()).ajout_unlike(1);
 				System.out.println("unlike : " + idLigne);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
 				taskLike.execute(idLigne, "unlike");
