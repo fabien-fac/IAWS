@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.iaws.R;
 import org.iaws.adapter.NavDrawerListAdapter;
 import org.iaws.model.NavDrawerItem;
-import org.lightcouch.CouchDbClient;
 
 import android.app.Activity;
 import android.app.Fragment;

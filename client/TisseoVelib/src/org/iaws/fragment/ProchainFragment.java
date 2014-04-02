@@ -66,10 +66,6 @@ public class ProchainFragment extends Fragment {
 		init_variables();
 		init_composants();
 
-		GetLikeUnlikeTask taskLike = new GetLikeUnlikeTask();
-		taskLike.execute();
-
-		// TODO le lancer que quand le 1er est fini ?
 		GetArretsTask task = new GetArretsTask();
 		task.execute();
 
@@ -106,10 +102,12 @@ public class ProchainFragment extends Fragment {
 		}
 
 		protected void onPostExecute(String result) {
-			progress_load.setVisibility(View.GONE);
+			
+			GetLikeUnlikeTask taskLike = new GetLikeUnlikeTask();
+			taskLike.execute();
+			
+			
 			update_listes(result);
-			update_spinners();
-			update_view_liste();
 		}
 	}
 
@@ -122,7 +120,10 @@ public class ProchainFragment extends Fragment {
 		}
 
 		protected void onPostExecute(String result) {
+			progress_load.setVisibility(View.GONE);
 			update_like(result);
+			update_spinners();
+			update_view_liste();
 		}
 	}
 
@@ -271,6 +272,11 @@ public class ProchainFragment extends Fragment {
 	}
 
 	private void update_like(String json) {
+		
+		if(json == null){
+			return;
+		}
+		
 		ParserJson parser = new ParserJson();
 		mapLike = parser.jsonToMapLike(json);
 		for (Ligne ligne : liste_lignes) {
