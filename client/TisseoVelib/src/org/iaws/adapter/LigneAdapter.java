@@ -34,6 +34,7 @@ public class LigneAdapter extends BaseAdapter {
 	private OnClickListener listener_horaires;
 	private OnClickListener listener_like;
 	private OnClickListener listener_unlike;
+	private AlertDialog dialog;
 
 	public LigneAdapter(Context context, ArrayList<Ligne> ligneItems) {
 		this.context = context;
@@ -177,20 +178,9 @@ public class LigneAdapter extends BaseAdapter {
 			message = traitement_no_departures();
 		}
 
-		new AlertDialog.Builder(context)
-				.setTitle(
-						ligneItems.get(positionClique).getLigne()
-								+ " "
-								+ ligneItems.get(positionClique)
-										.getDestination().getArret().getName())
-				.setMessage(message)
-				.setPositiveButton(android.R.string.yes,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
+		TextView messageDialog = (TextView)dialog.findViewById(android.R.id.message);
+		messageDialog.setText(message);
 
-							}
-						}).setIcon(R.drawable.clock).show();
 	}
 
 	private void afficher_like(View v) {
@@ -210,6 +200,16 @@ public class LigneAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				builder.setTitle(ligneItems.get(positionClique).getLigne()
+						+ " - "
+						+ ligneItems.get(positionClique)
+								.getDestination().getArret().getName());
+				builder.setMessage(context.getResources().getString(R.string.loading)+"...");
+				builder.setPositiveButton("OK", null);
+				dialog = builder.show();
+				
 				String idArret = ligneItems.get(v.getId()).getDestination()
 						.getArret().getId();
 				String idLigne = ligneItems.get(v.getId()).getId();
