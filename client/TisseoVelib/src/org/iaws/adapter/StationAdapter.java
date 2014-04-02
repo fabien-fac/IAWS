@@ -163,7 +163,7 @@ public class StationAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				String idLigne = stationItems.get(v.getId()).getId();
+				String idLigne = stationItems.get(v.getId()).getIdStation();
 				stationItems.get(v.getId()).ajout_like(1);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
 				
@@ -186,7 +186,7 @@ public class StationAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				String idLigne = stationItems.get(v.getId()).getId();
+				String idLigne = stationItems.get(v.getId()).getIdStation();
 				stationItems.get(v.getId()).ajout_unlike(1);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
 				

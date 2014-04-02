@@ -11,9 +11,10 @@ public class Station implements Fiabilite {
 	private int nbVeloDispo;
 	private int nbLike;
 	private int nbUnlike;
+	private String idStation;
 
 	public Station(String nom, String adresse, int totalVelo, int nbVeloDispo,
-			String ouverte) {
+			String ouverte, String idStation) {
 		this.nom = nom.replace("\"", "");
 		this.adresse = adresse.replace("\"", "");
 		this.totalVelo = totalVelo;
@@ -22,6 +23,15 @@ public class Station implements Fiabilite {
 		this.ouverte = (open.equalsIgnoreCase("OPEN"));
 		this.nbLike = 0;
 		this.nbUnlike = 0;
+		this.idStation = idStation;
+	}
+
+	public String getIdStation() {
+		return idStation;
+	}
+
+	public void setIdStation(String idStation) {
+		this.idStation = idStation;
 	}
 
 	public String toString() {

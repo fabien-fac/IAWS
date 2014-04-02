@@ -162,7 +162,8 @@ public class ParserJson {
 		int totalVelo = Integer.parseInt(obj.get("bike_stands").toString());
 		int nbVeloDispo = Integer.parseInt(obj.get("available_bikes").toString());
 		String ouverte = obj.get("status").toString();
-		station = new Station(name, address, totalVelo, nbVeloDispo, ouverte);
+		String idStation = obj.get("number").toString();
+		station = new Station(name, address, totalVelo, nbVeloDispo, ouverte, idStation);
 
 		return station;
 	}
