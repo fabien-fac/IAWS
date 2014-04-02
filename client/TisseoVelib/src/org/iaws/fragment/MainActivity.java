@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.iaws.R;
 import org.iaws.adapter.NavDrawerListAdapter;
 import org.iaws.model.NavDrawerItem;
+import org.lightcouch.CouchDbClient;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -89,11 +90,9 @@ public class MainActivity extends Activity {
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
 		if (savedInstanceState == null) {
 			displayView(0);
 		}
-
 	}
 
 	/**
