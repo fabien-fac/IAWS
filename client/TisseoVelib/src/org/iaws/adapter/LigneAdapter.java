@@ -100,7 +100,9 @@ public class LigneAdapter extends BaseAdapter {
 
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		
 		View view_like = mInflater.inflate(R.layout.like_display, null);
+
 
 		Button btn_horraire = (Button) view_like
 				.findViewById(R.id.likedisplay_button_horaires);
@@ -120,9 +122,11 @@ public class LigneAdapter extends BaseAdapter {
 		text_unlike.setText(String.valueOf(ligneItems.get(position).get_nb_unlike()));
 		
 		view_like.setVisibility(View.GONE);
-
-		if (layout.getChildCount() > 1)
-			layout.removeViewAt(1);
+		
+		if (layout.getChildCount() > 1){
+			view_like.setVisibility(layout.getChildAt(1).getVisibility());
+			layout.removeViewAt(1);		
+		}
 
 		layout.addView(view_like);
 
@@ -141,9 +145,6 @@ public class LigneAdapter extends BaseAdapter {
 
 			String numArret = params[0];
 			String numLigne = params[1];
-
-			System.out.println("arret : " + numArret);
-			System.out.println("ligne : " + numLigne);
 
 			String liste_horaires = webservice.get_horaires(numLigne, numArret);
 

@@ -109,7 +109,7 @@ public class WebService {
 	}
 
 	public String get_like_unlike() {
-		String url_like = URL_LIKE + "";
+		String url_like = URL_LIKE + "like_unlike/_all_docs?include_docs=true";
 
 		try {
 			// Envoie de la requête
