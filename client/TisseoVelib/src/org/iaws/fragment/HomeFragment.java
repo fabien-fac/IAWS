@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
     	plan_view.getSettings().setLoadWithOverviewMode(true);
     	plan_view.getSettings().setUseWideViewPort(true);
     	plan_view.loadUrl("file:///android_res/drawable/plan.png");
+    	plan_view.setInitialScale(80);
     	
     }
 }
