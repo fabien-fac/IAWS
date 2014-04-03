@@ -25,10 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class LigneAdapter extends BaseAdapter {
+public class PoteauAdapter extends BaseAdapter {
 
 	private Context context;
-	private ArrayList<Poteau> ligneItems;
+	private ArrayList<Poteau> poteauItems;
 	private WebService webservice;
 	private int positionClique;
 	private OnClickListener listener_horaires;
@@ -36,9 +36,9 @@ public class LigneAdapter extends BaseAdapter {
 	private OnClickListener listener_unlike;
 	private AlertDialog dialog;
 
-	public LigneAdapter(Context context, ArrayList<Poteau> ligneItems) {
+	public PoteauAdapter(Context context, ArrayList<Poteau> ligneItems) {
 		this.context = context;
-		this.ligneItems = ligneItems;
+		this.poteauItems = ligneItems;
 		webservice = new WebService();
 
 		init_listeners();
@@ -46,12 +46,12 @@ public class LigneAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return ligneItems.size();
+		return poteauItems.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return ligneItems.get(position);
+		return poteauItems.get(position);
 	}
 
 	@Override
@@ -74,17 +74,17 @@ public class LigneAdapter extends BaseAdapter {
 		TextView view_direction = (TextView) convertView
 				.findViewById(R.id.ligne_textview_direction);
 
-		view_nomLigne.setText(ligneItems.get(position).getLigne());
+		view_nomLigne.setText(poteauItems.get(position).getNumLigne());
 		GradientDrawable drawable = (GradientDrawable) view_nomLigne
 				.getBackground();
-		drawable.setColor(Color.parseColor(ligneItems.get(position)
+		drawable.setColor(Color.parseColor(poteauItems.get(position).getLigne()
 				.getBgXmlColor()));
-		view_nomLigne.setTextColor(Color.parseColor(ligneItems.get(position)
+		view_nomLigne.setTextColor(Color.parseColor(poteauItems.get(position).getLigne()
 				.getFgXmlColor()));
-		view_nomArret.setText(ligneItems.get(position).getDestination()
+		view_nomArret.setText(poteauItems.get(position).getDestination()
 				.getArret().getName());
 		view_direction.setText("Direction : "
-				+ ligneItems.get(position).getDestination().getName());
+				+ poteauItems.get(position).getDestination().getName());
 
 		convertView.setOnClickListener(new OnClickListener() {
 
@@ -119,9 +119,8 @@ public class LigneAdapter extends BaseAdapter {
 				.findViewById(R.id.likedisplay_textview_unlike);
 
 		text_like.setText(String
-				.valueOf(ligneItems.get(position).get_nb_like()));
-		text_unlike.setText(String.valueOf(ligneItems.get(position)
-				.get_nb_unlike()));
+				.valueOf(poteauItems.get(position).get_nb_like()));
+		text_unlike.setText(String.valueOf(poteauItems.get(position).get_nb_unlike()));
 
 		view_like.setVisibility(View.GONE);
 
@@ -203,9 +202,9 @@ public class LigneAdapter extends BaseAdapter {
 			public void onClick(View v) {
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
-				builder.setTitle(ligneItems.get(positionClique).getLigne()
+				builder.setTitle(poteauItems.get(positionClique).getNumLigne()
 						+ " - "
-						+ ligneItems.get(positionClique).getDestination()
+						+ poteauItems.get(positionClique).getDestination()
 								.getArret().getName());
 				builder.setMessage(context.getResources().getString(
 						R.string.loading)
@@ -213,9 +212,9 @@ public class LigneAdapter extends BaseAdapter {
 				builder.setPositiveButton("OK", null);
 				dialog = builder.show();
 
-				String idArret = ligneItems.get(v.getId()).getDestination()
+				String idArret = poteauItems.get(v.getId()).getDestination()
 						.getArret().getId();
-				String idLigne = ligneItems.get(v.getId()).getId();
+				String idLigne = poteauItems.get(v.getId()).getLigne().getId();
 				positionClique = v.getId();
 				GetHorrairesTask task = new GetHorrairesTask();
 				task.execute(idArret, idLigne);
@@ -226,14 +225,14 @@ public class LigneAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				String idLigne = ligneItems.get(v.getId()).getId();
-				ligneItems.get(v.getId()).ajout_like(1);
+				String idLigne = poteauItems.get(v.getId()).getNumLigne();
+				poteauItems.get(v.getId()).like();
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
 				
-				String nb_like = String.valueOf(ligneItems.get(v.getId())
+				String nb_like = String.valueOf(poteauItems.get(v.getId())
 						.get_nb_like());
-				taskLike.execute(idLigne, nb_like, String.valueOf(ligneItems.get(v.getId())
-						.get_nb_unlike()));
+				taskLike.execute(idLigne, nb_like, String.valueOf(poteauItems.get(v.getId())
+						.get_nb_unlike()), poteauItems.get(v.getId()).get_rev());
 
 				View view_grandparent = (View) v.getParent().getParent();
 				RelativeLayout parent = (RelativeLayout) view_grandparent
@@ -249,14 +248,15 @@ public class LigneAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				String idLigne = ligneItems.get(v.getId()).getId();
-				ligneItems.get(v.getId()).ajout_unlike(1);
+				
+				String idLigne = poteauItems.get(v.getId()).getNumLigne();
+				poteauItems.get(v.getId()).unlike();
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
 				
-				String nb_unlike = String.valueOf(ligneItems.get(v.getId())
+				String nb_unlike = String.valueOf(poteauItems.get(v.getId())
 						.get_nb_unlike());
-				taskLike.execute(idLigne, String.valueOf(ligneItems.get(v.getId())
-						.get_nb_like()), nb_unlike);
+				taskLike.execute(idLigne, String.valueOf(poteauItems.get(v.getId())
+						.get_nb_like()), nb_unlike, poteauItems.get(v.getId()).get_rev());
 
 				View view_grandparent = (View) v.getParent().getParent();
 				RelativeLayout parent = (RelativeLayout) view_grandparent
@@ -269,7 +269,7 @@ public class LigneAdapter extends BaseAdapter {
 	}
 
 	private String traitement_no_departures() {
-		String nomLigne = ligneItems.get(positionClique).getLigne();
+		String nomLigne = poteauItems.get(positionClique).getLigne().getName();
 		if (nomLigne.equals("A") || nomLigne.equals("B")) {
 			ProchainPassage p = new ProchainPassage(nomLigne, "", "", null);
 			return p.calculerProchainPassage();
@@ -285,15 +285,15 @@ public class LigneAdapter extends BaseAdapter {
 			String idLigne = params[0];
 			String nbLike = params[1];
 			String nbUnLike = params[2];
+			String rev = params[3];
 			
-			webservice.send_like_unlike(idLigne, nbLike, nbUnLike);
+			webservice.send_like_unlike(idLigne, nbLike, nbUnLike, rev);
 			
 			return null;
 
 		}
 
 		protected void onPostExecute(Void param) {
-			System.out.println("envoyé");
 		}
 	}
 

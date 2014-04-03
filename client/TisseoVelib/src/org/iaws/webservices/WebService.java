@@ -7,8 +7,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -137,27 +136,25 @@ public class WebService {
 		return null;
 	}
 
-	public void send_like_unlike(String id, String nbLike, String nbUnlike) {
+	public void send_like_unlike(String id, String nbLike, String nbUnlike, String rev) {
 		String url_like = URL_LIKE + "like_unlike/" + id;
-		String json = paramLikeToStringJson(id, nbLike, nbUnlike);
+		String json = paramLikeToStringJson(id, nbLike, nbUnlike, rev);
 		
-		System.out.println(json);
 		try {
-	        HttpPost httpPost = new HttpPost(url_like);
+	        HttpPut httpPost = new HttpPut(url_like);
 	        httpPost.setEntity(new StringEntity(json));
 	        httpPost.setHeader("Accept", "application/json");
 	        httpPost.setHeader("Content-type", "application/json");
-	        HttpResponse reponse = new DefaultHttpClient().execute(httpPost);
-	        System.out.println(reponse.getStatusLine());
+	        new DefaultHttpClient().execute(httpPost);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e("WebService", "Impossible d'envoyer les like et unlike");
 		}
 	}
 	
-	private String paramLikeToStringJson(String id, String nbLike, String nbUnlike){
+	private String paramLikeToStringJson(String id, String nbLike, String nbUnlike, String rev){
 		Map<String, String> comment = new HashMap<String, String>();
-	    comment.put("id", id);
+	    comment.put("_id", id);
 	    comment.put("like", nbLike);
 	    comment.put("unlike", nbUnlike);
 	    String json = new GsonBuilder().create().toJson(comment, Map.class);

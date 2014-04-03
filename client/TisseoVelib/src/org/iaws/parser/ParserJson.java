@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.iaws.classes.Arret;
 import org.iaws.classes.Destination;
+import org.iaws.classes.GestionLignes;
 import org.iaws.classes.Ligne;
 import org.iaws.classes.Poteau;
 import org.iaws.classes.LikeUnlike;
@@ -22,6 +23,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class ParserJson {
+
+	private GestionLignes gestionLignes;
+
+	public ParserJson() {
+		gestionLignes = GestionLignes.get_instance();
+	}
 
 	public List<Arret> jsonToListArretBus(String json) {
 
@@ -68,29 +75,39 @@ public class ParserJson {
 		Destination destination = new Destination(name, id);
 		destination.setCityName(objDest.get("cityName").toString());
 
-		JsonArray lines = objDest.getAsJsonArray("line");
-		for (JsonElement elemLine : lines) {
-			Ligne ligne = jsonElementToLigne(elemLine);
-			ligne.setDestination(destination);
-			destination.ajouter_ligne(ligne);
+		JsonArray poteaux = objDest.getAsJsonArray("line");
+		for (JsonElement elemPoteau : poteaux) {
+			Poteau poteau = jsonElementToPoteau(elemPoteau);
+			poteau.setDestination(destination);
+			destination.ajouter_poteau(poteau);
 		}
 
 		return destination;
 	}
 
-	private Ligne jsonElementToLigne(JsonElement elemLine) {
+	private Poteau jsonElementToPoteau(JsonElement elemLine) {
 
 		JsonObject objLine = elemLine.getAsJsonObject();
 		String name = objLine.get("name").toString();
 		String id = objLine.get("id").toString();
-		String numero = objLine.get("shortName").toString();
+		String numero = objLine.get("shortName").toString()
+				.replaceAll("\"", "");
 
-		Ligne ligne = new Ligne(name, id, numero);
-		ligne.setBgXmlColor(objLine.get("bgXmlColor").toString());
-		ligne.setColor(objLine.get("color").toString());
-		ligne.setFgXmlColor(objLine.get("fgXmlColor").toString());
+		Ligne ligne;
 
-		return ligne;
+		if (!gestionLignes.is_ligne_exists(numero)) {
+			ligne = new Ligne(name, id, numero);
+			ligne.setBgXmlColor(objLine.get("bgXmlColor").toString());
+			ligne.setColor(objLine.get("color").toString());
+			ligne.setFgXmlColor(objLine.get("fgXmlColor").toString());
+			gestionLignes.ajouter_ligne(ligne);
+		} else {
+			ligne = gestionLignes.get_ligne(id);
+		}
+
+		Poteau poteau = new Poteau(numero);
+
+		return poteau;
 	}
 
 	public List<ProchainPassage> jsonToListProchainPassage(String json) {
@@ -131,29 +148,27 @@ public class ParserJson {
 		try {
 			prochainHoraire = sdf.parse(prochainPassageString);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		prochainPassage.setProchainPassage(prochainHoraire);
 
 		return prochainPassage;
 	}
-	
+
 	public List<Station> jsonToListStation(String json) {
 
 		List<Station> liste = new ArrayList<Station>();
 
 		JsonElement jelement = new JsonParser().parse(json);
 		JsonArray jArray = jelement.getAsJsonArray();
-		
-		
+
 		for (JsonElement jsonElement : jArray) {
 			Station station = jsonElementToStation(jsonElement);
 			liste.add(station);
 		}
 		return liste;
 	}
-	
+
 	private Station jsonElementToStation(JsonElement elem) {
 		Station station;
 
@@ -161,37 +176,42 @@ public class ParserJson {
 		String name = obj.get("name").toString();
 		String address = obj.get("address").toString();
 		int totalVelo = Integer.parseInt(obj.get("bike_stands").toString());
-		int nbVeloDispo = Integer.parseInt(obj.get("available_bikes").toString());
+		int nbVeloDispo = Integer.parseInt(obj.get("available_bikes")
+				.toString());
 		String ouverte = obj.get("status").toString();
 		String idStation = obj.get("number").toString();
-		station = new Station(name, address, totalVelo, nbVeloDispo, ouverte, idStation);
+		station = new Station(name, address, totalVelo, nbVeloDispo, ouverte,
+				idStation);
 
 		return station;
 	}
-	
-	public Map<String, LikeUnlike> jsonToMapLike(String json){
+
+	public Map<String, LikeUnlike> jsonToMapLike(String json) {
 		Map<String, LikeUnlike> map = new HashMap<String, LikeUnlike>();
 
 		JsonElement jelement = new JsonParser().parse(json);
 		JsonObject jobject = jelement.getAsJsonObject();
-		
+
 		JsonArray jarray = jobject.getAsJsonArray("rows");
 
 		for (JsonElement jsonElement : jarray) {
 			LikeUnlike likeUnlike = jsonElementToLikeUnlike(jsonElement);
 			JsonObject obj = jsonElement.getAsJsonObject();
-			String id = obj.get("id").toString();
+			String id = obj.get("id").toString().replaceAll("\"", "");
 			map.put(id, likeUnlike);
 		}
 		return map;
 	}
-	
+
 	private LikeUnlike jsonElementToLikeUnlike(JsonElement elem) {
 		JsonObject obj = elem.getAsJsonObject();
 		JsonObject doc = obj.getAsJsonObject("doc");
-		int nbLike = Integer.parseInt(doc.get("like").toString());
-		int nbUnlike = Integer.parseInt(doc.get("unlike").toString());
-		LikeUnlike likeUnlike = new LikeUnlike(nbLike, nbUnlike);
+		int nbLike = Integer.parseInt(doc.get("like").toString()
+				.replaceAll("\"", ""));
+		int nbUnlike = Integer.parseInt(doc.get("unlike").toString()
+				.replaceAll("\"", ""));
+		String rev = doc.get("_rev").toString().replaceAll("\"", "");
+		LikeUnlike likeUnlike = new LikeUnlike(nbLike, nbUnlike, rev);
 		return likeUnlike;
 	}
 }

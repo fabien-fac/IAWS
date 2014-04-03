@@ -2,10 +2,11 @@ package org.iaws.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.iaws.R;
-import org.iaws.adapter.LigneAdapter;
 import org.iaws.adapter.StationAdapter;
+import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.Station;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
@@ -95,13 +96,30 @@ public class VelibdispoFragment extends Fragment {
 		}
 
 		protected void onPostExecute(String json) {
+
 			update_listes(json);
-			activate_btn_search();
-			update_view_stations();
+
+			GetLikeUnlikeTask taskLike = new GetLikeUnlikeTask();
+			taskLike.execute();
+
 		}
 
 	}
-	
+
+	private class GetLikeUnlikeTask extends AsyncTask<Void, Void, String> {
+
+		protected String doInBackground(Void... param) {
+			String liste_like = webservice.get_like_unlike();
+
+			return liste_like;
+		}
+
+		protected void onPostExecute(String result) {
+			update_like(result);
+			activate_btn_search();
+			update_view_stations();
+		}
+	}
 
 	private void activate_btn_search() {
 		loading_bar.setVisibility(View.GONE);
@@ -142,6 +160,24 @@ public class VelibdispoFragment extends Fragment {
 		StationAdapter adapter = new StationAdapter(getActivity(), stations);
 		list_view.setAdapter(adapter);
 
+	}
+
+	private void update_like(String json) {
+
+		if (json == null) {
+			return;
+		}
+		String cle = "station";
+		ParserJson parser = new ParserJson();
+		Map<String, LikeUnlike> mapLike = parser.jsonToMapLike(json);
+		for (Station station : list_stations) {
+			if (mapLike.containsKey(cle+station.getIdStation())) {
+				LikeUnlike like = mapLike.get(cle+station.getIdStation());
+				station.set_nb_like(like.getLike());
+				station.set_nb_unlike(like.getUnlike());
+				station.setRev(like.getRev());
+			}
+		}
 	}
 
 }

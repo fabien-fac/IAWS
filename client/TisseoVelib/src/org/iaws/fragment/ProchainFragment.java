@@ -8,9 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iaws.R;
-import org.iaws.adapter.LigneAdapter;
+import org.iaws.adapter.PoteauAdapter;
 import org.iaws.classes.Arret;
-import org.iaws.classes.Ligne;
 import org.iaws.classes.Poteau;
 import org.iaws.classes.LikeUnlike;
 import org.iaws.parser.ParserJson;
@@ -45,12 +44,12 @@ public class ProchainFragment extends Fragment {
 	private Spinner spinner_ligne;
 	private Spinner spinner_arret;
 	private ListView layout_liste;
-	private LigneAdapter adapter;
-	private ArrayList<Ligne> ligneItems;
+	private PoteauAdapter adapter;
+	private ArrayList<Poteau> poteauItems;
 	private ProgressBar progress_load;
 
 	private List<Arret> liste_arrets;
-	private List<Ligne> liste_lignes;
+	private List<Poteau> liste_poteaux;
 
 	private Map<String, LikeUnlike> mapLike;
 
@@ -90,7 +89,7 @@ public class ProchainFragment extends Fragment {
 		webservice = new WebService();
 		liste_string_arrets = new HashSet<String>();
 		liste_string_lignes = new HashSet<String>();
-		liste_lignes = new ArrayList<Ligne>();
+		liste_poteaux = new ArrayList<Poteau>();
 	}
 
 	private class GetArretsTask extends AsyncTask<Void, Void, String> {
@@ -104,11 +103,10 @@ public class ProchainFragment extends Fragment {
 
 		protected void onPostExecute(String result) {
 			
-			GetLikeUnlikeTask taskLike = new GetLikeUnlikeTask();
-			taskLike.execute();
-			
-			
 			update_listes(result);
+			
+			GetLikeUnlikeTask taskLike = new GetLikeUnlikeTask();
+			taskLike.execute();			
 		}
 	}
 
@@ -137,7 +135,7 @@ public class ProchainFragment extends Fragment {
 		for (Arret arret : liste_arrets) {
 			liste_string_arrets.add(arret.getName());
 			liste_string_lignes.addAll(arret.get_lignes_string());
-			liste_lignes.addAll(arret.get_lignes());
+			liste_poteaux.addAll(arret.get_poteaux());
 		}
 
 	}
@@ -180,36 +178,36 @@ public class ProchainFragment extends Fragment {
 
 	private void update_view_liste() {
 
-		ligneItems = new ArrayList<Ligne>();
-		for (Ligne ligne : liste_lignes) {
+		poteauItems = new ArrayList<Poteau>();
+		for (Poteau poteau : liste_poteaux) {
 
-			if (is_ligne_affichable(ligne)) {
-				ligneItems.add(ligne);
+			if (is_ligne_affichable(poteau)) {
+				poteauItems.add(poteau);
 			}
 		}
-		adapter = new LigneAdapter(getActivity(), ligneItems);
+		adapter = new PoteauAdapter(getActivity(), poteauItems);
 
 		layout_liste.setAdapter(adapter);
 
 	}
 
-	private boolean is_ligne_affichable(Ligne ligne) {
+	private boolean is_ligne_affichable(Poteau poteau) {
 
 		if (ligne_select.equals(TOUTES) && arret_select.equals(TOUS)) {
 			return true;
 		}
 
-		if (ligne.equals(ligne_select) && arret_select.equals(TOUS)) {
+		if (poteau.getLigne().getNumLigne().equals(ligne_select) && arret_select.equals(TOUS)) {
 			return true;
 		}
 
-		if (ligne.getDestination().getArret().getName().equals(arret_select)
-				&& ligne.equals(ligne_select)) {
+		if (poteau.getDestination().getArret().getName().equals(arret_select)
+				&& poteau.getLigne().getNumLigne().equals(ligne_select)) {
 			return true;
 		}
 
 		if (ligne_select.equals(TOUTES)
-				&& ligne.getDestination().getArret().getName()
+				&& poteau.getDestination().getArret().getName()
 						.equals(arret_select)) {
 			return true;
 		}
@@ -238,8 +236,8 @@ public class ProchainFragment extends Fragment {
 		for (Arret arret : liste_arrets) {
 			if (arret.getName().equals(arret_select)
 					|| arret_select.equals(TOUS)) {
-				for (Ligne ligne : arret.get_lignes()) {
-					liste_string_lignes.add(ligne.getName());
+				for (Poteau poteau : arret.get_poteaux()) {
+					liste_string_lignes.add(poteau.getLigne().getName());
 				}
 			}
 		}
@@ -280,11 +278,10 @@ public class ProchainFragment extends Fragment {
 		
 		ParserJson parser = new ParserJson();
 		mapLike = parser.jsonToMapLike(json);
-		for (Ligne ligne : liste_lignes) {
-			if (mapLike.containsKey(ligne.getId())) {
-				LikeUnlike like = mapLike.get(ligne.getId());
-				ligne.ajout_like(like.getLike());
-				ligne.ajout_unlike(like.getUnlike());
+		for (Poteau poteau : liste_poteaux) {
+			if (mapLike.containsKey(poteau.getNumLigne())) {
+				LikeUnlike like = mapLike.get(poteau.getNumLigne());
+				poteau.ajout_like_unlike(like);
 			}
 		}
 	}

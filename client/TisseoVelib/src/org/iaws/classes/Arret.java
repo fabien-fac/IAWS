@@ -39,13 +39,13 @@ public class Arret {
 	public void ajouter_destination(Destination destination) {
 		destinations.add(destination);
 	}
-
-	public List<Ligne> get_lignes() {
-		List<Ligne> liste = new ArrayList<Ligne>();
+	
+	public List<Poteau> get_poteaux() {
+		List<Poteau> liste = new ArrayList<Poteau>();
 
 		for (Destination destination : destinations) {
-			for (Ligne ligne : destination.getLignes()) {
-				liste.add(ligne);
+			for (Poteau poteau : destination.getPoteaux()) {
+				liste.add(poteau);
 			}
 		}
 
@@ -56,8 +56,8 @@ public class Arret {
 		List<String> liste = new ArrayList<String>();
 
 		for (Destination destination : destinations) {
-			for (Ligne ligne : destination.getLignes()) {
-				liste.add(ligne.getName());
+			for (Poteau poteau : destination.getPoteaux()) {
+				liste.add(poteau.getNumLigne());
 			}
 		}
 
@@ -66,8 +66,8 @@ public class Arret {
 	
 	public boolean is_arret_get_ligne(String ligneName){
 		for (Destination destination : destinations) {
-			for (Ligne ligne : destination.getLignes()) {
-				if(ligne.getName().equals(ligneName)){
+			for (Poteau poteau : destination.getPoteaux()) {
+				if(poteau.getNumLigne().equals(ligneName)){
 					return true;
 				}
 			}

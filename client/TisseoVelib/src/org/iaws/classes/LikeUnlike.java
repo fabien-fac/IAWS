@@ -9,10 +9,12 @@ public class LikeUnlike {
 
 	private int like;
 	private int unlike;
+	private String rev;
 	
-	public LikeUnlike(int nbLike, int nbUnlike){
+	public LikeUnlike(int nbLike, int nbUnlike, String rev){
 		this.like = nbLike;
 		this.unlike = nbUnlike;
+		this.rev = rev;
 	}
 	
 	public int getLike() {
@@ -21,5 +23,9 @@ public class LikeUnlike {
 	
 	public int getUnlike() {
 		return unlike;
+	}
+	
+	public String getRev() {
+		return rev;
 	}
 }
