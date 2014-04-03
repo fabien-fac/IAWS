@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iaws.R;
-import org.iaws.classes.Ligne;
+import org.iaws.classes.Poteau;
 import org.iaws.classes.ProchainPassage;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
@@ -28,7 +28,7 @@ import android.widget.TextView;
 public class LigneAdapter extends BaseAdapter {
 
 	private Context context;
-	private ArrayList<Ligne> ligneItems;
+	private ArrayList<Poteau> ligneItems;
 	private WebService webservice;
 	private int positionClique;
 	private OnClickListener listener_horaires;
@@ -36,7 +36,7 @@ public class LigneAdapter extends BaseAdapter {
 	private OnClickListener listener_unlike;
 	private AlertDialog dialog;
 
-	public LigneAdapter(Context context, ArrayList<Ligne> ligneItems) {
+	public LigneAdapter(Context context, ArrayList<Poteau> ligneItems) {
 		this.context = context;
 		this.ligneItems = ligneItems;
 		webservice = new WebService();
