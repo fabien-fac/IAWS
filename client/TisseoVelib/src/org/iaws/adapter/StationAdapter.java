@@ -94,19 +94,17 @@ public class StationAdapter extends BaseAdapter {
 		}
 
 		view_adresse.setText(stationItems.get(position).getAdresse());
-		
-		
+
 		// Partie like
-		
+
 		LinearLayout layout = (LinearLayout) convertView
 				.findViewById(R.id.station_linearlayout_body);
-		
+
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		View view_like = mInflater.inflate(R.layout.like_display, null);
 		view_like.setVisibility(View.GONE);
-		
-		
+
 		Button btn_like = (Button) view_like
 				.findViewById(R.id.likedisplay_button_like);
 		Button btn_unlike = (Button) view_like
@@ -117,20 +115,20 @@ public class StationAdapter extends BaseAdapter {
 		TextView text_unlike = (TextView) view_like
 				.findViewById(R.id.likedisplay_textview_unlike);
 
-		text_like.setText(String
-				.valueOf(stationItems.get(position).get_nb_like()));
+		text_like.setText(String.valueOf(stationItems.get(position)
+				.get_nb_like()));
 		text_unlike.setText(String.valueOf(stationItems.get(position)
 				.get_nb_unlike()));
-		
-		if(layout.getChildCount()>1){
+
+		if (layout.getChildCount() > 1) {
 			layout.removeViewAt(1);
 		}
-		
+
 		btn_like.setOnClickListener(listener_like);
 		btn_like.setId(position);
 		btn_unlike.setOnClickListener(listener_unlike);
 		btn_unlike.setId(position);
-		
+
 		layout.addView(view_like);
 
 		convertView.setOnClickListener(new OnClickListener() {
@@ -143,22 +141,21 @@ public class StationAdapter extends BaseAdapter {
 
 		return convertView;
 	}
-	
-	private void afficher_like(View v){
-		
+
+	private void afficher_like(View v) {
+
 		LinearLayout li = (LinearLayout) v;
 		View view = li.getChildAt(1);
-		
-		if(view.getVisibility() == View.VISIBLE){
+
+		if (view.getVisibility() == View.VISIBLE) {
 			view.setVisibility(View.GONE);
-		}
-		else{
+		} else {
 			view.setVisibility(View.VISIBLE);
 		}
 	}
-	
+
 	private void init_listeners() {
-		
+
 		listener_like = new OnClickListener() {
 
 			@Override
@@ -166,11 +163,12 @@ public class StationAdapter extends BaseAdapter {
 				String idLigne = stationItems.get(v.getId()).getIdStation();
 				stationItems.get(v.getId()).ajout_like(1);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
-				
+
 				String nb_like = String.valueOf(stationItems.get(v.getId())
 						.get_nb_like());
-				taskLike.execute(idLigne, nb_like, String.valueOf(stationItems.get(v.getId())
-						.get_nb_unlike()));
+				taskLike.execute(idLigne, nb_like, String.valueOf(stationItems
+						.get(v.getId()).get_nb_unlike()),
+						stationItems.get(v.getId()).getRev());
 
 				View view_grandparent = (View) v.getParent().getParent();
 				RelativeLayout parent = (RelativeLayout) view_grandparent
@@ -189,11 +187,12 @@ public class StationAdapter extends BaseAdapter {
 				String idLigne = stationItems.get(v.getId()).getIdStation();
 				stationItems.get(v.getId()).ajout_unlike(1);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
-				
+
 				String nb_unlike = String.valueOf(stationItems.get(v.getId())
 						.get_nb_unlike());
-				taskLike.execute(idLigne, String.valueOf(stationItems.get(v.getId())
-						.get_nb_like()), nb_unlike);
+				taskLike.execute(idLigne, String.valueOf(stationItems.get(
+						v.getId()).get_nb_like()), nb_unlike,
+						stationItems.get(v.getId()).getRev());
 
 				View view_grandparent = (View) v.getParent().getParent();
 				RelativeLayout parent = (RelativeLayout) view_grandparent
@@ -204,17 +203,18 @@ public class StationAdapter extends BaseAdapter {
 			}
 		};
 	}
-	
+
 	private class SendLikeUnlikeTask extends AsyncTask<String, Void, Void> {
 
 		protected Void doInBackground(String... params) {
 
-			String idLigne = params[0];
+			String idLigne = "station"+params[0];
 			String nbLike = params[1];
 			String nbUnLike = params[2];
-			
-			webservice.send_like_unlike(idLigne, nbLike, nbUnLike);
-			
+			String rev = params[3];
+
+			webservice.send_like_unlike(idLigne, nbLike, nbUnLike, rev);
+
 			return null;
 
 		}

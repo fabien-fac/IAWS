@@ -1,57 +1,60 @@
 package org.iaws.classes;
 
-public class Poteau{
-	private String name;
-	private String id;
-	private Ligne maLigne;
-	
-	public Poteau(String nom, String id){
-		this.name = nom.replaceAll("\"", "");
-		this.id = id.replaceAll("\"", "");
+public class Poteau {
+	private String numLigne;
+	private Destination destination;
+	private GestionLignes gestionLigne;
+
+	public Poteau(String numLigne) {
+		this.numLigne = numLigne;
+		gestionLigne = GestionLignes.get_instance();
 	}
 
-	public String getName() {
-		return name;
+	public String getNumLigne() {
+		return numLigne;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public Ligne getLigne() {
+		return GestionLignes.get_instance().get_ligne(numLigne);
 	}
 
-	public String getId() {
-		return id;
+	public Destination getDestination() {
+		return destination;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setDestination(Destination destination) {
+		this.destination = destination;
+	}
+
+	public void like() {
+		gestionLigne.ajout_like(numLigne);
+	}
+
+	public void unlike() {
+		gestionLigne.ajout_unlike(numLigne);
+	}
+
+	public int get_nb_like() {
+		return gestionLigne.get_nb_like(numLigne);
+	}
+
+	public int get_nb_unlike() {
+		return gestionLigne.get_nb_unlike(numLigne);
+	}
+
+	public void ajout_like_unlike(LikeUnlike likeUnlike) {
+		Ligne ligne = getLigne();
+		ligne.set_nb_like(likeUnlike.getLike());
+		ligne.set_nb_unlike(likeUnlike.getUnlike());
+		ligne.set_rev(likeUnlike.getRev());
+	}
+
+	public String get_rev() {
+		return getLigne().get_rev();
 	}
 	
 	@Override
 	public String toString() {
-		String str = this.maLigne.getName() + " : déstination : " + this.maLigne.getDestination().getName();
-		return str;
+		return "Poteau qui a pour ligne : " + numLigne;
 	}
-	
-	@Override
-	public int hashCode() {
-		return this.id.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
-			return true;
-		}
-		if (obj instanceof Poteau) {
-
-			Poteau other = (Poteau) obj;
-
-			if (other.id.equals(this.id)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-	
 }

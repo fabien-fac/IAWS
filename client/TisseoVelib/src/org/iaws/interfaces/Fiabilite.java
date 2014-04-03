@@ -8,5 +8,7 @@ public interface Fiabilite {
 	public void ajout_unlike(int nb);
 	public void suppr_like(int nb);
 	public void suppr_unlike(int nb);
+	public void set_nb_like(int nb);
+	public void set_nb_unlike(int nb);
 	
 }

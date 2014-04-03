@@ -12,6 +12,7 @@ public class Station implements Fiabilite {
 	private int nbLike;
 	private int nbUnlike;
 	private String idStation;
+	private String rev;
 
 	public Station(String nom, String adresse, int totalVelo, int nbVeloDispo,
 			String ouverte, String idStation) {
@@ -24,6 +25,7 @@ public class Station implements Fiabilite {
 		this.nbLike = 0;
 		this.nbUnlike = 0;
 		this.idStation = idStation;
+		this.rev = "null";
 	}
 
 	public String getIdStation() {
@@ -85,22 +87,6 @@ public class Station implements Fiabilite {
 		this.nbVeloDispo = nbVeloDispo;
 	}
 
-	public int getNbLike() {
-		return nbLike;
-	}
-
-	public void setNbLike(int nbLike) {
-		this.nbLike = nbLike;
-	}
-
-	public int getNbUnlike() {
-		return nbUnlike;
-	}
-
-	public void setNbUnlike(int nbUnlike) {
-		this.nbUnlike = nbUnlike;
-	}
-
 	@Override
 	public int get_nb_like() {
 		return nbLike;
@@ -137,6 +123,24 @@ public class Station implements Fiabilite {
 		} else {
 			nbUnlike -= nb;
 		}
+	}
+	
+	@Override
+	public void set_nb_like(int nb) {
+		nbLike = nb;
+	}
+
+	@Override
+	public void set_nb_unlike(int nb) {
+		nbUnlike = nb;
+	}
+	
+	public void setRev(String rev) {
+		this.rev = rev;
+	}
+	
+	public String getRev() {
+		return rev;
 	}
 
 }

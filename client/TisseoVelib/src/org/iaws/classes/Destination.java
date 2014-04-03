@@ -1,18 +1,20 @@
 package org.iaws.classes;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Destination {
 
-	private Set<Ligne> lignes;
+	private List<Poteau> poteaux;
 	private String cityName;
 	private String id;
 	private String name;
 	private Arret arret;
 
 	public Destination(String nom, String id) {
-		lignes = new HashSet<Ligne>();
+		poteaux = new ArrayList<Poteau>();
 		this.name = nom.replaceAll("\"", "");
 		this.id = id.replaceAll("\"", "");
 	}
@@ -41,12 +43,12 @@ public class Destination {
 		this.name = name;
 	}
 
-	public Set<Ligne> getLignes() {
-		return lignes;
+	public List<Poteau> getPoteaux() {
+		return poteaux;
 	}
 
-	public void ajouter_ligne(Ligne ligne) {
-		lignes.add(ligne);
+	public void ajouter_poteau(Poteau poteau) {
+		poteaux.add(poteau);
 	}
 	
 	public Arret getArret() {

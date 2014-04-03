@@ -2,7 +2,7 @@ package org.iaws.classes;
 
 import org.iaws.interfaces.Fiabilite;
 
-public class Ligne implements Fiabilite{
+public class Ligne implements Fiabilite {
 
 	private int nbLike;
 	private int nbUnlike;
@@ -11,19 +11,22 @@ public class Ligne implements Fiabilite{
 	private String color;
 	private String bgXmlColor;
 	private String fgXmlColor;
-	private Destination destination;
+	private String numLigne;
+	private String rev;
 
-	public Ligne(String nom, String id, String ligne){
+	public Ligne(String nom, String id, String ligne) {
 		this.name = nom.replaceAll("\"", "");
 		this.id = id.replaceAll("\"", "");
+		this.numLigne = ligne;
+		this.rev = "null";
 	}
-	
+
 	public String getColor() {
 		return color;
 	}
 
 	public void setColor(String color) {
-		this.color = color;
+		this.color = color.replaceAll("\"", "");
 	}
 
 	public String getBgXmlColor() {
@@ -31,7 +34,7 @@ public class Ligne implements Fiabilite{
 	}
 
 	public void setBgXmlColor(String bgXmlColor) {
-		this.bgXmlColor = bgXmlColor;
+		this.bgXmlColor = bgXmlColor.replaceAll("\"", "");
 	}
 
 	public String getFgXmlColor() {
@@ -39,23 +42,7 @@ public class Ligne implements Fiabilite{
 	}
 
 	public void setFgXmlColor(String fgXmlColor) {
-		this.fgXmlColor = fgXmlColor;
-	}
-
-	public Destination getDestination() {
-		return destination;
-	}
-
-	public void setDestination(Destination destination) {
-		this.destination = destination;
-	}
-
-	public int getNbLike() {
-		return nbLike;
-	}
-
-	public int getNbUnlike() {
-		return nbUnlike;
+		this.fgXmlColor = fgXmlColor.replaceAll("\"", "");
 	}
 
 	public void ajout_like(int nb) {
@@ -65,21 +52,19 @@ public class Ligne implements Fiabilite{
 	public void ajout_unlike(int nb) {
 		nbUnlike += nb;
 	}
-	
+
 	public void suppr_like(int nb) {
-		if((nbLike - nb) < 0){
+		if ((nbLike - nb) < 0) {
 			nbLike = 0;
-		}
-		else{
+		} else {
 			nbLike -= nb;
 		}
 	}
 
 	public void suppr_unlike(int nb) {
-		if((nbUnlike - nb) < 0){
+		if ((nbUnlike - nb) < 0) {
 			nbUnlike = 0;
-		}
-		else{
+		} else {
 			nbUnlike -= nb;
 		}
 	}
@@ -108,15 +93,36 @@ public class Ligne implements Fiabilite{
 		this.name = name;
 	}
 
+	public String getNumLigne() {
+		return numLigne;
+	}
+
 	@Override
 	public int get_nb_like() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nbLike;
 	}
 
 	@Override
 	public int get_nb_unlike() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nbUnlike;
 	}
+	
+	@Override
+	public void set_nb_like(int nb) {
+		nbLike = nb;
+	}
+
+	@Override
+	public void set_nb_unlike(int nb) {
+		nbUnlike = nb;
+	}
+
+	public void set_rev(String rev) {
+		this.rev = rev;
+	}
+
+	public String get_rev() {
+		return rev;
+	}
+
 }
