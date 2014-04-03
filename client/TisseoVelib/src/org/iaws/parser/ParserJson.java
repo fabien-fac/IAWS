@@ -11,6 +11,7 @@ import java.util.Map;
 import org.iaws.classes.Arret;
 import org.iaws.classes.Destination;
 import org.iaws.classes.Ligne;
+import org.iaws.classes.Poteau;
 import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.ProchainPassage;
 import org.iaws.classes.Station;

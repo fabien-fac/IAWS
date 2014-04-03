@@ -11,6 +11,7 @@ import org.iaws.R;
 import org.iaws.adapter.LigneAdapter;
 import org.iaws.classes.Arret;
 import org.iaws.classes.Ligne;
+import org.iaws.classes.Poteau;
 import org.iaws.classes.LikeUnlike;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
@@ -198,12 +199,12 @@ public class ProchainFragment extends Fragment {
 			return true;
 		}
 
-		if (ligne.getLigne().equals(ligne_select) && arret_select.equals(TOUS)) {
+		if (ligne.equals(ligne_select) && arret_select.equals(TOUS)) {
 			return true;
 		}
 
 		if (ligne.getDestination().getArret().getName().equals(arret_select)
-				&& ligne.getLigne().equals(ligne_select)) {
+				&& ligne.equals(ligne_select)) {
 			return true;
 		}
 
@@ -238,7 +239,7 @@ public class ProchainFragment extends Fragment {
 			if (arret.getName().equals(arret_select)
 					|| arret_select.equals(TOUS)) {
 				for (Ligne ligne : arret.get_lignes()) {
-					liste_string_lignes.add(ligne.getLigne());
+					liste_string_lignes.add(ligne.getName());
 				}
 			}
 		}

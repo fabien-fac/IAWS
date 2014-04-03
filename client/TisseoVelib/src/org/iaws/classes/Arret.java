@@ -57,7 +57,7 @@ public class Arret {
 
 		for (Destination destination : destinations) {
 			for (Ligne ligne : destination.getLignes()) {
-				liste.add(ligne.getLigne());
+				liste.add(ligne.getName());
 			}
 		}
 
@@ -67,7 +67,7 @@ public class Arret {
 	public boolean is_arret_get_ligne(String ligneName){
 		for (Destination destination : destinations) {
 			for (Ligne ligne : destination.getLignes()) {
-				if(ligne.getLigne().equals(ligneName)){
+				if(ligne.getName().equals(ligneName)){
 					return true;
 				}
 			}
