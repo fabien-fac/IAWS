@@ -190,6 +190,7 @@ public class ParserJson {
 		JsonObject obj = elem.getAsJsonObject();
 		JsonObject doc = obj.getAsJsonObject("doc");
 		int nbLike = Integer.parseInt(doc.get("like").toString());
+		String rev = doc.get("_rev").toString();
 		int nbUnlike = Integer.parseInt(doc.get("unlike").toString());
 		LikeUnlike likeUnlike = new LikeUnlike(nbLike, nbUnlike);
 		return likeUnlike;
