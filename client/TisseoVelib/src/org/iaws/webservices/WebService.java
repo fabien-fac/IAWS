@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -23,7 +24,7 @@ public class WebService {
 	private final String KEY_JCDECAUX = "9e6c731e4916e512a85e4de995de0d90462d5cf5";
 	private final String URL_JCDECAUX = "https://api.jcdecaux.com/vls/v1/";
 
-	private final String URL_LIKE = "http://10.0.2.2:5984/";
+	private final String URL_LIKE = "http://fabienserver.dyndns.org:5984/";
 
 	private InputStream sendRequest(URL url) throws IOException {
 
@@ -118,7 +119,6 @@ public class WebService {
 
 	public String get_like_unlike() {
 		String url_like = URL_LIKE + "like_unlike/_all_docs?include_docs=true";
-		System.out.println(url_like);
 		try {
 			// Envoie de la requête
 			InputStream inputStream = sendRequest(new URL(url_like));
@@ -147,7 +147,8 @@ public class WebService {
 	        httpPost.setEntity(new StringEntity(json));
 	        httpPost.setHeader("Accept", "application/json");
 	        httpPost.setHeader("Content-type", "application/json");
-	        new DefaultHttpClient().execute(httpPost);
+	        HttpResponse reponse = new DefaultHttpClient().execute(httpPost);
+	        System.out.println(reponse.getStatusLine());
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e("WebService", "Impossible d'envoyer les like et unlike");
