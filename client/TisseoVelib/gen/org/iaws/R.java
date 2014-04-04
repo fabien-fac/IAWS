@@ -44,7 +44,7 @@ public final class R {
         public static final int unlike=0x7f02000b;
     }
     public static final class id {
-        public static final int action_settings=0x7f09002a;
+        public static final int action_settings=0x7f09002b;
         public static final int counter=0x7f090006;
         public static final int drawer_layout=0x7f090000;
         public static final int frame_container=0x7f090001;
@@ -56,11 +56,12 @@ public final class R {
         public static final int ligne_textview_direction=0x7f09001c;
         public static final int ligne_textview_nomArret=0x7f09001b;
         public static final int ligne_textview_nomLigne=0x7f09001a;
-        public static final int likedisplay_button_horaires=0x7f090023;
-        public static final int likedisplay_button_like=0x7f090022;
-        public static final int likedisplay_button_unlike=0x7f090021;
+        public static final int likedisplay_button_horaires=0x7f090024;
+        public static final int likedisplay_button_like=0x7f090023;
+        public static final int likedisplay_button_unlike=0x7f090022;
         public static final int likedisplay_relativelayout_pouces=0x7f09001d;
         public static final int likedisplay_textview_like=0x7f09001e;
+        public static final int likedisplay_textview_temps=0x7f090021;
         public static final int likedisplay_textview_unlike=0x7f090020;
         public static final int list_slidermenu=0x7f090003;
         public static final int options_button_validerAdresse=0x7f09000a;
@@ -71,15 +72,15 @@ public final class R {
         public static final int prochain_spinner_ligne=0x7f09000b;
         public static final int rentrer_edittext_destination=0x7f090010;
         public static final int rentrer_imagebutton_search=0x7f090011;
-        public static final int rentrer_listview_plusfiable=0x7f090014;
-        public static final int rentrer_listview_plusrapide=0x7f090013;
+        public static final int rentrer_listview_busmetro=0x7f090014;
+        public static final int rentrer_listview_velo=0x7f090013;
         public static final int rentrer_progressbar_loading=0x7f090012;
-        public static final int station_etat=0x7f090025;
-        public static final int station_linearlayout_body=0x7f090024;
-        public static final int station_textview_adresse=0x7f090027;
-        public static final int station_textview_name=0x7f090026;
-        public static final int station_textview_nbPlaceDispo=0x7f090029;
-        public static final int station_textview_nbVeloDispo=0x7f090028;
+        public static final int station_etat=0x7f090026;
+        public static final int station_linearlayout_body=0x7f090025;
+        public static final int station_textview_adresse=0x7f090028;
+        public static final int station_textview_name=0x7f090027;
+        public static final int station_textview_nbPlaceDispo=0x7f09002a;
+        public static final int station_textview_nbVeloDispo=0x7f090029;
         public static final int textView1=0x7f090008;
         public static final int textView2=0x7f09000d;
         public static final int title=0x7f090005;
@@ -117,11 +118,12 @@ public final class R {
         public static final int adress_save=0x7f050005;
         public static final int app_name=0x7f050000;
         public static final int arret_name=0x7f050002;
+        public static final int busmetro=0x7f050019;
         public static final int button_valider=0x7f050014;
         public static final int depart_indispo=0x7f050004;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f050018;
+        public static final int desc_list_item_icon=0x7f05001a;
         public static final int destination=0x7f050015;
         public static final int directions=0x7f050003;
         public static final int fiable=0x7f050016;
@@ -140,6 +142,7 @@ public final class R {
         public static final int station_place_dispo=0x7f050008;
         public static final int station_velo_dispo=0x7f050007;
         public static final int unlike=0x7f05000b;
+        public static final int velotoulouse=0x7f050018;
     }
     public static final class style {
         /** 

@@ -15,7 +15,8 @@ public class Station implements Fiabilite {
 	private int nbUnlike;
 	private String idStation;
 	private String rev;
-
+	private String temps;
+	
 	public Station(String nom, String adresse, int totalVelo, int nbVeloDispo,
 			String ouverte, String idStation) {
 		this.nom = nom.replace("\"", "");
@@ -28,6 +29,7 @@ public class Station implements Fiabilite {
 		this.nbUnlike = 0;
 		this.idStation = idStation;
 		this.rev = "null";
+		this.temps = "";
 	}
 
 	public String getIdStation() {
@@ -171,7 +173,7 @@ public class Station implements Fiabilite {
 			return Color.parseColor("#f38234");
 		}
 		
-		return Color.parseColor("#000000");
+		return Color.parseColor("#3efa3e");
 	}
 	
 	public int getColorPlaceDispo(){
@@ -183,6 +185,18 @@ public class Station implements Fiabilite {
 			return Color.parseColor("#f38234");
 		}
 		
-		return Color.parseColor("#000000");
+		return Color.parseColor("#3efa3e");
 	}
+
+	public String getTemps() {
+		return temps;
+	}
+
+	public void setTemps(String temp) {
+		temp = temp.replace("\"", "");
+		temp = temp.replace("mins", "minutes");
+		this.temps = temp;
+	}
+	
+	
 }

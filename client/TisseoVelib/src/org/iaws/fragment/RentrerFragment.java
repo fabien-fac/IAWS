@@ -1,13 +1,18 @@
 package org.iaws.fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.iaws.R;
 import org.iaws.BDD.Bdd_Adresse;
-import org.iaws.adapter.StationAdapter;
+import org.iaws.adapter.PoteauAdapter;
+import org.iaws.adapter.PoteauRentrerAdapter;
 import org.iaws.adapter.StationRenterAdapter;
 import org.iaws.classes.Arret;
+import org.iaws.classes.LikeUnlike;
+import org.iaws.classes.Poteau;
 import org.iaws.classes.Station;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
@@ -32,18 +37,21 @@ public class RentrerFragment extends Fragment {
 	private ImageButton btnSearch;
 	private ProgressBar loading;
 	private EditText editTextDest;
-	private ListView listViewRapide;
-	private ListView listViewFiable;
+	private ListView listViewVelo;
+	private ListView listViewBusMetro;
 
 	private WebService webservice;
 	private ParserJson parser;
 
 	private String destinationSelect;
+	private String tempsVeloBrut;
+	private String tempsBusBrut;
 
 	private Bdd_Adresse bdAdresse;
 
 	private List<Station> list_stations;
-	private List<Arret> liste_arrets;
+	private List<Arret> liste_arrets_paulSab;
+	private Map<String, LikeUnlike> mapLike;
 
 	public RentrerFragment() {
 	}
@@ -96,10 +104,10 @@ public class RentrerFragment extends Fragment {
 			}
 		});
 
-		listViewRapide = (ListView) rootView
-				.findViewById(R.id.rentrer_listview_plusrapide);
-		listViewFiable = (ListView) rootView
-				.findViewById(R.id.rentrer_listview_plusfiable);
+		listViewVelo = (ListView) rootView
+				.findViewById(R.id.rentrer_listview_velo);
+		listViewBusMetro = (ListView) rootView
+				.findViewById(R.id.rentrer_listview_busmetro);
 	}
 
 	private void init_variables() {
@@ -107,6 +115,7 @@ public class RentrerFragment extends Fragment {
 		parser = new ParserJson();
 		bdAdresse = new Bdd_Adresse(getActivity());
 		destinationSelect = bdAdresse.get_adresse();
+		mapLike = new HashMap<String, LikeUnlike>();
 		if (destinationSelect != null) {
 			editTextDest.setText(destinationSelect);
 			btnSearch.setEnabled(true);
@@ -127,32 +136,26 @@ public class RentrerFragment extends Fragment {
 		}
 
 		protected void onPostExecute(String json) {
-			String result = parser.jsonToTempsTrajet(json);
-			System.out.println("temps velo temp : " + result);
+			tempsVeloBrut = parser.jsonToTempsTrajet(json);
 
-			GetTempsBusTask task = new GetTempsBusTask();
-			task.execute(destinationSelect);
+			GetLikeUnlikeTask task = new GetLikeUnlikeTask();
+			task.execute();
 		}
 	}
+	
+	private class GetLikeUnlikeTask extends AsyncTask<Void, Void, String> {
 
-	private class GetTempsBusTask extends AsyncTask<String, Void, String> {
-
-		protected String doInBackground(String... params) {
-
-			String destination = params[0];
-			String liste_like = webservice.get_temps_trajet(destination,
-					"driving");
+		protected String doInBackground(Void... param) {
+			String liste_like = webservice.get_like_unlike();
 
 			return liste_like;
 		}
 
-		protected void onPostExecute(String json) {
-			String result = parser.jsonToTempsTrajet(json);
-			System.out.println("temps bus temp : " + result);
-
+		protected void onPostExecute(String result) {
+			update_like(result);
+			
 			GetStationsTask task = new GetStationsTask();
 			task.execute();
-
 		}
 	}
 
@@ -165,50 +168,103 @@ public class RentrerFragment extends Fragment {
 		}
 
 		protected void onPostExecute(String json) {
-			// GetArretsTask task = new GetArretsTask();
-			// task.execute(destinationSelect);
+			GetTempsBusTask task = new GetTempsBusTask();
+			task.execute(destinationSelect);
 
 			update_listes_stations(json);
 		}
 
 	}
+	
+	private class GetTempsBusTask extends AsyncTask<String, Void, String> {
 
-	private class GetArretsTask extends AsyncTask<String, Void, String> {
+		protected String doInBackground(String... params) {
+
+			String destination = params[0];
+			String liste_like = webservice.get_temps_trajet(destination,
+					"driving");
+
+			return liste_like;
+		}
+
+		protected void onPostExecute(String json) {
+			
+			tempsBusBrut = parser.jsonToTempsTrajet(json);
+			
+			GetArretsPaulSabTask task = new GetArretsPaulSabTask();
+			task.execute();
+
+		}
+	}
+
+	private class GetArretsPaulSabTask extends AsyncTask<Void, Void, String> {
 
 		@Override
-		protected String doInBackground(String... params) {
-			String destination = params[0];
-			String liste_station = webservice.get_arrets_from_dest(destination);
+		protected String doInBackground(Void... params) {
+			String liste_station = webservice.get_arrets();
 			return liste_station;
 		}
 
 		protected void onPostExecute(String json) {
 
-			liste_arrets = parser.jsonToListArretBus(json);
+			liste_arrets_paulSab = parser.jsonToListArretBus(json);
+			GetArretsDestinationTask task = new GetArretsDestinationTask();
+			task.execute(destinationSelect);
+		}
+
+	}
+	
+	private class GetArretsDestinationTask extends AsyncTask<String, Void, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			String destination = params[0];
+			String liste_arrets = webservice.get_arrets_from_dest(destination);
+			return liste_arrets;
+		}
+
+		protected void onPostExecute(String json) {		
 			loading.setVisibility(View.INVISIBLE);
 			btnSearch.setVisibility(View.VISIBLE);
+			
+			update_view_liste();
 		}
 
 	}
 
 	private void update_listes_stations(String json) {
+		
+		String cle = "station";
 
 		list_stations = parser.jsonToListStation(json);
 		List<Station> stations = new ArrayList<Station>();
 		for (Station station : list_stations) {
 			if (is_station_affichable(station)) {
+				station.setTemps(tempsVeloBrut);
+				
+				if (mapLike.containsKey(cle+station.getIdStation())) {
+					LikeUnlike like = mapLike.get(cle+station.getIdStation());
+					station.set_nb_like(like.getLike());
+					station.set_nb_unlike(like.getUnlike());
+					station.setRev(like.getRev());
+				}
+				
 				stations.add(station);
 			}
 		}
 
 		StationRenterAdapter adapter = new StationRenterAdapter(getActivity(), stations);
-		listViewRapide.setAdapter(adapter);
+		listViewVelo.setAdapter(adapter);
 
 	}
 
 	private boolean is_station_affichable(Station station) {
 
 		if (station.getNbVeloDispo() == 0) {
+			return false;
+		}
+		
+		if(!station.getOuverte()){
 			return false;
 		}
 		
@@ -227,5 +283,46 @@ public class RentrerFragment extends Fragment {
 		}
 
 		return false;
+	}
+	
+	private void update_like(String json) {
+
+		if (json == null) {
+			return;
+		}
+		
+		mapLike = parser.jsonToMapLike(json);
+	}
+	
+	private void update_view_liste() {
+
+		List<Poteau> listePoteaux = new ArrayList<Poteau>();
+		for (Arret arret : liste_arrets_paulSab) {
+			if(is_arret_affichable(arret)){
+				listePoteaux.addAll(arret.get_poteaux());
+			}
+		}
+		
+		ArrayList<Poteau> poteauItems = new ArrayList<Poteau>();
+		for (Poteau poteau : listePoteaux) {
+			if(is_poteau_affichable(poteau)){
+				poteau.setTemps(tempsBusBrut);
+				poteauItems.add(poteau);
+			}
+		}
+		PoteauRentrerAdapter adapter = new PoteauRentrerAdapter(getActivity(), poteauItems);
+
+		listViewBusMetro.setAdapter(adapter);
+
+	}
+	
+	private boolean is_arret_affichable(Arret arret){
+		// TODO
+		return true;
+	}
+	
+	private boolean is_poteau_affichable(Poteau poteau){
+		// TODO
+		return true;
 	}
 }
