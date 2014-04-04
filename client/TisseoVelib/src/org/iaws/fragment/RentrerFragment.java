@@ -20,6 +20,8 @@ import org.iaws.webservices.WebService;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,8 @@ public class RentrerFragment extends Fragment {
 	private EditText editTextDest;
 	private ListView listViewVelo;
 	private ListView listViewBusMetro;
+	
+	private TextWatcher inputTextWatcher;
 
 	private WebService webservice;
 	private ParserJson parser;
@@ -95,11 +99,8 @@ public class RentrerFragment extends Fragment {
 
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (editTextDest.getText().toString().length() > 3) {
-					btnSearch.setEnabled(true);
-				} else {
-					btnSearch.setEnabled(false);
-				}
+				//System.out.println("test");
+				
 				return false;
 			}
 		});
@@ -122,6 +123,20 @@ public class RentrerFragment extends Fragment {
 		} else {
 			destinationSelect = "";
 		}
+		
+		inputTextWatcher = new TextWatcher() {
+		    public void afterTextChanged(Editable s) { }
+		    public void beforeTextChanged(CharSequence s, int start, int count, int after)
+		        { }
+		    public void onTextChanged(CharSequence s, int start, int before, int count) {
+		    	if (editTextDest.getText().toString().length() > 3) {
+					btnSearch.setEnabled(true);
+				} else {
+					btnSearch.setEnabled(false);
+				}
+		    }
+		};
+		editTextDest.addTextChangedListener(inputTextWatcher);
 	}
 
 	private class GetTempsVeloTask extends AsyncTask<String, Void, String> {
