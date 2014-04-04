@@ -241,4 +241,16 @@ public class ParserJson {
 		return tempsTrajet;
 	}
 	
+	public String jsonElementToIdStop(String json) {
+		String idStop = "";
+		JsonElement jelement = new JsonParser().parse(json);
+		JsonObject jobject = jelement.getAsJsonObject();
+		JsonObject places =jobject.get("placesList").getAsJsonObject();
+		JsonObject place = places.get("places").getAsJsonArray().get(0).getAsJsonObject();
+		idStop = place.get("id").toString();
+		//String tempsTrajet = legs.get(0).getAsJsonObject().get(
+		System.out.println("idStop "+idStop);
+		return idStop;
+	}
+	
 }
