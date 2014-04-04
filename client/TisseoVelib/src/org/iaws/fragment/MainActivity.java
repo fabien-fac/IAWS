@@ -6,12 +6,19 @@ import java.util.ArrayList;
 import org.iaws.R;
 import org.iaws.adapter.NavDrawerListAdapter;
 import org.iaws.model.NavDrawerItem;
+import org.iaws.parser.ParserJson;
+import org.iaws.webservices.WebService;
+import org.json.JSONObject;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -92,10 +99,23 @@ public class MainActivity extends Activity {
 		if (savedInstanceState == null) {
 			displayView(0);
 		}
-		System.out.println("COORD : " + 11*10000*Math.sqrt(Math.pow(48.841221-48.791033,2)+Math.pow(2.337341-2.492523,2)));
-		
+		GetTempsTrajetTask task = new GetTempsTrajetTask();
+		task.execute();
 	}
 
+	private class GetTempsTrajetTask extends AsyncTask<Void, Void, String> {
+
+		protected String doInBackground(Void... param) {
+			String temps_trajet = new WebService().get_temps_trajet("Notre_Dame_Toulouse", "bicycling");
+			System.out.println(temps_trajet);
+			new ParserJson().jsonElementToTempsTrajet(temps_trajet);
+			
+			return "babar";
+		}
+
+		protected void onPostExecute(String result) {		
+		}
+	}
 	/**
 	 * Slide menu item click listener
 	 * */

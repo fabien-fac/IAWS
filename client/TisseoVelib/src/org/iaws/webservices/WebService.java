@@ -23,6 +23,8 @@ public class WebService {
 	private final String KEY_JCDECAUX = "9e6c731e4916e512a85e4de995de0d90462d5cf5";
 	private final String URL_JCDECAUX = "https://api.jcdecaux.com/vls/v1/";
 
+	private final String URL_GOOGLE = "http://maps.googleapis.com/maps/api/directions/json?";
+
 	private final String URL_LIKE = "http://fabienserver.dyndns.org:5984/";
 
 	private InputStream sendRequest(URL url) throws IOException {
@@ -116,6 +118,29 @@ public class WebService {
 		return null;
 	}
 
+	public String get_temps_trajet(String arrivee, String mode) {
+		String url_temps_trajet = URL_GOOGLE + "origin=Universite_Paul_Sabatier_Toulouse";
+		url_temps_trajet += "&destination=" + arrivee + "&sensor=false&mode="+ mode;
+		System.out.println("url : " + url_temps_trajet);
+		try {
+			// Envoie de la requête
+			InputStream inputStream = sendRequest(new URL(url_temps_trajet));
+
+			// Vérification de l'inputStream
+			if (inputStream != null) {
+				java.util.Scanner s = new java.util.Scanner(inputStream)
+						.useDelimiter("\\A");
+				//System.out.println("trajet : "+ s.next());
+				return s.hasNext() ? s.next() : "";
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("WebService", "Impossible de récupérer le temps de trajet");
+		}
+		return null;
+	}
+	
 	public String get_like_unlike() {
 		String url_like = URL_LIKE + "like_unlike/_all_docs?include_docs=true";
 		try {
@@ -136,30 +161,32 @@ public class WebService {
 		return null;
 	}
 
-	public void send_like_unlike(String id, String nbLike, String nbUnlike, String rev) {
+	public void send_like_unlike(String id, String nbLike, String nbUnlike,
+			String rev) {
 		String url_like = URL_LIKE + "like_unlike/" + id;
 		String json = paramLikeToStringJson(id, nbLike, nbUnlike, rev);
-		
+
 		try {
-	        HttpPut httpPost = new HttpPut(url_like);
-	        httpPost.setEntity(new StringEntity(json));
-	        httpPost.setHeader("Accept", "application/json");
-	        httpPost.setHeader("Content-type", "application/json");
-	        new DefaultHttpClient().execute(httpPost);
+			HttpPut httpPost = new HttpPut(url_like);
+			httpPost.setEntity(new StringEntity(json));
+			httpPost.setHeader("Accept", "application/json");
+			httpPost.setHeader("Content-type", "application/json");
+			new DefaultHttpClient().execute(httpPost);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e("WebService", "Impossible d'envoyer les like et unlike");
 		}
 	}
-	
-	private String paramLikeToStringJson(String id, String nbLike, String nbUnlike, String rev){
+
+	private String paramLikeToStringJson(String id, String nbLike,
+			String nbUnlike, String rev) {
 		Map<String, String> comment = new HashMap<String, String>();
-	    comment.put("_id", id);
-	    comment.put("like", nbLike);
-	    comment.put("unlike", nbUnlike);
-	    String json = new GsonBuilder().create().toJson(comment, Map.class);
-	    
-	    return json;
+		comment.put("_id", id);
+		comment.put("like", nbLike);
+		comment.put("unlike", nbUnlike);
+		String json = new GsonBuilder().create().toJson(comment, Map.class);
+
+		return json;
 	}
 
 }

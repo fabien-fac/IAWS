@@ -17,6 +17,8 @@ import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.ProchainPassage;
 import org.iaws.classes.Station;
 
+import android.R.string;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -213,5 +215,19 @@ public class ParserJson {
 		String rev = doc.get("_rev").toString().replaceAll("\"", "");
 		LikeUnlike likeUnlike = new LikeUnlike(nbLike, nbUnlike, rev);
 		return likeUnlike;
+	}
+	
+	public String jsonElementToTempsTrajet(String json) {
+		// Tab(routes)->tab(legs)->duration->text
+		String tempsTrajet = "";
+		JsonElement jelement = new JsonParser().parse(json);
+		JsonObject jobject = jelement.getAsJsonObject();
+		JsonArray routes =jobject.getAsJsonArray("routes");
+		JsonObject legs = routes.get(0).getAsJsonObject();
+		JsonArray tabLegs = legs.get("legs").getAsJsonArray();
+		tempsTrajet = tabLegs.get(0).getAsJsonObject().get("duration").getAsJsonObject().get("text").toString();
+		//String tempsTrajet = legs.get(0).getAsJsonObject().get(
+		System.out.println("temps trajet : "+tempsTrajet);
+		return tempsTrajet;
 	}
 }
