@@ -227,8 +227,7 @@ public class ParserJson {
 		return likeUnlike;
 	}
 	
-	public String jsonElementToTempsTrajet(String json) {
-		// Tab(routes)->tab(legs)->duration->text
+	public String jsonToTempsTrajet(String json) {
 		String tempsTrajet = "";
 		JsonElement jelement = new JsonParser().parse(json);
 		JsonObject jobject = jelement.getAsJsonObject();
@@ -236,8 +235,7 @@ public class ParserJson {
 		JsonObject legs = routes.get(0).getAsJsonObject();
 		JsonArray tabLegs = legs.get("legs").getAsJsonArray();
 		tempsTrajet = tabLegs.get(0).getAsJsonObject().get("duration").getAsJsonObject().get("text").toString();
-		//String tempsTrajet = legs.get(0).getAsJsonObject().get(
-		System.out.println("temps trajet : "+tempsTrajet);
+
 		return tempsTrajet;
 	}
 	

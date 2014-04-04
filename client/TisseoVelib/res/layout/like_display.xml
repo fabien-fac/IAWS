@@ -85,7 +85,7 @@
             android:text="@string/horaires"
             android:background="@layout/grey_button"
             style="@style/button_text"
-            android:visibility="invisible"
+            android:visibility="gone"
              />
 
     </RelativeLayout>
