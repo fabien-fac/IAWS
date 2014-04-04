@@ -215,9 +215,9 @@ public class ParserJson {
 		LikeUnlike likeUnlike = new LikeUnlike(id, nbLike, nbUnlike, rev);
 		return likeUnlike;
 	}
-	
+
 	public LikeUnlike jsonToLikeUnlike(String json) {
-		
+
 		JsonElement jelement = new JsonParser().parse(json);
 		JsonObject obj = jelement.getAsJsonObject();
 
@@ -226,31 +226,53 @@ public class ParserJson {
 		LikeUnlike likeUnlike = new LikeUnlike(id, 0, 0, rev);
 		return likeUnlike;
 	}
-	
+
 	public String jsonToTempsTrajet(String json) {
-		// Tab(routes)->tab(legs)->duration->text
 		String tempsTrajet = "";
 		JsonElement jelement = new JsonParser().parse(json);
 		JsonObject jobject = jelement.getAsJsonObject();
-		JsonArray routes =jobject.getAsJsonArray("routes");
+		JsonArray routes = jobject.getAsJsonArray("routes");
 		JsonObject legs = routes.get(0).getAsJsonObject();
 		JsonArray tabLegs = legs.get("legs").getAsJsonArray();
-		tempsTrajet = tabLegs.get(0).getAsJsonObject().get("duration").getAsJsonObject().get("text").toString();
-		//String tempsTrajet = legs.get(0).getAsJsonObject().get(
-		System.out.println("temps trajet : "+tempsTrajet);
+		tempsTrajet = tabLegs.get(0).getAsJsonObject().get("duration")
+				.getAsJsonObject().get("text").toString();
+		System.out.println("temps trajet : " + tempsTrajet);
 		return tempsTrajet;
 	}
-	
+
 	public String jsonElementToIdStop(String json) {
 		String idStop = "";
 		JsonElement jelement = new JsonParser().parse(json);
 		JsonObject jobject = jelement.getAsJsonObject();
-		JsonObject places =jobject.get("placesList").getAsJsonObject();
-		JsonObject place = places.get("places").getAsJsonArray().get(0).getAsJsonObject();
-		idStop = place.get("id").toString();
-		//String tempsTrajet = legs.get(0).getAsJsonObject().get(
-		System.out.println("idStop "+idStop);
+		JsonObject places = jobject.get("placesList").getAsJsonObject();
+		JsonArray place = places.get("place").getAsJsonArray();
+		JsonObject bb = place.get(0).getAsJsonObject();
+		idStop = bb.get("id").toString();
+		// String tempsTrajet = legs.get(0).getAsJsonObject().get(
+		System.out.println("idStop " + idStop);
 		return idStop;
+	}
+	
+	public List<String> jsonToListLigne(String json) {
+
+		List<String> liste = new ArrayList<String>();
+
+		JsonElement jelement = new JsonParser().parse(json);
+		JsonObject jobject = jelement.getAsJsonObject();
+		jobject = jobject.getAsJsonObject("physicalStops");
+		JsonArray jarray = jobject.getAsJsonArray("physicalStop");
+
+		for (JsonElement jsonElement : jarray) {
+			JsonArray destinations = jsonElement.getAsJsonObject().getAsJsonArray("destinations");
+			for (JsonElement jsonDest : destinations) {
+				JsonArray lignes = jsonDest.getAsJsonObject().getAsJsonArray("line");
+				for (JsonElement jsonligne : lignes) {
+					String ligne = jsonligne.getAsJsonObject().get("shortName").toString();
+					liste.add(ligne);
+				}
+			}
+		}
+		return liste;
 	}
 	
 }

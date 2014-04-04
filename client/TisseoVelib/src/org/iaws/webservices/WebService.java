@@ -26,7 +26,7 @@ public class WebService {
 	private final String URL_JCDECAUX = "https://api.jcdecaux.com/vls/v1/";
 
 	private final String URL_GOOGLE = "http://maps.googleapis.com/maps/api/directions/json?";
-	
+
 	private final String URL_LIKE = "http://fabienserver.dyndns.org:5984/";
 
 	private InputStream sendRequest(URL url) throws IOException {
@@ -71,9 +71,9 @@ public class WebService {
 		return null;
 
 	}
-	
-	public String get_arrets_from_dest(String destination) {
 
+	public String get_arrets_from_dest(String destination) {
+;
 		String url_arret = URL_TISSEO
 				+ "placesList?term="+ destination +"&format=json&displayOnlyStopAreas=1&key="
 				+ KEY_TISSEO;
@@ -210,11 +210,13 @@ public class WebService {
 	}
 
 	public String get_temps_trajet(String arrivee, String mode) {
-		String url_temps_trajet = URL_GOOGLE + "origin=Universite_Paul_Sabatier_Toulouse";
-		url_temps_trajet += "&destination=" + arrivee + "&sensor=false&mode="+ mode;
+		String url_temps_trajet = URL_GOOGLE
+				+ "origin=Universite_Paul_Sabatier_Toulouse";
+		url_temps_trajet += "&destination=" + arrivee + "&sensor=false&mode="
+				+ mode;
 		url_temps_trajet = mise_en_forme_url(url_temps_trajet);
 		try {
-			
+
 			// Envoie de la requête
 			InputStream inputStream = sendRequest(new URL(url_temps_trajet));
 
@@ -231,12 +233,38 @@ public class WebService {
 		}
 		return null;
 	}
-	
-	public String mise_en_forme_url(String url){
+
+	public String get_ligne_destination(String idStop) {
+
+		String url_arret = URL_TISSEO
+				+ "stopPointsList?format=json&stopAreaId=" + idStop.replace("\"", "")
+				+ "&displayDestinations=1&displayLines=1&key=" + KEY_TISSEO;
+		url_arret = mise_en_forme_url(url_arret);
+		System.out.println(url_arret);
+		try {
+			// Envoie de la requête
+			InputStream inputStream = sendRequest(new URL(url_arret));
+
+			// Vérification de l'inputStream
+			if (inputStream != null) {
+				java.util.Scanner s = new java.util.Scanner(inputStream)
+						.useDelimiter("\\A");
+				return s.hasNext() ? s.next() : "";
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("WebService", "Impossible de récupérer les arrets");
+		}
+		return null;
+
+	}
+
+	public String mise_en_forme_url(String url) {
 		url = url.replace(" ", "%20");
 		url = url.replace("'", "%27");
-		
+
 		return url;
 	}
-	
+
 }

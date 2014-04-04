@@ -17,6 +17,8 @@ import org.iaws.classes.Station;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
+import com.google.gson.JsonElement;
+
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,7 +43,7 @@ public class RentrerFragment extends Fragment {
 	private EditText editTextDest;
 	private ListView listViewVelo;
 	private ListView listViewBusMetro;
-	
+
 	private TextWatcher inputTextWatcher;
 
 	private WebService webservice;
@@ -50,12 +52,14 @@ public class RentrerFragment extends Fragment {
 	private String destinationSelect;
 	private String tempsVeloBrut;
 	private String tempsBusBrut;
+	private String idStop;
 
 	private Bdd_Adresse bdAdresse;
 
 	private List<Station> list_stations;
 	private List<Arret> liste_arrets_paulSab;
 	private Map<String, LikeUnlike> mapLike;
+	private List<String> lignes;
 
 	public RentrerFragment() {
 	}
@@ -99,8 +103,8 @@ public class RentrerFragment extends Fragment {
 
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				//System.out.println("test");
-				
+				// System.out.println("test");
+
 				return false;
 			}
 		});
@@ -123,18 +127,23 @@ public class RentrerFragment extends Fragment {
 		} else {
 			destinationSelect = "";
 		}
-		
+
 		inputTextWatcher = new TextWatcher() {
-		    public void afterTextChanged(Editable s) { }
-		    public void beforeTextChanged(CharSequence s, int start, int count, int after)
-		        { }
-		    public void onTextChanged(CharSequence s, int start, int before, int count) {
-		    	if (editTextDest.getText().toString().length() > 3) {
+			public void afterTextChanged(Editable s) {
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				if (editTextDest.getText().toString().length() > 3) {
 					btnSearch.setEnabled(true);
 				} else {
 					btnSearch.setEnabled(false);
 				}
-		    }
+			}
 		};
 		editTextDest.addTextChangedListener(inputTextWatcher);
 	}
@@ -157,7 +166,7 @@ public class RentrerFragment extends Fragment {
 			task.execute();
 		}
 	}
-	
+
 	private class GetLikeUnlikeTask extends AsyncTask<Void, Void, String> {
 
 		protected String doInBackground(Void... param) {
@@ -168,7 +177,7 @@ public class RentrerFragment extends Fragment {
 
 		protected void onPostExecute(String result) {
 			update_like(result);
-			
+
 			GetStationsTask task = new GetStationsTask();
 			task.execute();
 		}
@@ -190,7 +199,7 @@ public class RentrerFragment extends Fragment {
 		}
 
 	}
-	
+
 	private class GetTempsBusTask extends AsyncTask<String, Void, String> {
 
 		protected String doInBackground(String... params) {
@@ -203,9 +212,9 @@ public class RentrerFragment extends Fragment {
 		}
 
 		protected void onPostExecute(String json) {
-			
+
 			tempsBusBrut = parser.jsonToTempsTrajet(json);
-			
+
 			GetArretsPaulSabTask task = new GetArretsPaulSabTask();
 			task.execute();
 
@@ -228,8 +237,9 @@ public class RentrerFragment extends Fragment {
 		}
 
 	}
-	
-	private class GetArretsDestinationTask extends AsyncTask<String, Void, String> {
+
+	private class GetArretsDestinationTask extends
+			AsyncTask<String, Void, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -238,17 +248,41 @@ public class RentrerFragment extends Fragment {
 			return liste_arrets;
 		}
 
-		protected void onPostExecute(String json) {		
+		protected void onPostExecute(String json) {
 			loading.setVisibility(View.INVISIBLE);
 			btnSearch.setVisibility(View.VISIBLE);
-			
+			// System.out.println("BAB: "+json);
+			idStop = parser.jsonElementToIdStop(json);
+			GetLignesDestinationTask task = new GetLignesDestinationTask();
+			task.execute();
 			update_view_liste();
 		}
 
 	}
 
+	private class GetLignesDestinationTask extends
+			AsyncTask<Void, Void, String> {
+
+		@Override
+		protected String doInBackground(Void... params) {
+			String liste_lignes = webservice.get_ligne_destination(idStop);
+			// System.out.println("json : " + liste_lignes);
+			lignes = parser.jsonToListLigne(liste_lignes);
+			for (String ligne : lignes) {
+				System.out.println("id : " + ligne);
+			}
+			return liste_lignes;
+		}
+
+		protected void onPostExecute(String json) {
+
+			// liste_arrets_paulSab = parser.jsonToListArretBus(json);
+		}
+
+	}
+
 	private void update_listes_stations(String json) {
-		
+
 		String cle = "station";
 
 		list_stations = parser.jsonToListStation(json);
@@ -256,19 +290,20 @@ public class RentrerFragment extends Fragment {
 		for (Station station : list_stations) {
 			if (is_station_affichable(station)) {
 				station.setTemps(tempsVeloBrut);
-				
-				if (mapLike.containsKey(cle+station.getIdStation())) {
-					LikeUnlike like = mapLike.get(cle+station.getIdStation());
+
+				if (mapLike.containsKey(cle + station.getIdStation())) {
+					LikeUnlike like = mapLike.get(cle + station.getIdStation());
 					station.set_nb_like(like.getLike());
 					station.set_nb_unlike(like.getUnlike());
 					station.setRev(like.getRev());
 				}
-				
+
 				stations.add(station);
 			}
 		}
 
-		StationRenterAdapter adapter = new StationRenterAdapter(getActivity(), stations);
+		StationRenterAdapter adapter = new StationRenterAdapter(getActivity(),
+				stations);
 		listViewVelo.setAdapter(adapter);
 
 	}
@@ -278,12 +313,12 @@ public class RentrerFragment extends Fragment {
 		if (station.getNbVeloDispo() == 0) {
 			return false;
 		}
-		
-		if(!station.getOuverte()){
+
+		if (!station.getOuverte()) {
 			return false;
 		}
-		
-		if(station.get_nb_unlike() > station.get_nb_like()){
+
+		if (station.get_nb_unlike() > station.get_nb_like()) {
 			return false;
 		}
 
@@ -299,44 +334,45 @@ public class RentrerFragment extends Fragment {
 
 		return false;
 	}
-	
+
 	private void update_like(String json) {
 
 		if (json == null) {
 			return;
 		}
-		
+
 		mapLike = parser.jsonToMapLike(json);
 	}
-	
+
 	private void update_view_liste() {
 
 		List<Poteau> listePoteaux = new ArrayList<Poteau>();
 		for (Arret arret : liste_arrets_paulSab) {
-			if(is_arret_affichable(arret)){
+			if (is_arret_affichable(arret)) {
 				listePoteaux.addAll(arret.get_poteaux());
 			}
 		}
-		
+
 		ArrayList<Poteau> poteauItems = new ArrayList<Poteau>();
 		for (Poteau poteau : listePoteaux) {
-			if(is_poteau_affichable(poteau)){
+			if (is_poteau_affichable(poteau)) {
 				poteau.setTemps(tempsBusBrut);
 				poteauItems.add(poteau);
 			}
 		}
-		PoteauRentrerAdapter adapter = new PoteauRentrerAdapter(getActivity(), poteauItems);
+		PoteauRentrerAdapter adapter = new PoteauRentrerAdapter(getActivity(),
+				poteauItems);
 
 		listViewBusMetro.setAdapter(adapter);
 
 	}
-	
-	private boolean is_arret_affichable(Arret arret){
+
+	private boolean is_arret_affichable(Arret arret) {
 		// TODO
 		return true;
 	}
-	
-	private boolean is_poteau_affichable(Poteau poteau){
+
+	private boolean is_poteau_affichable(Poteau poteau) {
 		// TODO
 		return true;
 	}
