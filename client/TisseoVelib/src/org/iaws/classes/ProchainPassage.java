@@ -127,7 +127,7 @@ public class ProchainPassage {
 					resultat += "et 1 minute : ";
 				}
 			} else if (nbMinutes <= 1) {
-				resultat = "Arrivée imminente";
+				resultat = "Arrivée imminente : ";
 			} else {
 				resultat += nbMinutes + " minutes : ";
 			}
