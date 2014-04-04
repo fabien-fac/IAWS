@@ -77,21 +77,14 @@ public class StationAdapter extends BaseAdapter {
 
 		view_nomStation.setText(stationItems.get(position).getNom());
 
-		String str = context.getResources().getString(
-				R.string.station_velo_dispo)
-				+ " ";
-		str += String.valueOf(stationItems.get(position).getNbVeloDispo());
-		view_nbVelo.setText(str);
-		view_nbVelo.setTextColor(Color.parseColor(stationItems.get(position)
-				.getColorVeloDispo()));
 		
-		str = context.getResources().getString(R.string.station_place_dispo)
-				+ " ";
-		str += String.valueOf(stationItems.get(position)
-				.calculerNbStandDIsponible());
-		view_nbPlace.setText(str);
-		view_nbPlace.setTextColor(Color.parseColor(stationItems.get(position)
-				.getColorPlaceDispo()));
+		view_nbVelo.setText(stationItems.get(position).getTextVeloDispo());
+		view_nbVelo.setTextColor(stationItems.get(position)
+				.getColorVeloDispo());
+
+		view_nbPlace.setText(stationItems.get(position).getTextPlaceDispo());
+		view_nbPlace.setTextColor(stationItems.get(position)
+				.getColorPlaceDispo());
 
 		GradientDrawable drawable = (GradientDrawable) etat.getBackground();
 		if (stationItems.get(position).getOuverte()) {

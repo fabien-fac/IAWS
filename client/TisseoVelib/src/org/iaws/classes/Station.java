@@ -2,6 +2,8 @@ package org.iaws.classes;
 
 import org.iaws.interfaces.Fiabilite;
 
+import android.graphics.Color;
+
 public class Station implements Fiabilite {
 
 	private String nom;
@@ -142,27 +144,45 @@ public class Station implements Fiabilite {
 	public String getRev() {
 		return rev;
 	}
-
-	public String getColorVeloDispo(){
+	
+	public String getTextVeloDispo(){
+		
 		if(nbVeloDispo == 0){
-			return "#fa3e3e";
-		}
-		else if(nbVeloDispo < 6){
-			return "#f38234";
+			return "Vélo disponible : 0";
 		}
 		
-		return "#000000";
+		return "Vélos disponibles : "+nbVeloDispo;
 	}
 	
-	public String getColorPlaceDispo(){
+	public String getTextPlaceDispo(){
 		int nbplace = calculerNbStandDIsponible();
 		if(nbplace == 0){
-			return "#fa3e3e";
-		}
-		else if(nbplace < 6){
-			return "#f38234";
+			return "Place disponible : 0";
 		}
 		
-		return "#000000";
+		return "Places disponibles : "+nbplace;
+	}
+
+	public int getColorVeloDispo(){
+		if(nbVeloDispo == 0){
+			return Color.parseColor("#fa3e3e");
+		}
+		else if(nbVeloDispo < 6){
+			return Color.parseColor("#f38234");
+		}
+		
+		return Color.parseColor("#000000");
+	}
+	
+	public int getColorPlaceDispo(){
+		int nbplace = calculerNbStandDIsponible();
+		if(nbplace == 0){
+			return Color.parseColor("#fa3e3e");
+		}
+		else if(nbplace < 6){
+			return Color.parseColor("#f38234");
+		}
+		
+		return Color.parseColor("#000000");
 	}
 }
