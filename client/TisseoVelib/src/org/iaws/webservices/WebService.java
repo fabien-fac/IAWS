@@ -71,6 +71,31 @@ public class WebService {
 		return null;
 
 	}
+	
+	public String get_arrets_from_dest(String destination) {
+
+		String url_arret = URL_TISSEO
+				+ "placesList?term="+ destination +"&format=json&displayOnlyStopAreas=1&key="
+				+ KEY_TISSEO;
+		url_arret = mise_en_forme_url(url_arret);
+		try {
+			// Envoie de la requête
+			InputStream inputStream = sendRequest(new URL(url_arret));
+
+			// Vérification de l'inputStream
+			if (inputStream != null) {
+				java.util.Scanner s = new java.util.Scanner(inputStream)
+						.useDelimiter("\\A");
+				return s.hasNext() ? s.next() : "";
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("WebService", "Impossible de récupérer les arrets");
+		}
+		return null;
+
+	}
 
 	public String get_horaires(String numLigne, String numArret) {
 
@@ -187,8 +212,9 @@ public class WebService {
 	public String get_temps_trajet(String arrivee, String mode) {
 		String url_temps_trajet = URL_GOOGLE + "origin=Universite_Paul_Sabatier_Toulouse";
 		url_temps_trajet += "&destination=" + arrivee + "&sensor=false&mode="+ mode;
-		System.out.println("url : " + url_temps_trajet);
+		url_temps_trajet = mise_en_forme_url(url_temps_trajet);
 		try {
+			
 			// Envoie de la requête
 			InputStream inputStream = sendRequest(new URL(url_temps_trajet));
 
@@ -196,7 +222,6 @@ public class WebService {
 			if (inputStream != null) {
 				java.util.Scanner s = new java.util.Scanner(inputStream)
 						.useDelimiter("\\A");
-				//System.out.println("trajet : "+ s.next());
 				return s.hasNext() ? s.next() : "";
 			}
 
@@ -205,6 +230,13 @@ public class WebService {
 			Log.e("WebService", "Impossible de récupérer le temps de trajet");
 		}
 		return null;
+	}
+	
+	public String mise_en_forme_url(String url){
+		url = url.replace(" ", "%20");
+		url = url.replace("'", "%27");
+		
+		return url;
 	}
 	
 }
