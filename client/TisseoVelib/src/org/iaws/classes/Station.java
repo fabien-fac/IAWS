@@ -143,4 +143,26 @@ public class Station implements Fiabilite {
 		return rev;
 	}
 
+	public String getColorVeloDispo(){
+		if(nbVeloDispo == 0){
+			return "#fa3e3e";
+		}
+		else if(nbVeloDispo < 6){
+			return "#f38234";
+		}
+		
+		return "#000000";
+	}
+	
+	public String getColorPlaceDispo(){
+		int nbplace = calculerNbStandDIsponible();
+		if(nbplace == 0){
+			return "#fa3e3e";
+		}
+		else if(nbplace < 6){
+			return "#f38234";
+		}
+		
+		return "#000000";
+	}
 }

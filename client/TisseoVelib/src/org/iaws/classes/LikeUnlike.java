@@ -7,11 +7,13 @@ public class LikeUnlike {
 		return "LikeUnlike [like=" + like + ", unlike=" + unlike + "]";
 	}
 
+	private String id;
 	private int like;
 	private int unlike;
 	private String rev;
 	
-	public LikeUnlike(int nbLike, int nbUnlike, String rev){
+	public LikeUnlike(String id,int nbLike, int nbUnlike, String rev){
+		this.id = id;
 		this.like = nbLike;
 		this.unlike = nbUnlike;
 		this.rev = rev;
@@ -28,4 +30,10 @@ public class LikeUnlike {
 	public String getRev() {
 		return rev;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	
 }

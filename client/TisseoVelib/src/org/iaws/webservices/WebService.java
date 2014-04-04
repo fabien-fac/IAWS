@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -136,30 +138,48 @@ public class WebService {
 		return null;
 	}
 
-	public void send_like_unlike(String id, String nbLike, String nbUnlike, String rev) {
+	public String send_like_unlike(String id, String nbLike, String nbUnlike,
+			String rev) {
 		String url_like = URL_LIKE + "like_unlike/" + id;
 		String json = paramLikeToStringJson(id, nbLike, nbUnlike, rev);
-		
+		HttpClient httpCli = new DefaultHttpClient();
+
 		try {
-	        HttpPut httpPost = new HttpPut(url_like);
-	        httpPost.setEntity(new StringEntity(json));
-	        httpPost.setHeader("Accept", "application/json");
-	        httpPost.setHeader("Content-type", "application/json");
-	        new DefaultHttpClient().execute(httpPost);
+			HttpPut httpPut = new HttpPut(url_like);
+			httpPut.setEntity(new StringEntity(json));
+			httpPut.setHeader("Accept", "application/json");
+			httpPut.setHeader("Content-type", "application/json");
+			HttpResponse response = httpCli.execute(httpPut);
+			if (response.getStatusLine().getStatusCode() == 201) {
+				InputStream inputStream = response.getEntity().getContent();
+				// Vérification de l'inputStream
+				if (inputStream != null) {
+					java.util.Scanner s = new java.util.Scanner(inputStream)
+							.useDelimiter("\\A");
+					return (s.hasNext() ? s.next() : "");
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e("WebService", "Impossible d'envoyer les like et unlike");
 		}
+
+		return null;
 	}
-	
-	private String paramLikeToStringJson(String id, String nbLike, String nbUnlike, String rev){
+
+	private String paramLikeToStringJson(String id, String nbLike,
+			String nbUnlike, String rev) {
 		Map<String, String> comment = new HashMap<String, String>();
-	    comment.put("_id", id);
-	    comment.put("like", nbLike);
-	    comment.put("unlike", nbUnlike);
-	    String json = new GsonBuilder().create().toJson(comment, Map.class);
-	    
-	    return json;
+		comment.put("_id", id);
+		comment.put("like", nbLike);
+		comment.put("unlike", nbUnlike);
+		if (!rev.equals("null")) {
+			comment.put("_rev", rev);
+		}
+		String json = new GsonBuilder().create().toJson(comment, Map.class);
+
+		return json;
 	}
 
 }

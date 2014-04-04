@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iaws.R;
+import org.iaws.classes.GestionLignes;
+import org.iaws.classes.Ligne;
+import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.Poteau;
 import org.iaws.classes.ProchainPassage;
 import org.iaws.parser.ParserJson;
@@ -79,8 +82,8 @@ public class PoteauAdapter extends BaseAdapter {
 				.getBackground();
 		drawable.setColor(Color.parseColor(poteauItems.get(position).getLigne()
 				.getBgXmlColor()));
-		view_nomLigne.setTextColor(Color.parseColor(poteauItems.get(position).getLigne()
-				.getFgXmlColor()));
+		view_nomLigne.setTextColor(Color.parseColor(poteauItems.get(position)
+				.getLigne().getFgXmlColor()));
 		view_nomArret.setText(poteauItems.get(position).getDestination()
 				.getArret().getName());
 		view_direction.setText("Direction : "
@@ -118,22 +121,23 @@ public class PoteauAdapter extends BaseAdapter {
 		TextView text_unlike = (TextView) view_like
 				.findViewById(R.id.likedisplay_textview_unlike);
 
-		text_like.setText(String
-				.valueOf(poteauItems.get(position).get_nb_like()));
-		text_unlike.setText(String.valueOf(poteauItems.get(position).get_nb_unlike()));
+		text_like.setText(String.valueOf(poteauItems.get(position)
+				.get_nb_like()));
+		text_unlike.setText(String.valueOf(poteauItems.get(position)
+				.get_nb_unlike()));
 
 		view_like.setVisibility(View.GONE);
 
 		if (layout.getChildCount() > 1) {
 			layout.removeViewAt(1);
 		}
-		
+
 		btn_like.setOnClickListener(listener_like);
 		btn_like.setId(position);
 		btn_unlike.setOnClickListener(listener_unlike);
 		btn_unlike.setId(position);
 		btn_horraire.setOnClickListener(listener_horaires);
-		
+
 		layout.addView(view_like);
 
 		return convertView;
@@ -228,11 +232,12 @@ public class PoteauAdapter extends BaseAdapter {
 				String idLigne = poteauItems.get(v.getId()).getNumLigne();
 				poteauItems.get(v.getId()).like();
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
-				
+
 				String nb_like = String.valueOf(poteauItems.get(v.getId())
 						.get_nb_like());
-				taskLike.execute(idLigne, nb_like, String.valueOf(poteauItems.get(v.getId())
-						.get_nb_unlike()), poteauItems.get(v.getId()).get_rev());
+				taskLike.execute(idLigne, nb_like, String.valueOf(poteauItems
+						.get(v.getId()).get_nb_unlike()),
+						poteauItems.get(v.getId()).get_rev());
 
 				View view_grandparent = (View) v.getParent().getParent();
 				RelativeLayout parent = (RelativeLayout) view_grandparent
@@ -248,15 +253,16 @@ public class PoteauAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				
+
 				String idLigne = poteauItems.get(v.getId()).getNumLigne();
 				poteauItems.get(v.getId()).unlike();
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
-				
+
 				String nb_unlike = String.valueOf(poteauItems.get(v.getId())
 						.get_nb_unlike());
-				taskLike.execute(idLigne, String.valueOf(poteauItems.get(v.getId())
-						.get_nb_like()), nb_unlike, poteauItems.get(v.getId()).get_rev());
+				taskLike.execute(idLigne, String.valueOf(poteauItems.get(
+						v.getId()).get_nb_like()), nb_unlike,
+						poteauItems.get(v.getId()).get_rev());
 
 				View view_grandparent = (View) v.getParent().getParent();
 				RelativeLayout parent = (RelativeLayout) view_grandparent
@@ -278,22 +284,29 @@ public class PoteauAdapter extends BaseAdapter {
 		}
 	}
 
-	private class SendLikeUnlikeTask extends AsyncTask<String, Void, Void> {
+	private class SendLikeUnlikeTask extends AsyncTask<String, Void, String> {
 
-		protected Void doInBackground(String... params) {
+		protected String doInBackground(String... params) {
 
 			String idLigne = params[0];
 			String nbLike = params[1];
 			String nbUnLike = params[2];
 			String rev = params[3];
-			
-			webservice.send_like_unlike(idLigne, nbLike, nbUnLike, rev);
-			
-			return null;
+
+			return webservice.send_like_unlike(idLigne, nbLike, nbUnLike, rev);
 
 		}
 
-		protected void onPostExecute(Void param) {
+		protected void onPostExecute(String json) {
+			
+			if(json==null){
+				return;
+			}
+			ParserJson parser = new ParserJson();
+			LikeUnlike like = parser.jsonToLikeUnlike(json);
+
+			Ligne ligne = GestionLignes.get_instance().get_ligne(like.getId());
+			ligne.set_rev(like.getRev());
 		}
 	}
 

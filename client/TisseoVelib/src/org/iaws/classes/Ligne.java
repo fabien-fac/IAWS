@@ -124,5 +124,10 @@ public class Ligne implements Fiabilite {
 	public String get_rev() {
 		return rev;
 	}
+	
+	@Override
+	public String toString() {
+		return "ligne: "+numLigne;
+	}
 
 }

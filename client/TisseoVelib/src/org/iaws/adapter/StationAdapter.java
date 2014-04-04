@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iaws.R;
+import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.Station;
+import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
 import android.app.Activity;
@@ -29,6 +31,7 @@ public class StationAdapter extends BaseAdapter {
 	private OnClickListener listener_like;
 	private OnClickListener listener_unlike;
 	private WebService webservice;
+	private int positionClique;
 
 	public StationAdapter(Context context, List<Station> stationItems) {
 		this.context = context;
@@ -79,12 +82,16 @@ public class StationAdapter extends BaseAdapter {
 				+ " ";
 		str += String.valueOf(stationItems.get(position).getNbVeloDispo());
 		view_nbVelo.setText(str);
-
+		view_nbVelo.setTextColor(Color.parseColor(stationItems.get(position)
+				.getColorVeloDispo()));
+		
 		str = context.getResources().getString(R.string.station_place_dispo)
 				+ " ";
 		str += String.valueOf(stationItems.get(position)
 				.calculerNbStandDIsponible());
 		view_nbPlace.setText(str);
+		view_nbPlace.setTextColor(Color.parseColor(stationItems.get(position)
+				.getColorPlaceDispo()));
 
 		GradientDrawable drawable = (GradientDrawable) etat.getBackground();
 		if (stationItems.get(position).getOuverte()) {
@@ -160,6 +167,7 @@ public class StationAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				positionClique = v.getId();
 				String idLigne = stationItems.get(v.getId()).getIdStation();
 				stationItems.get(v.getId()).ajout_like(1);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
@@ -184,6 +192,7 @@ public class StationAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				positionClique = v.getId();
 				String idLigne = stationItems.get(v.getId()).getIdStation();
 				stationItems.get(v.getId()).ajout_unlike(1);
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
@@ -204,23 +213,30 @@ public class StationAdapter extends BaseAdapter {
 		};
 	}
 
-	private class SendLikeUnlikeTask extends AsyncTask<String, Void, Void> {
+	private class SendLikeUnlikeTask extends AsyncTask<String, Void, String> {
 
-		protected Void doInBackground(String... params) {
+		protected String doInBackground(String... params) {
 
-			String idLigne = "station"+params[0];
+			String idLigne = "station" + params[0];
 			String nbLike = params[1];
 			String nbUnLike = params[2];
 			String rev = params[3];
 
-			webservice.send_like_unlike(idLigne, nbLike, nbUnLike, rev);
-
-			return null;
+			return webservice.send_like_unlike(idLigne, nbLike, nbUnLike, rev);
 
 		}
 
-		protected void onPostExecute(Void param) {
-			System.out.println("envoyé");
+		protected void onPostExecute(String json) {
+			if (json == null) {
+				return;
+			}
+			ParserJson parser = new ParserJson();
+			LikeUnlike like = parser.jsonToLikeUnlike(json);
+			Station station = stationItems.get(positionClique);
+
+			if (like.getId().equals("station" + station.getIdStation())) {
+				station.setRev(like.getRev());
+			}
 		}
 	}
 

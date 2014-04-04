@@ -211,7 +211,19 @@ public class ParserJson {
 		int nbUnlike = Integer.parseInt(doc.get("unlike").toString()
 				.replaceAll("\"", ""));
 		String rev = doc.get("_rev").toString().replaceAll("\"", "");
-		LikeUnlike likeUnlike = new LikeUnlike(nbLike, nbUnlike, rev);
+		String id = doc.get("_id").toString().replaceAll("\"", "");
+		LikeUnlike likeUnlike = new LikeUnlike(id, nbLike, nbUnlike, rev);
+		return likeUnlike;
+	}
+	
+	public LikeUnlike jsonToLikeUnlike(String json) {
+		
+		JsonElement jelement = new JsonParser().parse(json);
+		JsonObject obj = jelement.getAsJsonObject();
+
+		String rev = obj.get("rev").toString().replaceAll("\"", "");
+		String id = obj.get("id").toString().replaceAll("\"", "");
+		LikeUnlike likeUnlike = new LikeUnlike(id, 0, 0, rev);
 		return likeUnlike;
 	}
 }
