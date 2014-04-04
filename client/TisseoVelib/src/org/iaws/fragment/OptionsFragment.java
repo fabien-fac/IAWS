@@ -53,7 +53,7 @@ public class OptionsFragment extends Fragment {
 
 	}
 
-	private void init_variables() {
+	private void init_variables() {		
 		bdAdresse = new Bdd_Adresse(getActivity());
 		adresseSave = bdAdresse.get_adresse();
 		if (adresseSave != null) {
@@ -73,4 +73,5 @@ public class OptionsFragment extends Fragment {
 			Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 		}
 	}
+	
 }

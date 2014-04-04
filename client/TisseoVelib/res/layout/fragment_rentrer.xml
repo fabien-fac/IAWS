@@ -3,7 +3,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#fff" >
-    
+    android:background="#fff"
+    android:padding="5dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/rentrer_edittext_destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/rentrer_imagebutton_search"
+            android:ems="10" 
+            android:hint="@string/destination">
+			
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/rentrer_imagebutton_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_dialog_map"
+            android:background="@layout/grey_button"
+            android:contentDescription="@string/search" />
+
+        <ProgressBar
+            android:id="@+id/rentrer_progressbar_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/button_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@layout/grey_button"
+        android:text="@string/rapide"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ListView
+        android:id="@+id/rentrer_listview_plusrapide"
+        android:layout_width="match_parent"
+        android:layout_height="191dp" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/fiable"
+        style="@style/button_text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@layout/grey_button" />
+
+    <ListView
+        android:id="@+id/rentrer_listview_plusfiable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>

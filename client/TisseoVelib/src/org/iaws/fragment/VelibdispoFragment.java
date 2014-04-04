@@ -52,7 +52,7 @@ public class VelibdispoFragment extends Fragment {
 		init_composants();
 		init_variables();
 
-		GetArretsTask task = new GetArretsTask();
+		GetStationsTask task = new GetStationsTask();
 		task.execute();
 
 		return rootView;
@@ -86,7 +86,7 @@ public class VelibdispoFragment extends Fragment {
 		list_string_stations = new ArrayList<String>();
 	}
 
-	private class GetArretsTask extends AsyncTask<Void, Void, String> {
+	private class GetStationsTask extends AsyncTask<Void, Void, String> {
 
 		@Override
 		protected String doInBackground(Void... arg0) {
