@@ -105,11 +105,16 @@ public class StationRenterAdapter extends BaseAdapter {
 				.findViewById(R.id.likedisplay_textview_like);
 		TextView text_unlike = (TextView) view_like
 				.findViewById(R.id.likedisplay_textview_unlike);
+		TextView text_temps = (TextView) view_like
+				.findViewById(R.id.likedisplay_textview_temps);
 
 		text_like.setText(String.valueOf(stationItems.get(position)
 				.get_nb_like()));
 		text_unlike.setText(String.valueOf(stationItems.get(position)
 				.get_nb_unlike()));
+		text_temps.setText(stationItems.get(position)
+				.getTemps());
+		text_temps.setVisibility(View.VISIBLE);
 		
 		if (layout.getChildCount() > 1) {
 			layout.removeViewAt(1);

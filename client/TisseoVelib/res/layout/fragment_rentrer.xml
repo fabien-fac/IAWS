@@ -47,11 +47,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@layout/grey_button"
-        android:text="@string/rapide"
+        android:text="@string/velotoulouse"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
-        android:id="@+id/rentrer_listview_plusrapide"
+        android:id="@+id/rentrer_listview_velo"
         android:layout_width="match_parent"
         android:layout_height="191dp" >
     </ListView>
@@ -60,13 +60,13 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/fiable"
+        android:text="@string/busmetro"
         style="@style/button_text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:background="@layout/grey_button" />
 
     <ListView
-        android:id="@+id/rentrer_listview_plusfiable"
+        android:id="@+id/rentrer_listview_busmetro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>

@@ -4,10 +4,12 @@ public class Poteau {
 	private String numLigne;
 	private Destination destination;
 	private GestionLignes gestionLigne;
+	private String temps;
 
 	public Poteau(String numLigne) {
 		this.numLigne = numLigne;
 		gestionLigne = GestionLignes.get_instance();
+		this.temps = "";
 	}
 
 	public String getNumLigne() {
@@ -57,4 +59,14 @@ public class Poteau {
 	public String toString() {
 		return "Poteau qui a pour ligne : " + numLigne;
 	}
+
+	public String getTemps() {
+		return temps;
+	}
+
+	public void setTemps(String temps) {
+		this.temps = temps;
+	}
+	
+	
 }

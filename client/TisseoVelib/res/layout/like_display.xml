@@ -50,6 +50,16 @@
             android:layout_toLeftOf="@+id/imageView2"
             android:text="4"
             android:textColor="#fa3e3e" />
+
+        <TextView
+            android:id="@+id/likedisplay_textview_temps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="TextView"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
     <RelativeLayout
