@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="4dp" 
+    android:id="@+id/ligne_linearlayout_body">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/ligne_textview_nomLigne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:minWidth="40dp"
+            android:gravity="center"
+            android:text="2s"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@layout/ligne_name" />
+
+        <TextView
+            android:id="@+id/ligne_textview_nomArret"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="61dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/arret_name" />
+
+        <TextView
+            android:id="@+id/ligne_textview_direction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="61dp"
+			android:layout_below="@+id/ligne_textview_nomArret"
+            android:text="@string/directions" 
+            android:textColor="#b4b4b4"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

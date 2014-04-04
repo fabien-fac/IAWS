@@ -17,8 +17,6 @@ import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.ProchainPassage;
 import org.iaws.classes.Station;
 
-import android.R.string;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -213,21 +211,19 @@ public class ParserJson {
 		int nbUnlike = Integer.parseInt(doc.get("unlike").toString()
 				.replaceAll("\"", ""));
 		String rev = doc.get("_rev").toString().replaceAll("\"", "");
-		LikeUnlike likeUnlike = new LikeUnlike(nbLike, nbUnlike, rev);
+		String id = doc.get("_id").toString().replaceAll("\"", "");
+		LikeUnlike likeUnlike = new LikeUnlike(id, nbLike, nbUnlike, rev);
 		return likeUnlike;
 	}
 	
-	public String jsonElementToTempsTrajet(String json) {
-		// Tab(routes)->tab(legs)->duration->text
-		String tempsTrajet = "";
+	public LikeUnlike jsonToLikeUnlike(String json) {
+		
 		JsonElement jelement = new JsonParser().parse(json);
-		JsonObject jobject = jelement.getAsJsonObject();
-		JsonArray routes =jobject.getAsJsonArray("routes");
-		JsonObject legs = routes.get(0).getAsJsonObject();
-		JsonArray tabLegs = legs.get("legs").getAsJsonArray();
-		tempsTrajet = tabLegs.get(0).getAsJsonObject().get("duration").getAsJsonObject().get("text").toString();
-		//String tempsTrajet = legs.get(0).getAsJsonObject().get(
-		System.out.println("temps trajet : "+tempsTrajet);
-		return tempsTrajet;
+		JsonObject obj = jelement.getAsJsonObject();
+
+		String rev = obj.get("rev").toString().replaceAll("\"", "");
+		String id = obj.get("id").toString().replaceAll("\"", "");
+		LikeUnlike likeUnlike = new LikeUnlike(id, 0, 0, rev);
+		return likeUnlike;
 	}
 }
