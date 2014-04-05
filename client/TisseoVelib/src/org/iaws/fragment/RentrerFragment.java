@@ -2,8 +2,10 @@ package org.iaws.fragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iaws.R;
 import org.iaws.BDD.Bdd_Adresse;
@@ -11,6 +13,7 @@ import org.iaws.adapter.PoteauAdapter;
 import org.iaws.adapter.PoteauRentrerAdapter;
 import org.iaws.adapter.StationRenterAdapter;
 import org.iaws.classes.Arret;
+import org.iaws.classes.Destination;
 import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.Poteau;
 import org.iaws.classes.Station;
@@ -255,7 +258,6 @@ public class RentrerFragment extends Fragment {
 			idStop = parser.jsonElementToIdStop(json);
 			GetLignesDestinationTask task = new GetLignesDestinationTask();
 			task.execute();
-			update_view_liste();
 		}
 
 	}
@@ -268,15 +270,13 @@ public class RentrerFragment extends Fragment {
 			String liste_lignes = webservice.get_ligne_destination(idStop);
 			// System.out.println("json : " + liste_lignes);
 			lignes = parser.jsonToListLigne(liste_lignes);
-			for (String ligne : lignes) {
-				System.out.println("id : " + ligne);
-			}
+
 			return liste_lignes;
 		}
 
 		protected void onPostExecute(String json) {
 
-			// liste_arrets_paulSab = parser.jsonToListArretBus(json);
+			update_view_liste();
 		}
 
 	}
@@ -346,13 +346,25 @@ public class RentrerFragment extends Fragment {
 
 	private void update_view_liste() {
 
-		List<Poteau> listePoteaux = new ArrayList<Poteau>();
+		Set<Poteau> listePoteaux = new HashSet<Poteau>();
 		for (Arret arret : liste_arrets_paulSab) {
-			if (is_arret_affichable(arret)) {
-				listePoteaux.addAll(arret.get_poteaux());
+			for (String ligne : lignes) {
+				if (arret.get_lignes_string().contains(ligne)){
+					for(Poteau poteau : arret.get_poteaux()){
+						if (poteau.getLigne().getNumLigne().equals(ligne) && !listePoteaux.contains(poteau)){
+							
+							listePoteaux.add(poteau);
+						}
+					}
+				}
 			}
+			
+			
+			/*if (is_arret_affichable(arret)) {
+				listePoteaux.addAll(arret.get_poteaux());
+			}*/
 		}
-
+		System.out.println("BABAR");
 		ArrayList<Poteau> poteauItems = new ArrayList<Poteau>();
 		for (Poteau poteau : listePoteaux) {
 			if (is_poteau_affichable(poteau)) {

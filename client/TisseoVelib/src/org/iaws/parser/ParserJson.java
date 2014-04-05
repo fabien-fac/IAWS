@@ -268,7 +268,9 @@ public class ParserJson {
 				JsonArray lignes = jsonDest.getAsJsonObject().getAsJsonArray("line");
 				for (JsonElement jsonligne : lignes) {
 					String ligne = jsonligne.getAsJsonObject().get("shortName").toString();
-					liste.add(ligne);
+					if (!liste.contains(ligne)){
+						liste.add(ligne.replace("\"", ""));
+					}
 				}
 			}
 		}
