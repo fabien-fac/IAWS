@@ -108,7 +108,7 @@ public class ProchainPassage {
 		}
 		
 		if (resultat.equals("")){
-			resultat = "Information indisponible";
+			resultat = "Temps d'attente approximatif : 5 minutes";
 		}
 		
 		return resultat;

@@ -213,7 +213,9 @@ public class WebService {
 	}
 
 	public String get_temps_trajet(String arrivee, String mode) {
-		
+		if (!arrivee.contains("toulouse")){
+			arrivee += " toulouse";
+		}
 		String param = mise_en_forme_param(arrivee);
 		String url_temps_trajet = URL_GOOGLE
 				+ "origin=Universite_Paul_Sabatier_Toulouse";
@@ -272,7 +274,7 @@ public class WebService {
 		} catch (UnsupportedEncodingException e) {
 			url_MeF = "";
 		}
-
+		
 		return url_MeF;
 	}
 

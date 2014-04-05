@@ -86,7 +86,7 @@ public class Poteau {
 	public boolean equals(Object obj) {
 		Poteau other = (Poteau) obj;
 		if (other.numLigne.equals(this.numLigne)) {
-			System.out.println(numLigne);
+			//System.out.println("bilbo : "+numLigne);
 			return true;
 		}
 		return false;

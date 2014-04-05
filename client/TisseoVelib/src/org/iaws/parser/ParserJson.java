@@ -246,10 +246,12 @@ public class ParserJson {
 		JsonObject jobject = jelement.getAsJsonObject();
 		JsonObject places = jobject.get("placesList").getAsJsonObject();
 		JsonArray place = places.get("place").getAsJsonArray();
-		JsonObject bb = place.get(0).getAsJsonObject();
-		idStop = bb.get("id").toString();
-		// String tempsTrajet = legs.get(0).getAsJsonObject().get(
-		System.out.println("idStop " + idStop);
+		if(place.size()>0){
+			JsonObject bb = place.get(0).getAsJsonObject();
+			idStop = bb.get("id").toString();
+			// String tempsTrajet = legs.get(0).getAsJsonObject().get(
+			System.out.println("idStop " + idStop);
+		}
 		return idStop;
 	}
 	

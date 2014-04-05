@@ -254,10 +254,12 @@ public class RentrerFragment extends Fragment {
 		protected void onPostExecute(String json) {
 			loading.setVisibility(View.INVISIBLE);
 			btnSearch.setVisibility(View.VISIBLE);
-			System.out.println("BAB: "+json);
+			
 			idStop = parser.jsonElementToIdStop(json);
-			GetLignesDestinationTask task = new GetLignesDestinationTask();
-			task.execute();
+			if (!idStop.equals("")){
+				GetLignesDestinationTask task = new GetLignesDestinationTask();
+				task.execute();
+			}
 		}
 
 	}
@@ -268,9 +270,8 @@ public class RentrerFragment extends Fragment {
 		@Override
 		protected String doInBackground(Void... params) {
 			String liste_lignes = webservice.get_ligne_destination(idStop);
-			// System.out.println("json : " + liste_lignes);
 			lignes = parser.jsonToListLigne(liste_lignes);
-
+			System.out.println("json : " + lignes);
 			return liste_lignes;
 		}
 
