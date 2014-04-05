@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e8e8e8"
     android:orientation="vertical"
-    android:background="#fff"
     android:padding="5dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@layout/shape_coins_arrondies" >
 
         <EditText
             android:id="@+id/rentrer_edittext_destination"
@@ -17,9 +18,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/rentrer_imagebutton_search"
-            android:ems="10" 
-            android:hint="@string/destination">
-			
+            android:ems="10"
+            android:hint="@string/destination" >
         </EditText>
 
         <ImageButton
@@ -28,9 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_dialog_map"
             android:background="@layout/grey_button"
-            android:contentDescription="@string/search" />
+            android:contentDescription="@string/search"
+            android:src="@android:drawable/ic_dialog_map" />
 
         <ProgressBar
             android:id="@+id/rentrer_progressbar_loading"
@@ -38,37 +38,54 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true" />
-
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView1"
-        style="@style/button_text"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@layout/grey_button"
-        android:text="@string/velotoulouse"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_marginTop="4dp"
+        android:background="@layout/shape_coins_arrondies" >
 
-    <ListView
-        android:id="@+id/rentrer_listview_velo"
-        android:layout_width="match_parent"
-        android:layout_height="191dp" >
-    </ListView>
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@layout/title"
+            android:text="@string/velotoulouse"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/textView2"
+        <ListView
+            android:id="@+id/rentrer_listview_velo"
+            android:layout_width="match_parent"
+            android:layout_height="191dp"
+            android:layout_below="@+id/textView1" >
+        </ListView>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/busmetro"
-        style="@style/button_text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="@layout/grey_button" />
+        android:layout_marginTop="4dp"
+        android:background="@layout/shape_coins_arrondies" >
 
-    <ListView
-        android:id="@+id/rentrer_listview_busmetro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@layout/title"
+            android:text="@string/busmetro"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ListView
+            android:id="@+id/rentrer_listview_busmetro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/textView2" >
+
+        </ListView>
+    </RelativeLayout>
 
 </LinearLayout>
