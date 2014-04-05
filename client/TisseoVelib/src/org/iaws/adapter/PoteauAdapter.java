@@ -203,6 +203,8 @@ public class PoteauAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 
+				positionClique = v.getId();
+				
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setTitle(poteauItems.get(positionClique).getNumLigne()
 						+ " - "
@@ -217,7 +219,7 @@ public class PoteauAdapter extends BaseAdapter {
 				String idArret = poteauItems.get(v.getId()).getDestination()
 						.getArret().getId();
 				String idLigne = poteauItems.get(v.getId()).getLigne().getId();
-				positionClique = v.getId();
+				
 				GetHorrairesTask task = new GetHorrairesTask();
 				task.execute(idArret, idLigne);
 			}
