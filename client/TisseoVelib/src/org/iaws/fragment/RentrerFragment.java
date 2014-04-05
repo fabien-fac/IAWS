@@ -352,7 +352,7 @@ public class RentrerFragment extends Fragment {
 				if (arret.get_lignes_string().contains(ligne)){
 					for(Poteau poteau : arret.get_poteaux()){
 						if (poteau.getLigne().getNumLigne().equals(ligne) && !listePoteaux.contains(poteau)){
-							
+							System.out.println("baba "+poteau.getLigne().getNumLigne());
 							listePoteaux.add(poteau);
 						}
 					}
