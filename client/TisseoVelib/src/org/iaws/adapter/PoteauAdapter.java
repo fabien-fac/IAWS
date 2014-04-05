@@ -70,6 +70,8 @@ public class PoteauAdapter extends BaseAdapter {
 			convertView = mInflater.inflate(R.layout.ligne, null);
 		}
 
+		Poteau poteau = poteauItems.get(position);
+
 		TextView view_nomLigne = (TextView) convertView
 				.findViewById(R.id.ligne_textview_nomLigne);
 		TextView view_nomArret = (TextView) convertView
@@ -77,17 +79,15 @@ public class PoteauAdapter extends BaseAdapter {
 		TextView view_direction = (TextView) convertView
 				.findViewById(R.id.ligne_textview_direction);
 
-		view_nomLigne.setText(poteauItems.get(position).getNumLigne());
+		view_nomLigne.setText(poteau.getNumLigne());
 		GradientDrawable drawable = (GradientDrawable) view_nomLigne
 				.getBackground();
-		drawable.setColor(Color.parseColor(poteauItems.get(position).getLigne()
-				.getBgXmlColor()));
-		view_nomLigne.setTextColor(Color.parseColor(poteauItems.get(position)
-				.getLigne().getFgXmlColor()));
-		view_nomArret.setText(poteauItems.get(position).getDestination()
-				.getArret().getName());
+		drawable.setColor(Color.parseColor(poteau.getLigne().getBgXmlColor()));
+		view_nomLigne.setTextColor(Color.parseColor(poteau.getLigne()
+				.getFgXmlColor()));
+		view_nomArret.setText(poteau.getDestination().getArret().getName());
 		view_direction.setText("Direction : "
-				+ poteauItems.get(position).getDestination().getName());
+				+ poteau.getDestination().getName());
 
 		convertView.setOnClickListener(new OnClickListener() {
 
@@ -121,10 +121,8 @@ public class PoteauAdapter extends BaseAdapter {
 		TextView text_unlike = (TextView) view_like
 				.findViewById(R.id.likedisplay_textview_unlike);
 
-		text_like.setText(String.valueOf(poteauItems.get(position)
-				.get_nb_like()));
-		text_unlike.setText(String.valueOf(poteauItems.get(position)
-				.get_nb_unlike()));
+		text_like.setText(String.valueOf(poteau.get_nb_like()));
+		text_unlike.setText(String.valueOf(poteau.get_nb_unlike()));
 
 		view_like.setVisibility(View.GONE);
 
@@ -229,15 +227,15 @@ public class PoteauAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				String idLigne = poteauItems.get(v.getId()).getNumLigne();
-				poteauItems.get(v.getId()).like();
+				Poteau poteau = poteauItems.get(v.getId());
+				String idLigne = poteau.getNumLigne();
+				poteau.like();
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
 
-				String nb_like = String.valueOf(poteauItems.get(v.getId())
-						.get_nb_like());
-				taskLike.execute(idLigne, nb_like, String.valueOf(poteauItems
-						.get(v.getId()).get_nb_unlike()),
-						poteauItems.get(v.getId()).get_rev());
+				String nb_like = String.valueOf(poteau.get_nb_like());
+				taskLike.execute(idLigne, nb_like,
+						String.valueOf(poteau.get_nb_unlike()),
+						poteau.get_rev());
 
 				View view_grandparent = (View) v.getParent().getParent();
 				RelativeLayout parent = (RelativeLayout) view_grandparent
@@ -253,16 +251,15 @@ public class PoteauAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				Poteau poteau = poteauItems.get(v.getId());
 
-				String idLigne = poteauItems.get(v.getId()).getNumLigne();
-				poteauItems.get(v.getId()).unlike();
+				String idLigne = poteau.getNumLigne();
+				poteau.unlike();
 				SendLikeUnlikeTask taskLike = new SendLikeUnlikeTask();
 
-				String nb_unlike = String.valueOf(poteauItems.get(v.getId())
-						.get_nb_unlike());
-				taskLike.execute(idLigne, String.valueOf(poteauItems.get(
-						v.getId()).get_nb_like()), nb_unlike,
-						poteauItems.get(v.getId()).get_rev());
+				String nb_unlike = String.valueOf(poteau.get_nb_unlike());
+				taskLike.execute(idLigne, String.valueOf(poteau.get_nb_like()),
+						nb_unlike, poteau.get_rev());
 
 				View view_grandparent = (View) v.getParent().getParent();
 				RelativeLayout parent = (RelativeLayout) view_grandparent
@@ -298,8 +295,8 @@ public class PoteauAdapter extends BaseAdapter {
 		}
 
 		protected void onPostExecute(String json) {
-			
-			if(json==null){
+
+			if (json == null) {
 				return;
 			}
 			ParserJson parser = new ParserJson();

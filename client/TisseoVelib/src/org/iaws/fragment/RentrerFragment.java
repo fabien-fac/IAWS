@@ -254,7 +254,7 @@ public class RentrerFragment extends Fragment {
 		protected void onPostExecute(String json) {
 			loading.setVisibility(View.INVISIBLE);
 			btnSearch.setVisibility(View.VISIBLE);
-			// System.out.println("BAB: "+json);
+			System.out.println("BAB: "+json);
 			idStop = parser.jsonElementToIdStop(json);
 			GetLignesDestinationTask task = new GetLignesDestinationTask();
 			task.execute();

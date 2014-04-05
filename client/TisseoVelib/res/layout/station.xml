@@ -39,7 +39,7 @@
             android:text="@string/station_adresse" />
 
         <TextView
-            android:id="@+id/station_textview_nbVeloDispo"
+            android:id="@+id/station_textview_nbVeloDispoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/station_etat"
@@ -48,12 +48,28 @@
             android:text="@string/station_velo_dispo" />
 
         <TextView
-            android:id="@+id/station_textview_nbPlaceDispo"
+            android:id="@+id/station_textview_nbPlaceDispoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_toLeftOf="@+id/station_textview_nbPlaceDispoValeur"
             android:layout_below="@+id/station_textview_adresse"
             android:text="@string/station_place_dispo" />
+
+        <TextView
+            android:id="@+id/station_textview_nbVeloDispoValeur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/station_textview_adresse"
+            android:layout_toRightOf="@+id/station_textview_nbVeloDispoText"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/station_textview_nbPlaceDispoValeur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/station_textview_adresse"
+            android:layout_alignParentRight="true"
+            android:text="0" />
 
     </RelativeLayout>
 

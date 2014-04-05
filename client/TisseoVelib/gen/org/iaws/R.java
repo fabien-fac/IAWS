@@ -44,7 +44,7 @@ public final class R {
         public static final int unlike=0x7f02000b;
     }
     public static final class id {
-        public static final int action_settings=0x7f09002b;
+        public static final int action_settings=0x7f09002d;
         public static final int counter=0x7f090006;
         public static final int drawer_layout=0x7f090000;
         public static final int frame_container=0x7f090001;
@@ -79,8 +79,10 @@ public final class R {
         public static final int station_linearlayout_body=0x7f090025;
         public static final int station_textview_adresse=0x7f090028;
         public static final int station_textview_name=0x7f090027;
-        public static final int station_textview_nbPlaceDispo=0x7f09002a;
-        public static final int station_textview_nbVeloDispo=0x7f090029;
+        public static final int station_textview_nbPlaceDispoText=0x7f09002a;
+        public static final int station_textview_nbPlaceDispoValeur=0x7f09002b;
+        public static final int station_textview_nbVeloDispoText=0x7f090029;
+        public static final int station_textview_nbVeloDispoValeur=0x7f09002c;
         public static final int textView1=0x7f090008;
         public static final int textView2=0x7f09000d;
         public static final int title=0x7f090005;
