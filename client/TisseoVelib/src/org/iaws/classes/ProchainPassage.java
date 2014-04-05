@@ -41,6 +41,15 @@ public class ProchainPassage {
 		}
 	}
 	
+	public int calculerProchainPassageTemps(int tempsAjout) {		
+		if (this.idLigne.equals("A") || this.idLigne.equals("B")) {
+			return calculerProchainPassageMetroTemps(tempsAjout);
+		} else {
+			return calculerProchainPassageBusTemps(tempsAjout);
+		}
+	}
+	
+	
 	private String calculerProchainPassageMetro(){
 		
 		String resultat = "";
@@ -104,6 +113,64 @@ public class ProchainPassage {
 		
 		return resultat;
 	}
+	
+private int calculerProchainPassageMetroTemps(int tempsAjout){
+		
+		int resultat = 9 + tempsAjout;
+		
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+		/* 1 min 20 en heure de pointe durant la semaine */
+		if ((now.get(Calendar.HOUR_OF_DAY) >= 7
+				&& now.get(Calendar.HOUR_OF_DAY) < 9 || now
+				.get(Calendar.HOUR_OF_DAY) >= 16
+				&& now.get(Calendar.HOUR_OF_DAY) < 20)
+				&& (now.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+						.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)) {
+			resultat = 1 + tempsAjout;
+		}
+
+		/* 4 min en soirée le vendredi et le samedi */
+		if ((now.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY && now
+				.get(Calendar.HOUR_OF_DAY) >= 20)
+				|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && now
+						.get(Calendar.HOUR_OF_DAY) <= 1)
+				|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && now
+						.get(Calendar.HOUR_OF_DAY) >= 20)
+				|| (now.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY && now
+						.get(Calendar.HOUR_OF_DAY) <= 1)) {
+			resultat = 4 + tempsAjout;
+		}
+
+		/* 5 min en heure creuse durant la semaine */
+		if (now.get(Calendar.HOUR_OF_DAY) >= 9
+				&& now.get(Calendar.HOUR_OF_DAY) < 16
+				&& (now.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+						.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)) {
+			resultat = 5 + tempsAjout;
+		}
+
+		/*
+		 * 7 min en soirée durant la semaine, en heure creuse le dimanche et
+		 * les jours fériés
+		 */
+		if ((now.get(Calendar.HOUR_OF_DAY) >= 20 && (now
+				.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && now
+				.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY))
+				|| (now.get(Calendar.HOUR_OF_DAY) >= 7 && (now
+						.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY))
+				|| estJourFerie()) {
+			resultat = 7 + tempsAjout;
+		}
+
+		/* 9 min en début de service */
+		if (now.get(Calendar.HOUR_OF_DAY) <= 5
+				&& (now.get(Calendar.MINUTE) <= 15)) {
+			resultat = 9 + tempsAjout;
+		}
+		
+		return resultat;
+	}
 
 	private String calculerProchainPassageBus(){
 		String resultat = "Dans ";
@@ -145,6 +212,23 @@ public class ProchainPassage {
 		}
 		
 		return resultat;
+	}
+	
+	private int calculerProchainPassageBusTemps(int tempsAjout){
+
+		int temps = -1;
+		
+		long intervalle = this.prochainPassage.getTime()
+				- new Date().getTime();
+		if (intervalle >= 0) {
+			long nbMinutes = TimeUnit.MINUTES.convert(intervalle,
+					TimeUnit.MILLISECONDS);
+			
+			
+			temps = (int) (nbMinutes + tempsAjout);
+		} 
+		
+		return temps;
 	}
 	
 	public boolean estJourFerie() {
