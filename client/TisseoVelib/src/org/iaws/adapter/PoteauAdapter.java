@@ -272,7 +272,7 @@ public class PoteauAdapter extends BaseAdapter {
 	}
 
 	private String traitement_no_departures() {
-		String nomLigne = poteauItems.get(positionClique).getLigne().getName();
+		String nomLigne = poteauItems.get(positionClique).getLigne().getNumLigne();
 		if (nomLigne.equals("A") || nomLigne.equals("B")) {
 			ProchainPassage p = new ProchainPassage(nomLigne, "", "", null);
 			return p.calculerProchainPassage();
