@@ -150,19 +150,19 @@ public class Station implements Fiabilite {
 	public String getTextVeloDispo(){
 		
 		if(nbVeloDispo == 0){
-			return "Vélo disponible : 0";
+			return "Vélo disponible : ";
 		}
 		
-		return "Vélos disponibles : "+nbVeloDispo;
+		return "Vélos disponibles : ";
 	}
 	
 	public String getTextPlaceDispo(){
 		int nbplace = calculerNbStandDIsponible();
 		if(nbplace == 0){
-			return "Place disponible : 0";
+			return "Place disponible : ";
 		}
 		
-		return "Places disponibles : "+nbplace;
+		return "Places disponibles : ";
 	}
 
 	public int getColorVeloDispo(){

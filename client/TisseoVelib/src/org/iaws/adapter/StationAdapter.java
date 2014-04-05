@@ -66,34 +66,41 @@ public class StationAdapter extends BaseAdapter {
 
 		TextView view_nomStation = (TextView) convertView
 				.findViewById(R.id.station_textview_name);
-		TextView view_nbVelo = (TextView) convertView
-				.findViewById(R.id.station_textview_nbVeloDispo);
-		TextView view_nbPlace = (TextView) convertView
-				.findViewById(R.id.station_textview_nbPlaceDispo);
+		TextView view_nbVeloText = (TextView) convertView
+				.findViewById(R.id.station_textview_nbVeloDispoText);
+		TextView view_nbVeloValeur = (TextView) convertView
+				.findViewById(R.id.station_textview_nbVeloDispoValeur);
+
+		TextView view_nbPlaceText = (TextView) convertView
+				.findViewById(R.id.station_textview_nbPlaceDispoText);
+		TextView view_nbPlaceValeur = (TextView) convertView
+				.findViewById(R.id.station_textview_nbPlaceDispoValeur);
 		TextView view_adresse = (TextView) convertView
 				.findViewById(R.id.station_textview_adresse);
 
 		View etat = (View) convertView.findViewById(R.id.station_etat);
 
-		view_nomStation.setText(stationItems.get(position).getNom());
+		Station station = stationItems.get(position);
 
-		
-		view_nbVelo.setText(stationItems.get(position).getTextVeloDispo());
-		view_nbVelo.setTextColor(stationItems.get(position)
-				.getColorVeloDispo());
+		view_nomStation.setText(station.getNom());
 
-		view_nbPlace.setText(stationItems.get(position).getTextPlaceDispo());
-		view_nbPlace.setTextColor(stationItems.get(position)
-				.getColorPlaceDispo());
+		view_nbVeloText.setText(station.getTextVeloDispo());
+		view_nbVeloValeur.setText(String.valueOf(station.getNbVeloDispo()));
+		view_nbVeloValeur.setTextColor(station.getColorVeloDispo());
+
+		view_nbPlaceText.setText(station.getTextPlaceDispo());
+		view_nbPlaceValeur.setText(String.valueOf(station
+				.calculerNbStandDIsponible()));
+		view_nbPlaceValeur.setTextColor(station.getColorPlaceDispo());
 
 		GradientDrawable drawable = (GradientDrawable) etat.getBackground();
-		if (stationItems.get(position).getOuverte()) {
+		if (station.getOuverte()) {
 			drawable.setColor(Color.GREEN);
 		} else {
 			drawable.setColor(Color.RED);
 		}
 
-		view_adresse.setText(stationItems.get(position).getAdresse());
+		view_adresse.setText(station.getAdresse());
 
 		// Partie like
 
@@ -115,10 +122,8 @@ public class StationAdapter extends BaseAdapter {
 		TextView text_unlike = (TextView) view_like
 				.findViewById(R.id.likedisplay_textview_unlike);
 
-		text_like.setText(String.valueOf(stationItems.get(position)
-				.get_nb_like()));
-		text_unlike.setText(String.valueOf(stationItems.get(position)
-				.get_nb_unlike()));
+		text_like.setText(String.valueOf(station.get_nb_like()));
+		text_unlike.setText(String.valueOf(station.get_nb_unlike()));
 
 		if (layout.getChildCount() > 1) {
 			layout.removeViewAt(1);
