@@ -32,8 +32,9 @@ public class ProchainPassage {
 
 	}
 
-	public String calculerProchainPassage() {		
+	public String calculerProchainPassage() {	
 		if (this.idLigne.equals("A") || this.idLigne.equals("B")) {
+			System.out.println("BABAR");
 			return calculerProchainPassageMetro();
 		} else {
 			return calculerProchainPassageBus();
