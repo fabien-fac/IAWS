@@ -2,8 +2,10 @@ package org.iaws.webservices;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,11 +75,12 @@ public class WebService {
 	}
 
 	public String get_arrets_from_dest(String destination) {
-;
+		
+		String param = mise_en_forme_param(destination);
+
 		String url_arret = URL_TISSEO
-				+ "placesList?term="+ destination +"&format=json&displayOnlyStopAreas=1&key="
+				+ "placesList?term="+ param +"&format=json&displayOnlyStopAreas=1&key="
 				+ KEY_TISSEO;
-		url_arret = mise_en_forme_url(url_arret);
 		try {
 			// Envoie de la requête
 			InputStream inputStream = sendRequest(new URL(url_arret));
@@ -210,11 +213,13 @@ public class WebService {
 	}
 
 	public String get_temps_trajet(String arrivee, String mode) {
+		
+		String param = mise_en_forme_param(arrivee);
 		String url_temps_trajet = URL_GOOGLE
 				+ "origin=Universite_Paul_Sabatier_Toulouse";
-		url_temps_trajet += "&destination=" + arrivee + "&sensor=false&mode="
+		url_temps_trajet += "&destination=" + param + "&sensor=false&mode="
 				+ mode;
-		url_temps_trajet = mise_en_forme_url(url_temps_trajet);
+
 		try {
 
 			// Envoie de la requête
@@ -239,8 +244,7 @@ public class WebService {
 		String url_arret = URL_TISSEO
 				+ "stopPointsList?format=json&stopAreaId=" + idStop.replace("\"", "")
 				+ "&displayDestinations=1&displayLines=1&key=" + KEY_TISSEO;
-		url_arret = mise_en_forme_url(url_arret);
-		System.out.println(url_arret);
+
 		try {
 			// Envoie de la requête
 			InputStream inputStream = sendRequest(new URL(url_arret));
@@ -260,11 +264,16 @@ public class WebService {
 
 	}
 
-	public String mise_en_forme_url(String url) {
-		url = url.replace(" ", "%20");
-		url = url.replace("'", "%27");
+	public String mise_en_forme_param(String param) {
+		String url_MeF;
+		
+		try {
+			url_MeF = URLEncoder.encode(param, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			url_MeF = "";
+		}
 
-		return url;
+		return url_MeF;
 	}
 
 }
