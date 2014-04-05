@@ -252,14 +252,9 @@ public class RentrerFragment extends Fragment {
 		}
 
 		protected void onPostExecute(String json) {
-			loading.setVisibility(View.INVISIBLE);
-			btnSearch.setVisibility(View.VISIBLE);
-			
 			idStop = parser.jsonElementToIdStop(json);
-			if (!idStop.equals("")){
-				GetLignesDestinationTask task = new GetLignesDestinationTask();
-				task.execute();
-			}
+			GetLignesDestinationTask task = new GetLignesDestinationTask();
+			task.execute();
 		}
 
 	}
@@ -269,15 +264,19 @@ public class RentrerFragment extends Fragment {
 
 		@Override
 		protected String doInBackground(Void... params) {
-			String liste_lignes = webservice.get_ligne_destination(idStop);
-			lignes = parser.jsonToListLigne(liste_lignes);
-			System.out.println("json : " + lignes);
+			String liste_lignes = "";
+			if (!idStop.equals("")){
+				liste_lignes = webservice.get_ligne_destination(idStop);
+				lignes = parser.jsonToListLigne(liste_lignes);
+				System.out.println("json : " + lignes);
+			}
 			return liste_lignes;
 		}
 
 		protected void onPostExecute(String json) {
-
 			update_view_liste();
+			loading.setVisibility(View.INVISIBLE);
+			btnSearch.setVisibility(View.VISIBLE);
 		}
 
 	}
@@ -348,24 +347,28 @@ public class RentrerFragment extends Fragment {
 	private void update_view_liste() {
 
 		Set<Poteau> listePoteaux = new HashSet<Poteau>();
-		for (Arret arret : liste_arrets_paulSab) {
-			for (String ligne : lignes) {
-				if (arret.get_lignes_string().contains(ligne)){
-					for(Poteau poteau : arret.get_poteaux()){
-						if (poteau.getLigne().getNumLigne().equals(ligne) && !listePoteaux.contains(poteau)){
-							System.out.println("baba "+poteau.getLigne().getNumLigne());
-							listePoteaux.add(poteau);
+		if (!idStop.equals("")) {
+			for (Arret arret : liste_arrets_paulSab) {
+				for (String ligne : lignes) {
+					if (arret.get_lignes_string().contains(ligne)) {
+						for (Poteau poteau : arret.get_poteaux()) {
+							if (poteau.getLigne().getNumLigne().equals(ligne)
+									&& !listePoteaux.contains(poteau)) {
+								System.out.println("baba "
+										+ poteau.getLigne().getNumLigne());
+								listePoteaux.add(poteau);
+							}
 						}
 					}
 				}
 			}
-			
-			
-			/*if (is_arret_affichable(arret)) {
-				listePoteaux.addAll(arret.get_poteaux());
-			}*/
+
+			/*
+			 * if (is_arret_affichable(arret)) {
+			 * listePoteaux.addAll(arret.get_poteaux()); }
+			 */
 		}
-		System.out.println("BABAR");
+		System.out.println("BABAR" + listePoteaux);
 		ArrayList<Poteau> poteauItems = new ArrayList<Poteau>();
 		for (Poteau poteau : listePoteaux) {
 			if (is_poteau_affichable(poteau)) {
