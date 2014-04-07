@@ -18,6 +18,7 @@ import org.iaws.classes.Station;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
+import com.google.gson.JsonElement;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -261,7 +262,7 @@ public class RentrerFragment extends Fragment {
 		@Override
 		protected String doInBackground(Void... params) {
 			String liste_lignes = "";
-			if (!idStop.equals("")){
+			if (!idStop.equals("")) {
 				liste_lignes = webservice.get_ligne_destination(idStop);
 				lignesDestination = parser.jsonToListLigne(liste_lignes);
 				System.out.println("json : " + lignesDestination);
@@ -339,7 +340,6 @@ public class RentrerFragment extends Fragment {
 		if (json == null) {
 			return;
 		}
-
 		mapLike = parser.jsonToMapLike(json);
 	}
 
@@ -352,28 +352,20 @@ public class RentrerFragment extends Fragment {
 					if (arret.get_lignes_string().contains(ligne)) {
 						for (Poteau poteau : arret.get_poteaux()) {
 							if (poteau.getLigne().getNumLigne().equals(ligne)
-									&& !listePoteaux.contains(poteau)) {
-								System.out.println("baba "
-										+ poteau.getLigne().getNumLigne());
+									&& !contientLigne(ligne, listePoteaux)) {
+							//	System.out.println(poteau.toString());
 								listePoteaux.add(poteau);
 							}
 						}
 					}
 				}
 			}
-
-			/*
-			 * if (is_arret_affichable(arret)) {
-			 * listePoteaux.addAll(arret.get_poteaux()); }
-			 */
 		}
-		System.out.println("BABAR" + listePoteaux);
+		//System.out.println("BABAR" + listePoteaux);
 		ArrayList<Poteau> poteauItems = new ArrayList<Poteau>();
 		for (Poteau poteau : listePoteaux) {
-			if (is_poteau_affichable(poteau)) {
-				poteau.setTemps(tempsBusBrut);
-				poteauItems.add(poteau);
-			}
+			poteau.setTemps(tempsBusBrut);
+			poteauItems.add(poteau);
 		}
 		PoteauRentrerAdapter adapter = new PoteauRentrerAdapter(getActivity(),
 				poteauItems);
@@ -382,12 +374,18 @@ public class RentrerFragment extends Fragment {
 
 	}
 
-	private boolean is_arret_affichable(Arret arret) {
-		// TODO
-		return true;
+	private boolean contientLigne(String ligne, Set<Poteau> listePoteau) {
+		for (Poteau poteau : listePoteau) {
+			System.out.println(poteau.getLigne().getNumLigne());
+			System.out.println(ligne);
+			if (poteau.getLigne().getNumLigne().equals(ligne)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	private boolean is_poteau_affichable(Poteau poteau) {
+	private boolean is_arret_affichable(Arret arret) {
 		// TODO
 		return true;
 	}
