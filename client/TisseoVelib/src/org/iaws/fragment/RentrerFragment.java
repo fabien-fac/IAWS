@@ -58,7 +58,7 @@ public class RentrerFragment extends Fragment {
 	private List<Station> list_stations;
 	private List<Arret> liste_arrets_paulSab;
 	private Map<String, LikeUnlike> mapLike;
-	private List<String> lignes;
+	private List<String> lignesDestination;
 
 	public RentrerFragment() {
 	}
@@ -263,8 +263,8 @@ public class RentrerFragment extends Fragment {
 			String liste_lignes = "";
 			if (!idStop.equals("")){
 				liste_lignes = webservice.get_ligne_destination(idStop);
-				lignes = parser.jsonToListLigne(liste_lignes);
-				System.out.println("json : " + lignes);
+				lignesDestination = parser.jsonToListLigne(liste_lignes);
+				System.out.println("json : " + lignesDestination);
 			}
 			return liste_lignes;
 		}
@@ -348,7 +348,7 @@ public class RentrerFragment extends Fragment {
 		Set<Poteau> listePoteaux = new HashSet<Poteau>();
 		if (!idStop.equals("")) {
 			for (Arret arret : liste_arrets_paulSab) {
-				for (String ligne : lignes) {
+				for (String ligne : lignesDestination) {
 					if (arret.get_lignes_string().contains(ligne)) {
 						for (Poteau poteau : arret.get_poteaux()) {
 							if (poteau.getLigne().getNumLigne().equals(ligne)
