@@ -88,6 +88,7 @@ public class RentrerFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				indicePoteau = 0;
+				poteauItems = new ArrayList<Poteau>();
 				loading.setVisibility(View.VISIBLE);
 				btnSearch.setVisibility(View.INVISIBLE);
 				destinationSelect = editTextDest.getText().toString();

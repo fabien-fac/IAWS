@@ -236,7 +236,6 @@ public class ParserJson {
 		JsonArray tabLegs = legs.get("legs").getAsJsonArray();
 		tempsTrajet = tabLegs.get(0).getAsJsonObject().get("duration")
 				.getAsJsonObject().get("text").toString();
-		System.out.println("temps trajet : " + tempsTrajet);
 		return tempsTrajet;
 	}
 
@@ -249,8 +248,6 @@ public class ParserJson {
 		if(place.size()>0){
 			JsonObject bb = place.get(0).getAsJsonObject();
 			idStop = bb.get("id").toString();
-			// String tempsTrajet = legs.get(0).getAsJsonObject().get(
-			System.out.println("idStop " + idStop);
 		}
 		return idStop;
 	}
