@@ -18,12 +18,7 @@ import org.iaws.classes.Station;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
-<<<<<<< HEAD
 import com.google.gson.JsonElement;
-
-import android.R.bool;
-=======
->>>>>>> 3368f13caf3c3e2c9b4a7f226fe6fdecb310fd30
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
