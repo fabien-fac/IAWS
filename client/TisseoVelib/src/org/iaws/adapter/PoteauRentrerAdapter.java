@@ -1,31 +1,19 @@
 package org.iaws.adapter;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.iaws.R;
-import org.iaws.classes.GestionLignes;
-import org.iaws.classes.Ligne;
-import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.Poteau;
-import org.iaws.classes.ProchainPassage;
-import org.iaws.parser.ParserJson;
-import org.iaws.webservices.WebService;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class PoteauRentrerAdapter extends BaseAdapter{
@@ -76,8 +64,7 @@ public class PoteauRentrerAdapter extends BaseAdapter{
 				.getLigne().getFgXmlColor()));
 		view_nomArret.setText(poteauItems.get(position).getDestination()
 				.getArret().getName());
-		view_direction.setText("Direction : "
-				+ poteauItems.get(position).getDestination().getName());
+		view_direction.setText("");
 
 		// Partie like
 
