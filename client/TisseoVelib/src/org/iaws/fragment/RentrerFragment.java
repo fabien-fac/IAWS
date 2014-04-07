@@ -17,10 +17,10 @@ import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.Poteau;
 import org.iaws.classes.ProchainPassage;
 import org.iaws.classes.Station;
+import org.iaws.comparator.PoteauTimeComparator;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
-import Comparator.PoteauTimeComparator;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.os.AsyncTask;

@@ -1,4 +1,4 @@
-package Comparator;
+package org.iaws.comparator;
 
 import java.util.Comparator;
 
