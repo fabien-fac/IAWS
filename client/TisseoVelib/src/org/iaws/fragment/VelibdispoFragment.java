@@ -75,7 +75,7 @@ public class VelibdispoFragment extends Fragment {
 			}
 		});
 		btnSearch.setEnabled(false);
-		btnSearch.setVisibility(View.GONE);
+		btnSearch.setVisibility(View.INVISIBLE);
 		loading_bar = (ProgressBar) rootView
 				.findViewById(R.id.velibdispo_progressBar_load);
 

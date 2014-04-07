@@ -9,20 +9,21 @@ import java.util.Set;
 
 import org.iaws.R;
 import org.iaws.BDD.Bdd_Adresse;
-import org.iaws.adapter.PoteauAdapter;
 import org.iaws.adapter.PoteauRentrerAdapter;
 import org.iaws.adapter.StationRenterAdapter;
 import org.iaws.classes.Arret;
-import org.iaws.classes.Destination;
 import org.iaws.classes.LikeUnlike;
 import org.iaws.classes.Poteau;
 import org.iaws.classes.Station;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
+<<<<<<< HEAD
 import com.google.gson.JsonElement;
 
 import android.R.bool;
+=======
+>>>>>>> 3368f13caf3c3e2c9b4a7f226fe6fdecb310fd30
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -289,16 +290,16 @@ public class RentrerFragment extends Fragment {
 		list_stations = parser.jsonToListStation(json);
 		List<Station> stations = new ArrayList<Station>();
 		for (Station station : list_stations) {
+			
+			if (mapLike.containsKey(cle + station.getIdStation())) {
+				LikeUnlike like = mapLike.get(cle + station.getIdStation());
+				station.set_nb_like(like.getLike());
+				station.set_nb_unlike(like.getUnlike());
+				station.setRev(like.getRev());
+			}
+			
 			if (is_station_affichable(station)) {
 				station.setTemps(tempsVeloBrut);
-
-				if (mapLike.containsKey(cle + station.getIdStation())) {
-					LikeUnlike like = mapLike.get(cle + station.getIdStation());
-					station.set_nb_like(like.getLike());
-					station.set_nb_unlike(like.getUnlike());
-					station.setRev(like.getRev());
-				}
-
 				stations.add(station);
 			}
 		}
@@ -319,6 +320,9 @@ public class RentrerFragment extends Fragment {
 			return false;
 		}
 
+		System.out.println("unlike : " + station.get_nb_unlike());
+		System.out.println("like : " + station.get_nb_like());
+		
 		if (station.get_nb_unlike() > station.get_nb_like()) {
 			return false;
 		}

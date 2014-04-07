@@ -20,9 +20,9 @@
     <string name="form_your_adress">Votre adresse :</string>
     <string name="form_ligne">Ligne :</string>
     <string name="form_arret">Arret :</string>
-    <string name="form_nom_station">Nom de la station</string>
+    <string name="form_nom_station">Nom ou adresse de la station</string>
     <string name="button_valider">Valider</string>
-    <string name="destination">Déstination</string>
+    <string name="destination">Destination</string>
     <string name="fiable">Plus fiable</string>
     <string name="rapide">Plus rapide</string>
     <string name="velotoulouse">Vélô Toulouse</string>

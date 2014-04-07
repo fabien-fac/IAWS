@@ -2,60 +2,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="#e8e8e8"
     android:orientation="vertical"
     android:padding="5dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@layout/shape_coins_arrondies"
+        android:padding="2dp" >
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="@string/form_ligne"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:id="@+id/relativeLayout1" >
 
-        <Spinner
-            android:id="@+id/prochain_spinner_ligne"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="@string/form_ligne"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/prochain_spinner_ligne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/textView1" />
+
+            <ProgressBar
+                android:id="@+id/prochain_progressbar_load"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/textView1" />
+            android:layout_below="@+id/relativeLayout1" >
 
-        <ProgressBar
-            android:id="@+id/prochain_progressbar_load"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="@string/form_arret"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="@string/form_arret"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <Spinner
-            android:id="@+id/prochain_spinner_arret"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/textView2" />
+            <Spinner
+                android:id="@+id/prochain_spinner_arret"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/textView2" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <ListView
         android:id="@+id/prochain_listview_liste"
+        android:background="@layout/shape_coins_arrondies"
+        android:layout_marginTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"

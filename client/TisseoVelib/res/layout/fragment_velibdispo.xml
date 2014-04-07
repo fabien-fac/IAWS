@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e8e8e8"
     android:orientation="vertical"
-    android:background="#fff"
     android:padding="5dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@layout/shape_coins_arrondies" >
 
         <AutoCompleteTextView
             android:id="@+id/velibdispo_edittext_nom"
@@ -18,9 +19,8 @@
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/velibdispo_imgbutton_search"
             android:ems="10"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:hint="@string/form_nom_station" >
-
+            android:hint="@string/form_nom_station"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
         </AutoCompleteTextView>
 
         <ImageButton
@@ -29,9 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_menu_search"
             android:background="@layout/grey_button"
-            android:contentDescription="@string/search" />
+            android:contentDescription="@string/search"
+            android:src="@android:drawable/ic_menu_search" />
 
         <ProgressBar
             android:id="@+id/velibdispo_progressBar_load"
@@ -39,13 +39,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true" />
-
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/velibdispo_listview_liste"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@layout/shape_coins_arrondies" >
+
+        <ListView
+            android:id="@+id/velibdispo_listview_liste"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent" >
+        </ListView>
+    </RelativeLayout>
 
 </LinearLayout>
