@@ -461,6 +461,10 @@ public class RentrerFragment extends Fragment {
 	}
 
 	private void afficher_aucun_bus() {
+		
+		loading.setVisibility(View.INVISIBLE);
+		btnSearch.setVisibility(View.VISIBLE);
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getActivity().getResources().getString(
 				R.string.busmetro));
