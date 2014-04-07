@@ -5,6 +5,7 @@ public class Poteau {
 	private Destination destination;
 	private GestionLignes gestionLigne;
 	private String temps;
+	private int tempsMinute;
 
 	public Poteau(String numLigne) {
 		this.numLigne = numLigne;
@@ -61,12 +62,29 @@ public class Poteau {
 	}
 
 	public String getTemps() {
-		return temps;
+		String tempsRes;
+	
+		if(tempsMinute == -1){
+			tempsRes = "Information indisponible";
+		}
+		else{
+			tempsRes = (String.valueOf(tempsMinute) + " minutes");
+		}
+		return tempsRes;
 	}
 
 	public void setTemps(String temps) {
 		this.temps = temps;
 	}
+	
+	public void setTempsMinute(int tempsMinute) {
+		this.tempsMinute = tempsMinute;
+	}
+	
+	public int getTempsMinute() {
+		return tempsMinute;
+	}
+	
 
 	@Override
 	public int hashCode() {
@@ -86,7 +104,6 @@ public class Poteau {
 	public boolean equals(Object obj) {
 		Poteau other = (Poteau) obj;
 		if (other.numLigne.equals(this.numLigne)) {
-			//System.out.println("bilbo : "+numLigne);
 			return true;
 		}
 		return false;

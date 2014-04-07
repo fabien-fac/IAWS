@@ -1,6 +1,7 @@
 package org.iaws.fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.iaws.classes.Station;
 import org.iaws.parser.ParserJson;
 import org.iaws.webservices.WebService;
 
+import Comparator.PoteauTimeComparator;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.os.AsyncTask;
@@ -63,6 +65,7 @@ public class RentrerFragment extends Fragment {
 	private List<String> lignesDestination;
 	private ArrayList<Poteau> poteauItems;
 	private int indicePoteau;
+	private int nbPoteauAAfficher;
 
 	public RentrerFragment() {
 	}
@@ -274,10 +277,8 @@ public class RentrerFragment extends Fragment {
 
 		protected void onPostExecute(String json) {
 			update_view_liste();
-			
+
 			chargement_horaires();
-			loading.setVisibility(View.INVISIBLE);
-			btnSearch.setVisibility(View.VISIBLE);
 		}
 
 	}
@@ -289,14 +290,14 @@ public class RentrerFragment extends Fragment {
 		list_stations = parser.jsonToListStation(json);
 		List<Station> stations = new ArrayList<Station>();
 		for (Station station : list_stations) {
-			
+
 			if (mapLike.containsKey(cle + station.getIdStation())) {
 				LikeUnlike like = mapLike.get(cle + station.getIdStation());
 				station.set_nb_like(like.getLike());
 				station.set_nb_unlike(like.getUnlike());
 				station.setRev(like.getRev());
 			}
-			
+
 			if (is_station_affichable(station)) {
 				station.setTemps(tempsVeloBrut);
 				stations.add(station);
@@ -318,7 +319,7 @@ public class RentrerFragment extends Fragment {
 		if (!station.getOuverte()) {
 			return false;
 		}
-		
+
 		if (station.get_nb_unlike() > station.get_nb_like()) {
 			return false;
 		}
@@ -366,12 +367,18 @@ public class RentrerFragment extends Fragment {
 			poteau.setTemps(tempsBusBrut);
 			poteauItems.add(poteau);
 		}
-		
+
 	}
-	
-	private void afficher_poteaux(){
+
+	private void afficher_poteaux() {
 		PoteauRentrerAdapter adapter = new PoteauRentrerAdapter(getActivity(),
 				poteauItems);
+
+		if (indicePoteau >= nbPoteauAAfficher) {
+			loading.setVisibility(View.INVISIBLE);
+			btnSearch.setVisibility(View.VISIBLE);
+			Collections.sort(poteauItems, new PoteauTimeComparator());
+		}
 
 		listViewBusMetro.setAdapter(adapter);
 	}
@@ -385,32 +392,33 @@ public class RentrerFragment extends Fragment {
 		return false;
 	}
 
-	
-	private void chargement_horaires(){
-		
-		if(poteauItems.size() < 1){
+	private void chargement_horaires() {
+
+		if (poteauItems.size() < 1) {
+			afficher_poteaux();
 			afficher_aucun_bus();
 		}
-		
+
+		nbPoteauAAfficher = poteauItems.size();
+
 		for (Poteau poteau : poteauItems) {
-			
-			String idArret = poteau.getDestination()
-					.getArret().getId();
+
+			String idArret = poteau.getDestination().getArret().getId();
 			String idLigne = poteau.getLigne().getId();
-			
+
 			GetHorrairesTask task = new GetHorrairesTask();
 			task.execute(idArret, idLigne);
-			
+
 		}
 	}
-	
+
 	private class GetHorrairesTask extends AsyncTask<String, Void, String> {
 
 		protected String doInBackground(String... params) {
 
 			String numArret = params[0];
 			String numLigne = params[1];
-			
+
 			String liste_horaires = webservice.get_horaires(numLigne, numArret);
 
 			return liste_horaires;
@@ -418,43 +426,41 @@ public class RentrerFragment extends Fragment {
 
 		protected void onPostExecute(String result) {
 			ParserJson parser = new ParserJson();
-			
+
 			List<ProchainPassage> prochainPassages = parser
 					.jsonToListProchainPassage(result);
-			
-			String tempsTotal = get_temps_totalBus(prochainPassages);
-			poteauItems.get(indicePoteau).setTemps(tempsTotal);
+
+			int tempsTotal = get_temps_totalBus(prochainPassages);
+			poteauItems.get(indicePoteau).setTempsMinute(tempsTotal);
+			System.out.println(poteauItems.get(indicePoteau).getTempsMinute());
 			indicePoteau++;
 			afficher_poteaux();
 		}
-		
-		private String get_temps_totalBus(List<ProchainPassage> prochainPassages){
+
+		private int get_temps_totalBus(List<ProchainPassage> prochainPassages) {
 			String temps = tempsBusBrut.replace("mins", "");
 			temps = temps.replaceAll(" ", "");
 			temps = temps.replaceAll("\"", "");
 			int tempsTrajet = Integer.parseInt(temps);
 			String nomLigne = poteauItems.get(indicePoteau).getNumLigne();
-			
-			int temp;
-			if(prochainPassages.size() > 0){
-				temp = prochainPassages.get(0).calculerProchainPassageTemps(tempsTrajet);
-			}
-			else{
+
+			int temp = -1;
+			if (prochainPassages.size() > 0) {
+				temp = prochainPassages.get(0).calculerProchainPassageTemps(
+						tempsTrajet);
+			} else {
 				if (nomLigne.equals("A") || nomLigne.equals("B")) {
-					ProchainPassage p = new ProchainPassage(nomLigne, "", "", null);
+					ProchainPassage p = new ProchainPassage(nomLigne, "", "",
+							null);
 					temp = p.calculerProchainPassageTemps(tempsTrajet);
-				} else {
-					return getResources().getString(R.string.depart_indispo);
 				}
 			}
-			
-			String tempsTotal = String.valueOf(temp) + " minutes";
-			
-			return tempsTotal;
+
+			return temp;
 		}
 	}
-	
-	private void afficher_aucun_bus(){
+
+	private void afficher_aucun_bus() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getActivity().getResources().getString(
 				R.string.busmetro));
